@@ -7,7 +7,7 @@ const Clients = () => {
         { name: "Cisco", src: "/clients/Cisco.svg" },
         { name: "Adobe", src: "/clients/Adobe.svg" },
         { name: "Intel", src: "/clients/Intel.svg" },
-        { name: "NVIDIA", src: "/clients/Nvidia.svg" },
+        { name: "NVIDIA", src: "/clients/NVIDIA.svg" },
     ];
 
     return (
