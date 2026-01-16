@@ -14,7 +14,7 @@ const Footer = () => {
                     <div className="footer-brand">
                         <div className="logo">
                             <img
-                                src="/src/assets/logo.png"
+                                src="/logo.png"
                                 alt="Hexalabs Logo"
                                 className="footer-logo"
                             />
