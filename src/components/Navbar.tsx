@@ -13,7 +13,7 @@ const Navbar = () => {
                 {/* Logo */}
                 <div className="navbar-logo">
                     <img
-                        src="/src/assets/logo.png"
+                        src="/logo.png"
                         alt="Hexalabs Logo"
                         className="logo-img"
                     />
