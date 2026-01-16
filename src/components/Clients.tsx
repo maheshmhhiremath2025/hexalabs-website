@@ -1,13 +1,13 @@
 const Clients = () => {
     const logos = [
-        { name: "Microsoft", src: "/src/assets/clients/microsoft.svg" },
-        { name: "Google Cloud", src: "/src/assets/clients/google-cloud.svg" },
-        { name: "AWS", src: "/src/assets/clients/aws.svg" },
-        { name: "Red-Hat", src: "/src/assets/clients/Red-Hat.svg" },
-        { name: "Cisco", src: "/src/assets/clients/cisco.svg" },
-        { name: "Adobe", src: "/src/assets/clients/adobe.svg" },
-        { name: "Intel", src: "/src/assets/clients/intel.svg" },
-        { name: "NVIDIA", src: "/src/assets/clients/nvidia.svg" },
+        { name: "Microsoft", src: "/clients/microsoft.svg" },
+        { name: "Google Cloud", src: "/clients/google-cloud.svg" },
+        { name: "AWS", src: "/clients/aws.svg" },
+        { name: "Red-Hat", src: "/clients/Red-Hat.svg" },
+        { name: "Cisco", src: "/clients/cisco.svg" },
+        { name: "Adobe", src: "/clients/adobe.svg" },
+        { name: "Intel", src: "/clients/intel.svg" },
+        { name: "NVIDIA", src: "/clients/nvidia.svg" },
     ];
 
     return (
