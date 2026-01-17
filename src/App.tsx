@@ -18,6 +18,12 @@ import SectionDivider from './components/SectionDivider';
 import ProcessSection from './components/ProcessSection';
 import CustomCursor from './components/CustomCursor';
 import ScrollProgress from './components/ScrollProgress';
+import CaseStudies from './components/CaseStudies';
+import Team from './components/Team';
+import Partners from './components/Partners';
+import ChatWidget from './components/ChatWidget';
+import CookieConsent from './components/CookieConsent';
+import ActiveSectionIndicator from './components/ActiveSectionIndicator';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -55,10 +61,21 @@ function App() {
     };
   }, []);
 
+  const sections = [
+    { id: 'services', label: 'Services' },
+    { id: 'training', label: 'Training' },
+    { id: 'case-studies', label: 'Case Studies' },
+    { id: 'team', label: 'Team' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
     <div className="app">
       <CustomCursor />
       <ScrollProgress />
+      <ChatWidget />
+      <CookieConsent />
+      <ActiveSectionIndicator sections={sections} />
       <LoadingScreen />
 
       {/* Dynamic Background Elements with Parallax */}
@@ -94,6 +111,7 @@ function App() {
         <SectionDivider variant="wave" color="var(--bg-color)" />
 
         <Clients />
+        <Partners />
 
         <SectionDivider variant="curve" color="var(--bg-color)" />
 
@@ -109,6 +127,8 @@ function App() {
         <ProcessSection />
         <Training />
         <Testimonials />
+        <CaseStudies />
+        <Team />
 
         <SectionDivider variant="wave" color="var(--bg-color)" />
 
