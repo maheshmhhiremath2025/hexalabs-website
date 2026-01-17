@@ -1,85 +1,82 @@
 const Footer = () => {
-    return (
-        <footer
-            style={{
-                padding: "5rem 2rem 2.5rem",
-                background: "var(--bg-elevated)",
-                borderTop: "1px solid var(--glass-border)",
-            }}
-        >
-            <div className="container footer-container">
-                {/* Top Section */}
-                <div className="footer-grid">
-                    {/* Brand */}
-                    <div className="footer-brand">
-                        <div className="logo">
-                            <img
-                                src="/logo.png"
-                                alt="Hexalabs Logo"
-                                className="footer-logo"
-                            />
-                            <span>
-                                HEXA<span className="text-gradient">LABS</span>
-                            </span>
-                        </div>
-
-                        <p className="footer-desc">
-                            Building the next generation of technology leaders and innovative
-                            IT solutions for a digital-first world.
-                        </p>
-                    </div>
-
-                    {/* Solutions */}
-                    <div>
-                        <h4 className="footer-title">Solutions</h4>
-                        <ul className="footer-links">
-                            <li><a href="#services">IT Consulting</a></li>
-                            <li><a href="#services">Cloud Strategy</a></li>
-                            <li><a href="#services">Cybersecurity</a></li>
-                            <li><a href="#services">AI Development</a></li>
-                        </ul>
-                    </div>
-
-                    {/* Training */}
-                    <div>
-                        <h4 className="footer-title">Training</h4>
-                        <ul className="footer-links">
-                            <li><a href="#training">Web Development</a></li>
-                            <li><a href="#training">Cloud Architecting</a></li>
-                            <li><a href="#training">DevOps</a></li>
-                            <li><a href="#training">Data Science</a></li>
-                        </ul>
-                    </div>
-
-                    {/* Company */}
-                    <div>
-                        <h4 className="footer-title">Company</h4>
-                        <ul className="footer-links">
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#about">Careers</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                            <li><a href="#contact">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Bottom Section */}
-                <div className="footer-bottom">
-                    <p>
-                        © {new Date().getFullYear()} Hexalabs IT Services & Training Private
-                        Limited.
-                    </p>
-
-                    <div className="footer-social">
-                        <a href="#">LinkedIn</a>
-                        <a href="#">Twitter</a>
-                        <a href="#">GitHub</a>
-                    </div>
-                </div>
+  return (
+    <footer
+      style={{
+        padding: "5rem 2rem 2.5rem",
+        background: "var(--bg-elevated)",
+        borderTop: "1px solid var(--glass-border)",
+      }}
+    >
+      <div className="container footer-container">
+        {/* Top Section */}
+        <div className="footer-grid">
+          {/* Brand */}
+          <div className="footer-brand">
+            <div className="logo">
+              <img
+                src="/logo.png"
+                alt="Hexalabs Logo"
+                className="footer-logo"
+              />
             </div>
 
-            {/* Styles */}
-            <style>{`
+            <p className="footer-desc">
+              Building the next generation of technology leaders and innovative
+              IT solutions for a digital-first world.
+            </p>
+          </div>
+
+          {/* Solutions */}
+          <div>
+            <h4 className="footer-title">Solutions</h4>
+            <ul className="footer-links">
+              <li><a href="#services">IT Consulting</a></li>
+              <li><a href="#services">Cloud Strategy</a></li>
+              <li><a href="#services">Cybersecurity</a></li>
+              <li><a href="#services">AI Development</a></li>
+            </ul>
+          </div>
+
+          {/* Training */}
+          <div>
+            <h4 className="footer-title">Training</h4>
+            <ul className="footer-links">
+              <li><a href="#training">Web Development</a></li>
+              <li><a href="#training">Cloud Architecting</a></li>
+              <li><a href="#training">DevOps</a></li>
+              <li><a href="#training">Data Science</a></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="footer-title">Company</h4>
+            <ul className="footer-links">
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#about">Careers</a></li>
+              <li><a href="#contact">Contact</a></li>
+              <li><a href="#contact">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="footer-bottom">
+          <p>
+            © {new Date().getFullYear()} Hexalabs IT Services & Training Private
+            Limited.
+          </p>
+
+          <div className="footer-social">
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+            <a href="#">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      {/* Styles */}
+      <style>{`
         .footer-container {
           max-width: 1200px;
           margin: auto;
@@ -106,7 +103,7 @@ const Footer = () => {
         }
 
         .footer-logo {
-          height: 42px;
+          height: 100px;
           width: auto;
         }
 
@@ -185,8 +182,8 @@ const Footer = () => {
           }
         }
       `}</style>
-        </footer>
-    );
+    </footer>
+  );
 };
 
 export default Footer;
