@@ -15,6 +15,9 @@ import BackToTop from './components/BackToTop';
 import LoadingScreen from './components/LoadingScreen';
 import FAQ from './components/FAQ';
 import SectionDivider from './components/SectionDivider';
+import ProcessSection from './components/ProcessSection';
+import CustomCursor from './components/CustomCursor';
+import ScrollProgress from './components/ScrollProgress';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -54,6 +57,8 @@ function App() {
 
   return (
     <div className="app">
+      <CustomCursor />
+      <ScrollProgress />
       <LoadingScreen />
 
       {/* Dynamic Background Elements with Parallax */}
@@ -85,9 +90,12 @@ function App() {
 
       <main>
         <Hero />
-        <Clients />
 
         <SectionDivider variant="wave" color="var(--bg-color)" />
+
+        <Clients />
+
+        <SectionDivider variant="curve" color="var(--bg-color)" />
 
         <Features />
         <StatsSection />
@@ -98,6 +106,7 @@ function App() {
 
         <Statistics />
         <Services />
+        <ProcessSection />
         <Training />
         <Testimonials />
 
@@ -125,14 +134,14 @@ function App() {
                     <div className="glass" style={{ width: '60px', height: '60px', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📍</div>
                     <div>
                       <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>Our Office</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>123 Tech Avenue, Innovation City, 560001</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>1st Floor, Innotech Park, Bangalore</p>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                     <div className="glass" style={{ width: '60px', height: '60px', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📧</div>
                     <div>
                       <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>Email Us</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>contact@hexalabs.com</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>labs@hexalabs.online</p>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
