@@ -10,7 +10,7 @@ const Partners = () => {
         {
             name: "Microsoft Azure",
             color: "#0078D4",
-            logoUrl: "/logos/azure.svg"
+            logoUrl: "/logos/azure.sv"
         },
         {
             name: "Google Cloud",
