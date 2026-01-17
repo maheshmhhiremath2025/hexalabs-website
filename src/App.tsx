@@ -13,6 +13,8 @@ import Features from './components/Features';
 import StatsSection from './components/StatsSection';
 import BackToTop from './components/BackToTop';
 import LoadingScreen from './components/LoadingScreen';
+import FAQ from './components/FAQ';
+import SectionDivider from './components/SectionDivider';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -85,8 +87,12 @@ function App() {
         <Hero />
         <Clients />
 
+        <SectionDivider variant="wave" color="var(--bg-color)" />
+
         <Features />
         <StatsSection />
+
+        <SectionDivider variant="curve" flip color="var(--bg-elevated)" />
 
         <AboutSection />
 
@@ -94,6 +100,11 @@ function App() {
         <Services />
         <Training />
         <Testimonials />
+
+        <SectionDivider variant="wave" color="var(--bg-color)" />
+
+        {/* FAQ Section */}
+        <FAQ />
 
         {/* Contact Section */}
         <section id="contact" style={{ padding: '10rem 2rem', background: 'var(--bg-color)' }}>
