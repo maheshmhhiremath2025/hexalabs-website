@@ -1,181 +1,107 @@
+import { useState, useEffect } from "react";
+import { useTheme } from "../context/ThemeContext";
+import styles from "./Navbar.module.css";
+import { NAV_LINKS } from "../constants/data";
+
 const Navbar = () => {
-    return (
-        <header
-            className="glass"
-            style={{
-                position: "sticky",
-                top: 0,
-                zIndex: 1000,
-                borderBottom: "1px solid var(--glass-border)",
-            }}
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const closeAll = () => {
+    setIsMenuOpen(false);
+    setIsServicesOpen(false);
+  };
+
+  return (
+    <header className={`${styles.header} ${isScrolled ? "glass" : ""}`}>
+      <nav className={`container ${styles.navbar}`}>
+        {/* Logo */}
+        <div className={styles.logoContainer}>
+          <img src="/logo.png" alt="Hexalabs Logo" className={styles.logo} />
+        </div>
+
+        {/* Navigation */}
+        <ul className={`${styles.navLinks} ${isMenuOpen ? styles.active : ""}`}>
+          {/* Services Dropdown */}
+          <li className={styles.dropdownParent}>
+            <button
+              className={`${styles.navLink} ${styles.dropdownTrigger}`}
+              onClick={() => setIsServicesOpen(!isServicesOpen)}
+              aria-expanded={isServicesOpen}
+            >
+              Services
+              <svg width="10" height="6" viewBox="0 0 10 6">
+                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </button>
+
+            {isServicesOpen && (
+              <div className={styles.dropdownMenu}>
+                <a href="#services" className={styles.dropdownItem} onClick={closeAll}>All Services</a>
+                <a href="#cloud-portal" className={styles.dropdownItem} onClick={closeAll}>Cloud Portal</a>
+                <a href="#marketplace" className={styles.dropdownItem} onClick={closeAll}>Marketplace</a>
+                <a href="#it-consulting" className={styles.dropdownItem} onClick={closeAll}>IT Consulting</a>
+              </div>
+            )}
+          </li>
+
+          {NAV_LINKS.map((link) => (
+            <li key={link.name}>
+              <a href={link.href} className={styles.navLink} onClick={closeAll}>
+                {link.name}
+              </a>
+            </li>
+          ))}
+
+          {/* Mobile Theme Toggle */}
+          <li className={styles.mobileOnly}>
+            <button onClick={toggleTheme} className={styles.themeToggle}>
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
+          </li>
+
+          {/* Mobile CTA */}
+          <li className={styles.mobileOnly}>
+            <button className={`btn-premium ${styles.navCta}`}>
+              Book Demo
+            </button>
+          </li>
+        </ul>
+
+        {/* Desktop Actions */}
+        <div className={styles.navAction}>
+          <button onClick={toggleTheme} className={styles.themeToggle}>
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
+
+          <button className={`btn-premium ${styles.navCta}`}>
+            Book Demo
+          </button>
+        </div>
+
+        {/* Hamburger */}
+        <button
+          className={`${styles.menuToggle} ${isMenuOpen ? styles.active : ""}`}
+          onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+            setIsServicesOpen(false);
+          }}
         >
-            <nav className="container navbar">
-                {/* Logo */}
-                <div className="navbar-logo">
-                    <img
-                        src="/logo.png"
-                        alt="Hexalabs Logo"
-                        className="logo-img"
-                    />
-                </div>
-
-                {/* Navigation */}
-                <ul className="nav-links">
-                    {/* Services Dropdown */}
-                    <li className="dropdown-parent">
-                        <span className="nav-link dropdown-trigger">
-                            Services
-                            <svg
-                                width="10"
-                                height="6"
-                                viewBox="0 0 10 6"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M1 1L5 5L9 1"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                        </span>
-
-                        <div className="dropdown-menu">
-                            <a href="#services" className="dropdown-item">All Services</a>
-                            <a href="#cloud-portal" className="dropdown-item">Cloud Portal</a>
-                            <a href="#marketplace" className="dropdown-item">Marketplace</a>
-                            <a href="#it-consulting" className="dropdown-item">IT Consulting</a>
-                        </div>
-                    </li>
-
-                    {["Training", "About", "Contact"].map((item, i) => (
-                        <li key={i}>
-                            <a
-                                href={`#${item.toLowerCase()}`}
-                                className="nav-link"
-                            >
-                                {item}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-
-                {/* CTA */}
-                <button className="btn-premium nav-cta">
-                    Book Demo
-                </button>
-            </nav>
-
-            {/* Styles */}
-            <style>{`
-        .navbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          height: 72px;
-          padding: 0 2rem;
-        }
-
-        /* Logo */
-        .navbar-logo {
-          display: flex;
-          align-items: center;
-        }
-
-        .logo-img {
-          height: 100px; /* ✅ fixed proper logo size */
-          width: auto;
-          object-fit: contain;
-          display: block;
-        }
-
-        /* Nav Links */
-        .nav-links {
-          display: flex;
-          align-items: center;
-          gap: 2.5rem;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          height: 100%;
-        }
-
-        .nav-link {
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          cursor: pointer;
-          text-decoration: none;
-          transition: color 0.2s ease;
-        }
-
-        .nav-link:hover {
-          color: var(--primary);
-        }
-
-        /* Dropdown */
-        .dropdown-parent {
-          position: relative;
-          height: 100%;
-          display: flex;
-          align-items: center;
-        }
-
-        .dropdown-menu {
-          position: absolute;
-          top: 110%;
-          left: 0;
-          min-width: 200px;
-          background: var(--bg-elevated);
-          border: 1px solid var(--glass-border);
-          border-radius: 14px;
-          padding: 0.5rem;
-          display: none;
-          flex-direction: column;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-          backdrop-filter: blur(12px);
-        }
-
-        .dropdown-parent:hover .dropdown-menu {
-          display: flex;
-        }
-
-        .dropdown-item {
-          padding: 0.65rem 0.9rem;
-          border-radius: 10px;
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          text-decoration: none;
-          transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .dropdown-item:hover {
-          background: rgba(255,255,255,0.06);
-          color: white;
-        }
-
-        /* CTA */
-        .nav-cta {
-          padding: 0.5rem 1.25rem;
-          font-size: 0.85rem;
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
-          white-space: nowrap;
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-          .nav-links {
-            gap: 1.5rem;
-          }
-        }
-      `}</style>
-        </header>
-    );
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </header>
+  );
 };
 
 export default Navbar;

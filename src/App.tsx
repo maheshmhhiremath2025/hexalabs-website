@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -9,8 +9,14 @@ import Statistics from './components/Statistics';
 import Testimonials from './components/Testimonials';
 import AboutSection from './components/AboutSection';
 import ContactForm from './components/ContactForm';
+import Features from './components/Features';
+import StatsSection from './components/StatsSection';
+import BackToTop from './components/BackToTop';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
+  const [scrollY, setScrollY] = useState(0);
+
   useEffect(() => {
     // Intersection Observer for reveal animations
     const observerOptions = {
@@ -27,17 +33,28 @@ function App() {
       });
     }, observerOptions);
 
-    const revealElements = document.querySelectorAll('.reveal');
+    // Observe all reveal elements
+    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
     revealElements.forEach(el => observer.observe(el));
+
+    // Parallax scroll effect
+    const handleScroll = () => {
+      setScrollY(window.pageYOffset);
+    };
+
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
       revealElements.forEach(el => observer.unobserve(el));
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
     <div className="app">
-      {/* Dynamic Background Elements */}
+      <LoadingScreen />
+
+      {/* Dynamic Background Elements with Parallax */}
       <div style={{
         position: 'fixed',
         top: '10%',
@@ -46,7 +63,8 @@ function App() {
         height: '40vw',
         background: 'radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%)',
         zIndex: -1,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        transform: `translateY(${scrollY * 0.3}px)`
       }} className="animate-float"></div>
       <div style={{
         position: 'fixed',
@@ -57,7 +75,8 @@ function App() {
         background: 'radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%)',
         zIndex: -1,
         pointerEvents: 'none',
-        animationDelay: '-3s'
+        animationDelay: '-3s',
+        transform: `translateY(${scrollY * -0.2}px)`
       }} className="animate-float"></div>
 
       <Navbar />
@@ -65,6 +84,9 @@ function App() {
       <main>
         <Hero />
         <Clients />
+
+        <Features />
+        <StatsSection />
 
         <AboutSection />
 
@@ -122,6 +144,7 @@ function App() {
         </section>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

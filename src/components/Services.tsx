@@ -1,45 +1,4 @@
-const services = [
-    {
-        title: 'IT Consulting',
-        description: 'Strategic technology advisory to align your IT infrastructure with business goals.',
-        icon: '💼'
-    },
-    {
-        title: 'Software Development',
-        description: 'Custom web, mobile, and enterprise solutions built with modern technology stacks.',
-        icon: '💻'
-    },
-    {
-        title: 'Cloud Transformation',
-        description: 'Cloud migration, optimization, and serverless architecture on AWS, Azure, and GCP.',
-        icon: '☁️'
-    },
-    {
-        title: 'Cloud Portal',
-        description: 'Self-service infrastructure management platform for seamless cloud operations and monitoring.',
-        icon: '🛡️'
-    },
-    {
-        title: 'Marketplace',
-        description: 'Exclusive hub for pre-configured software solutions and enterprise-grade tech assets.',
-        icon: '🏪'
-    },
-    {
-        title: 'Cybersecurity',
-        description: 'End-to-end security audits, threat detection, and robust protection for your digital assets.',
-        icon: '🔐'
-    },
-    {
-        title: 'Data Analytics & AI',
-        description: 'Unlocking insights and automating processes using machine learning and data engineering.',
-        icon: '📊'
-    },
-    {
-        title: 'Managed IT Services',
-        description: 'Proactive maintenance, support, and infrastructure management for seamless operations.',
-        icon: '🛠️'
-    }
-];
+import { SERVICES } from "../constants/data";
 
 const Services = () => {
     return (
@@ -57,7 +16,7 @@ const Services = () => {
                     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                     gap: '2.5rem'
                 }}>
-                    {services.map((service, index) => (
+                    {SERVICES.map((service, index) => (
                         <div
                             key={index}
                             id={service.title.toLowerCase().replace(/\s+/g, '-')}

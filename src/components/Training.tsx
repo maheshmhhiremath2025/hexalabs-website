@@ -1,29 +1,4 @@
-const courses = [
-    {
-        title: 'Full Stack Web Development',
-        duration: '12 Weeks',
-        level: 'Beginner to Pro',
-        tags: ['React', 'Node.js', 'PostgreSQL']
-    },
-    {
-        title: 'Cloud Solutions Architect',
-        duration: '8 Weeks',
-        level: 'Intermediate',
-        tags: ['AWS', 'Azure', 'Terraform']
-    },
-    {
-        title: 'DevOps & SRE Masterclass',
-        duration: '10 Weeks',
-        level: 'Advanced',
-        tags: ['Docker', 'K8s', 'CI/CD']
-    },
-    {
-        title: 'Cybersecurity Fundamentals',
-        duration: '6 Weeks',
-        level: 'Beginner',
-        tags: ['Network', 'Security+', 'Ethical Hacking']
-    }
-];
+import { COURSES } from "../constants/data";
 
 const Training = () => {
     return (
@@ -46,7 +21,7 @@ const Training = () => {
                     gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                     gap: '2rem'
                 }}>
-                    {courses.map((course, index) => (
+                    {COURSES.map((course, index) => (
                         <div key={index} className="reveal card-hover" style={{
                             backgroundColor: 'var(--bg-elevated)',
                             borderRadius: '24px',
@@ -76,7 +51,7 @@ const Training = () => {
                                 border: '1px solid var(--primary)',
                                 color: 'var(--primary)',
                                 fontWeight: '600',
-                                transition: 'var(--transition)',
+                                transition: 'all 0.3s ease',
                                 cursor: 'pointer'
                             }}
                                 onMouseEnter={(e) => {
