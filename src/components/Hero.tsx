@@ -2,39 +2,36 @@ import { useEffect, useState } from "react";
 
 const Hero = () => {
   /* =========================
-     TYPEWRITER EFFECT
+     TYPEWRITER EFFECT (FIXED)
   ========================= */
   const words = ["Expert Training", "Corporate Training", "Hands-on Labs"];
-  const [wordIndex, setWordIndex] = useState(0);
+
+  const [text, setText] = useState("");
+  const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
-  const [text, setText] = useState("");
 
   useEffect(() => {
-    const currentWord = words[wordIndex];
-    const speed = deleting ? 60 : 120;
+    const current = words[index];
+    const speed = deleting ? 50 : 90;
 
-    const timer = setTimeout(() => {
-      if (!deleting) {
-        setText(currentWord.slice(0, charIndex + 1));
-        setCharIndex(charIndex + 1);
-
-        if (charIndex === currentWord.length) {
-          setTimeout(() => setDeleting(true), 1200);
-        }
-      } else {
-        setText(currentWord.slice(0, charIndex - 1));
-        setCharIndex(charIndex - 1);
-
-        if (charIndex === 0) {
-          setDeleting(false);
-          setWordIndex((wordIndex + 1) % words.length);
-        }
+    const timeout = setTimeout(() => {
+      if (!deleting && charIndex < current.length) {
+        setText(current.slice(0, charIndex + 1));
+        setCharIndex((prev) => prev + 1);
+      } else if (deleting && charIndex > 0) {
+        setText(current.slice(0, charIndex - 1));
+        setCharIndex((prev) => prev - 1);
+      } else if (!deleting && charIndex === current.length) {
+        setTimeout(() => setDeleting(true), 1200);
+      } else if (deleting && charIndex === 0) {
+        setDeleting(false);
+        setIndex((prev) => (prev + 1) % words.length);
       }
     }, speed);
 
-    return () => clearTimeout(timer);
-  }, [charIndex, deleting, wordIndex]);
+    return () => clearTimeout(timeout);
+  }, [charIndex, deleting, index]);
 
   return (
     <section
@@ -44,6 +41,7 @@ const Hero = () => {
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
+        isolation: "isolate",
       }}
     >
       {/* ================= ANIMATED BACKGROUND ================= */}
@@ -79,7 +77,6 @@ const Hero = () => {
         <button className="btn-premium hero-btn-primary">Our Services</button>
         <button className="glass hero-btn-secondary">Explore Training</button>
       </div>
-
 
       {/* Tags */}
       <div className="hero-tags">
@@ -175,12 +172,14 @@ const Hero = () => {
           height: 650px;
           background: radial-gradient(
             circle,
-            rgba(99, 102, 241, 0.18) 0%,
+            rgba(99, 102, 241, 0.25) 0%,
+            rgba(99, 102, 241, 0.15) 40%,
             transparent 70%
           );
           border-radius: 50%;
           z-index: -1;
           animation: floatGlow 8s ease-in-out infinite;
+          filter: blur(10px);
         }
 
         @keyframes floatGlow {
@@ -244,29 +243,6 @@ const Hero = () => {
           border-radius: 12px;
           font-weight: 700;
           font-size: 1.1rem;
-        }
-
-        /* Stats */
-        .hero-stats {
-          margin-top: 4rem;
-          display: flex;
-          justify-content: center;
-          gap: 4rem;
-          flex-wrap: wrap;
-          opacity: 0;
-          animation: fadeUp 0.8s ease forwards;
-          animation-delay: 0.5s;
-        }
-
-        .hero-stats strong {
-          font-size: 2rem;
-          display: block;
-          color: white;
-        }
-
-        .hero-stats span {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
         }
 
         /* Tags */
@@ -338,7 +314,6 @@ const Hero = () => {
         /* Mobile */
         @media (max-width: 768px) {
           .hero-actions { flex-direction: column; }
-          .hero-stats { gap: 2rem; }
         }
       `}</style>
     </section>
