@@ -22,7 +22,7 @@ const Training = () => {
                         </button>
                     </div>
 
-                    {/* Grid */}
+                    {/* Courses Grid */}
                     <div className="training-grid">
                         {COURSES.map((course, index) => (
                             <div key={index} className="training-card reveal">
@@ -44,7 +44,26 @@ const Training = () => {
                                     </div>
                                 </div>
 
-                                <button className="training-btn">
+                                {/* Enroll Button */}
+                                <button
+                                    className="training-btn"
+                                    onClick={() => {
+                                        const subject = `Training Enrollment Request - ${course.title}`;
+                                        const body =
+                                            `Hello Hexalabs Team,\n\n` +
+                                            `I am interested in enrolling in the following course:\n\n` +
+                                            `Course Name: ${course.title}\n` +
+                                            `Level: ${course.level}\n` +
+                                            `Duration: ${course.duration}\n\n` +
+                                            `Please contact me with further details.\n\n` +
+                                            `Regards,\n`;
+
+                                        window.location.href =
+                                            `mailto:labs@hexalabs.online` +
+                                            `?subject=${encodeURIComponent(subject)}` +
+                                            `&body=${encodeURIComponent(body)}`;
+                                    }}
+                                >
                                     Enroll Now
                                 </button>
                             </div>
