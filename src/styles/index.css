@@ -1,0 +1,206 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+
+  body {
+    @apply font-sans text-base;
+    background-color: var(--ink-950);
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--surface-heading);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus, var(--blue-400));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--blue-400) 35%, transparent);
+  }
+}
+
+@layer components {
+  /* Container: 1200px max, 16px gutter on phones */
+  .container-site {
+    @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8;
+  }
+
+  .serif-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .eyebrow {
+    @apply font-mono text-eyebrow uppercase text-muted;
+  }
+
+  .link {
+    color: var(--surface-link);
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  /* Buttons — solid primary, outlined secondary, 10px radius, no glow */
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-control px-4.5 text-button font-medium whitespace-nowrap select-none;
+    transition:
+      background-color 150ms var(--ease-standard),
+      border-color 150ms var(--ease-standard),
+      color 150ms var(--ease-standard);
+  }
+  .btn-lg {
+    @apply h-12 px-5 text-base;
+  }
+  .btn-sm {
+    @apply h-9 px-3.5 text-sm;
+  }
+  .btn-primary {
+    background-color: var(--blue-600);
+    color: var(--white);
+  }
+  .btn-primary:hover {
+    background-color: var(--blue-700);
+  }
+  .btn-secondary {
+    border: 1px solid var(--surface-line-strong);
+    color: var(--surface-heading);
+    background: transparent;
+  }
+  .btn-secondary:hover {
+    border-color: var(--surface-heading);
+  }
+  .btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Hover lift for interactive cards */
+  .card-lift {
+    transition:
+      transform 200ms var(--ease-standard),
+      border-color 200ms var(--ease-standard);
+  }
+  .card-lift:hover {
+    transform: translateY(var(--lift));
+    border-color: var(--surface-line-strong);
+  }
+
+  /* Live status dot */
+  .status-dot {
+    position: relative;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--dot, var(--status-running));
+    flex: none;
+  }
+  .status-dot[data-live="true"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: status-ping 2.4s var(--ease-standard) infinite;
+  }
+
+  /* Fine technical grid used behind dark heroes */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--blue-400) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--blue-400) 7%, transparent) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell);
+    mask-image: radial-gradient(ellipse 70% 65% at 72% 35%, #000 25%, transparent 75%);
+  }
+
+  /* Form controls (light surfaces) */
+  .field {
+    @apply block w-full rounded-control border border-line-strong bg-white px-3.5 text-base text-ink-950 placeholder:text-slate-500;
+    min-height: 44px;
+    transition: border-color 150ms var(--ease-standard);
+  }
+  textarea.field {
+    @apply py-3;
+  }
+  .field:hover {
+    border-color: var(--slate-500);
+  }
+  .field:focus-visible {
+    border-color: var(--blue-600);
+    outline-offset: 0;
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--status-error);
+  }
+  .field-label {
+    @apply block text-sm font-medium text-heading;
+  }
+  .field-error {
+    @apply mt-1.5 text-sm;
+    color: var(--status-error);
+  }
+
+  .skip-link {
+    @apply fixed top-3 left-3 z-100 -translate-y-24 rounded-control bg-white px-4 py-2 text-sm font-medium text-ink-950;
+    transition: transform 150ms var(--ease-standard);
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+@keyframes status-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-lift:hover {
+    transform: none;
+  }
+}

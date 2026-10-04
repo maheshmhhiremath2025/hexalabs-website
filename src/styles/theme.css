@@ -1,0 +1,168 @@
+/*
+ * HexaLabs design tokens — the ONLY place colours, type sizes, radii and
+ * special values are defined. Components reference these through Tailwind
+ * utilities (bg-ink-950, text-heading, rounded-control …) or var(--token).
+ */
+
+:root {
+  /* ── Brand palette (fixed — do not add brand colours) ─────────────── */
+  --ink-950: #061426; /* page background, dark sections */
+  --ink-900: #0b1f3a; /* cards on dark */
+  --ink-700: #1c3354; /* borders on dark */
+  --blue-600: #0a66c2; /* primary actions, links on light */
+  --blue-400: #5aa6ff; /* highlights and links on dark */
+  --orange-500: #f28c1e; /* accent — max 1–2 uses per screen */
+  --paper-50: #f7f8fa; /* light sections */
+  --white: #ffffff;
+  --slate-600: #475569; /* body text on light */
+  --slate-300: #cbd5e1; /* body text on dark */
+
+  /* ── Supporting neutrals (UI only, never as brand colour) ─────────── */
+  --blue-700: #0857a6; /* primary button hover */
+  --slate-500: #5b6b80; /* muted text on light (5.4:1 white, 5.1:1 paper) */
+  --slate-400: #94a3b8; /* muted text on dark (7:1 on ink-950) */
+  --slate-200: #e2e8f0; /* borders on light */
+  --slate-250: #c3ccd8; /* stronger borders / outline buttons on light */
+  --ink-600: #2a4670; /* stronger borders / outline buttons on dark */
+
+  /* ── Status (live VM state in product mocks) ───────────────────────── */
+  --status-running: #2bb673;
+  --status-starting: #e5a400;
+  --status-stopped: #94a3b8;
+  --status-error: #b42318; /* form errors (5.9:1 on white) */
+  --status-success: #1a7f4b; /* form success (5.1:1 on white) */
+
+  /* ── Layout ─────────────────────────────────────────────────────────── */
+  --container-max: 1200px;
+  --header-h: 72px;
+  --control-radius: 10px; /* buttons, inputs */
+  --card-radius: 16px;
+  --frame-radius: 12px;
+
+  /* ── Motion & special values ────────────────────────────────────────── */
+  --hero-tilt: 2deg;
+  --lift: -3px;
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --grid-cell: 48px;
+}
+
+/*
+ * Surfaces set semantic colours so components work on dark and light
+ * sections without knowing where they sit.
+ */
+@layer components {
+  .surface-dark {
+    --surface-bg: var(--ink-950);
+    --surface-raised: var(--ink-900);
+    --surface-heading: var(--white);
+    --surface-body: var(--slate-300);
+    --surface-muted: var(--slate-400);
+    --surface-line: var(--ink-700);
+    --surface-line-strong: var(--ink-600);
+    --surface-link: var(--blue-400);
+    --focus: var(--blue-400);
+    background-color: var(--surface-bg);
+    color: var(--surface-body);
+  }
+
+  .surface-paper,
+  .surface-white {
+    --surface-raised: var(--white);
+    --surface-heading: var(--ink-950);
+    --surface-body: var(--slate-600);
+    --surface-muted: var(--slate-500);
+    --surface-line: var(--slate-200);
+    --surface-line-strong: var(--slate-250);
+    --surface-link: var(--blue-600);
+    --focus: var(--blue-600);
+    color: var(--surface-body);
+  }
+  .surface-paper {
+    --surface-bg: var(--paper-50);
+    background-color: var(--surface-bg);
+  }
+  .surface-white {
+    --surface-bg: var(--white);
+    --surface-raised: var(--paper-50);
+    background-color: var(--surface-bg);
+  }
+}
+
+@theme inline {
+  /* Remove Tailwind's default palette so only brand tokens can be used. */
+  --color-*: initial;
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: var(--white);
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-blue-700: var(--blue-700);
+  --color-blue-600: var(--blue-600);
+  --color-blue-400: var(--blue-400);
+  --color-orange-500: var(--orange-500);
+  --color-paper-50: var(--paper-50);
+  --color-slate-600: var(--slate-600);
+  --color-slate-500: var(--slate-500);
+  --color-slate-400: var(--slate-400);
+  --color-slate-300: var(--slate-300);
+  --color-slate-200: var(--slate-200);
+  --color-running: var(--status-running);
+  --color-starting: var(--status-starting);
+  --color-stopped: var(--status-stopped);
+  --color-error: var(--status-error);
+  --color-success: var(--status-success);
+
+  /* Semantic, surface-aware colours */
+  --color-surface: var(--surface-bg);
+  --color-raised: var(--surface-raised);
+  --color-heading: var(--surface-heading);
+  --color-body: var(--surface-body);
+  --color-muted: var(--surface-muted);
+  --color-line: var(--surface-line);
+  --color-line-strong: var(--surface-line-strong);
+  --color-link: var(--surface-link);
+
+  /* Type */
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+
+  --text-display: clamp(2.5rem, 1.55rem + 3.4vw, 4.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(1.875rem, 1.35rem + 1.7vw, 2.75rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lead: 1.1875rem;
+  --text-lead--line-height: 1.6;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.08em;
+  --text-button: 0.9375rem;
+  --text-button--line-height: 1;
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.3;
+
+  /* Shape */
+  --radius-control: var(--control-radius);
+  --radius-card: var(--card-radius);
+  --radius-frame: var(--frame-radius);
+
+  /* Layout */
+  --container-site: var(--container-max);
+  --spacing-header: var(--header-h);
+
+  --shadow-frame: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 30px 60px -20px rgb(0 0 0 / 0.55), 0 12px 24px -12px rgb(0 0 0 / 0.4);
+  --shadow-card: 0 1px 2px rgb(6 20 38 / 0.06), 0 8px 24px -12px rgb(6 20 38 / 0.12);
+
+  --ease-out: var(--ease-standard);
+}

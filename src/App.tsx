@@ -1,192 +1,69 @@
-import { useEffect, useState } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import Training from './components/Training';
-import Footer from './components/Footer';
-import Clients from './components/Clients';
-import Statistics from './components/Statistics';
-import Testimonials from './components/Testimonials';
-import AboutSection from './components/AboutSection';
-import ContactForm from './components/ContactForm';
-import Features from './components/Features';
-import StatsSection from './components/StatsSection';
-import BackToTop from './components/BackToTop';
-import LoadingScreen from './components/LoadingScreen';
-import FAQ from './components/FAQ';
-import SectionDivider from './components/SectionDivider';
-import ProcessSection from './components/ProcessSection';
-import CustomCursor from './components/CustomCursor';
-import ScrollProgress from './components/ScrollProgress';
-import CaseStudies from './components/CaseStudies';
-import Team from './components/Team';
-import Partners from './components/Partners';
-import ChatWidget from './components/ChatWidget';
-import CookieConsent from './components/CookieConsent';
-import ActiveSectionIndicator from './components/ActiveSectionIndicator';
+import { Route, Routes } from 'react-router';
+import { LazyMotion, MotionConfig } from 'motion/react';
+import { Layout } from './components/layout/Layout';
+import { loadable } from './loadable';
+import { normalisePath } from './content/seo';
+import NotFound from './pages/NotFound';
 
-function App() {
-  const [scrollY, setScrollY] = useState(0);
+/**
+ * Routes. Each page is its own chunk (see loadable.tsx). main.tsx preloads the
+ * current page before hydrating; the prerender step preloads all of them.
+ * When adding a route, add it to `pages` below and its title/description in src/content/seo.ts.
+ */
+const Home = loadable(() => import('./pages/Home'));
+const OfficialLabs = loadable(() => import('./pages/OfficialLabs'));
+const Sandboxes = loadable(() => import('./pages/Sandboxes'));
+const Labs = loadable(() => import('./pages/Labs'));
+const Certifications = loadable(() => import('./pages/Certifications'));
+const TrainingCompanies = loadable(() => import('./pages/TrainingCompanies'));
+const Pricing = loadable(() => import('./pages/Pricing'));
+const About = loadable(() => import('./pages/About'));
+const Contact = loadable(() => import('./pages/Contact'));
+const Legal = loadable(() => import('./pages/Legal'));
 
-  useEffect(() => {
-    // Intersection Observer for reveal animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+const pages: Record<string, { preload: () => Promise<void> }> = {
+  '/': Home,
+  '/official-labs': OfficialLabs,
+  '/sandboxes': Sandboxes,
+  '/labs': Labs,
+  '/certifications': Certifications,
+  '/for-training-companies': TrainingCompanies,
+  '/pricing': Pricing,
+  '/about': About,
+  '/contact': Contact,
+  '/privacy': Legal,
+  '/terms': Legal,
+};
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
+/** Load the chunk for a path (no-op for unknown paths, which render NotFound). */
+export const preloadPage = (path: string) => pages[normalisePath(path)]?.preload() ?? Promise.resolve();
 
-    // Observe all reveal elements
-    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-    revealElements.forEach(el => observer.observe(el));
+/** Load every page chunk — used by the prerender step. */
+export const preloadAllPages = () => Promise.all(Object.values(pages).map((p) => p.preload()));
 
-    // Parallax scroll effect
-    const handleScroll = () => {
-      setScrollY(window.pageYOffset);
-    };
+const loadMotionFeatures = () => import('./motion-features').then((m) => m.default);
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      revealElements.forEach(el => observer.unobserve(el));
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const sections = [
-    { id: 'services', label: 'Services' },
-    { id: 'training', label: 'Training' },
-    { id: 'case-studies', label: 'Case Studies' },
-    { id: 'team', label: 'Team' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
+export function App() {
   return (
-    <div className="app">
-      <CustomCursor />
-      <ScrollProgress />
-      <ChatWidget />
-      <CookieConsent />
-      <ActiveSectionIndicator sections={sections} />
-      <LoadingScreen />
-
-      {/* Dynamic Background Elements with Parallax */}
-      <div style={{
-        position: 'fixed',
-        top: '10%',
-        left: '-5%',
-        width: '40vw',
-        height: '40vw',
-        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%)',
-        zIndex: -1,
-        pointerEvents: 'none',
-        transform: `translateY(${scrollY * 0.3}px)`
-      }} className="animate-float"></div>
-      <div style={{
-        position: 'fixed',
-        bottom: '10%',
-        right: '-5%',
-        width: '35vw',
-        height: '35vw',
-        background: 'radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%)',
-        zIndex: -1,
-        pointerEvents: 'none',
-        animationDelay: '-3s',
-        transform: `translateY(${scrollY * -0.2}px)`
-      }} className="animate-float"></div>
-
-      <Navbar />
-
-      <main>
-        <Hero />
-
-        <SectionDivider variant="wave" color="var(--bg-color)" />
-
-        <Clients />
-        <Partners />
-
-        <SectionDivider variant="curve" color="var(--bg-color)" />
-
-        <Features />
-        <StatsSection />
-
-        <SectionDivider variant="curve" flip color="var(--bg-elevated)" />
-
-        <AboutSection />
-
-        <Statistics />
-        <Services />
-        <ProcessSection />
-        <Training />
-        <Testimonials />
-        <CaseStudies />
-        <Team />
-
-        <SectionDivider variant="wave" color="var(--bg-color)" />
-
-        {/* FAQ Section */}
-        <FAQ />
-
-        {/* Contact Section */}
-        <section id="contact" style={{ padding: '10rem 2rem', background: 'var(--bg-color)' }}>
-          <div className="container">
-            <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '5rem', alignItems: 'start' }}>
-
-              {/* Contact Info Panel */}
-              <div style={{ padding: '2rem 0' }}>
-                <h2 style={{ fontSize: '3.5rem', marginBottom: '2rem', lineHeight: 1.1 }}>
-                  Let's <span className="text-gradient">Get In Touch</span>
-                </h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3rem', maxWidth: '500px' }}>
-                  Have a question about our cloud portal or marketplace? Want to start your training journey? We're here to help you accelerate your digital transformation.
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                    <div className="glass" style={{ width: '60px', height: '60px', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📍</div>
-                    <div>
-                      <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>Our Office</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>1st Floor, Innotech Park, Bangalore</p>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                    <div className="glass" style={{ width: '60px', height: '60px', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📧</div>
-                    <div>
-                      <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>Email Us</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>labs@hexalabs.online</p>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                    <div className="glass" style={{ width: '60px', height: '60px', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📞</div>
-                    <div>
-                      <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>Call Us</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>+1 (555) 000-TECH</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Form Panel */}
-              <div className="glass" style={{ padding: '4rem 3rem', borderRadius: '40px', background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(99, 102, 241, 0.05) 100%)' }}>
-                <ContactForm />
-              </div>
-
-            </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
-      <BackToTop />
-    </div>
+    <LazyMotion features={loadMotionFeatures} strict>
+      <MotionConfig reducedMotion="user">
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="official-labs" element={<OfficialLabs />} />
+            <Route path="sandboxes" element={<Sandboxes />} />
+            <Route path="labs" element={<Labs />} />
+            <Route path="certifications" element={<Certifications />} />
+            <Route path="for-training-companies" element={<TrainingCompanies />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="privacy" element={<Legal kind="privacy" />} />
+            <Route path="terms" element={<Legal kind="terms" />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </MotionConfig>
+    </LazyMotion>
   );
 }
-
-export default App;
