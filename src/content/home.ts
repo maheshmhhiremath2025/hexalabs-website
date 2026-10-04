@@ -3,14 +3,56 @@
  * no exclamation marks. Wrap an accent phrase in `accent` (Instrument Serif).
  */
 
+import type { AccentTitle } from '../components/ui/Accent';
+import { officialVendors } from './officialLabs';
+
 export const hero = {
-  headline: { before: 'Cloud labs your learners can open in a ', accent: 'browser tab', after: '.' },
+  headline: { before: 'Every learner gets ', accent: 'their own', after: ' cloud lab.' } satisfies AccentTitle,
   subcopy:
-    'Windows, Linux, Azure and AWS lab machines for your training batches. Ready in minutes, opened from any laptop, with nothing to install.',
+    'Official Azure and AWS course labs, cloud sandboxes, Windows and Linux lab machines, and exam vouchers. Deploy one machine or a hundred, and run the whole batch from one console.',
   primaryCta: { label: 'Book a demo', href: '/contact' },
-  secondaryCta: { label: 'See official labs', href: '/official-labs' },
-  footnote: 'Runs in any modern browser over HTTPS. No client, no VPN.',
-  visualSummary: 'One trainer action deploys 30 identical lab machines, and each learner opens theirs in a browser tab.',
+  secondaryCta: { label: 'For training companies', href: '/for-training-companies' },
+  audience: {
+    label: 'Built for',
+    items: ['IT training companies', 'Corporate L&D teams', 'Individual learners'],
+  },
+
+  /** Visible caption under the diagram. It is also the text summary of the (aria-hidden) diagram. */
+  caption:
+    'Each learner signs in over HTTPS and gets their own environment. The trainer runs the batch from the console. Hour caps, idle auto-stop and auto clean-up apply to every lab.',
+
+  /** Everything written inside the diagram. Keep labels short: they are set in a fixed-width font. */
+  diagram: {
+    learnersWide: ['learner 01', 'learner 02', 'learner 03', 'learner 30'],
+    learnersNarrow: ['learner 01', 'learner 02', 'learner 30'],
+    /** Index (in either list) of the learner whose route is traced in blue. */
+    tracedLearner: 1,
+    httpsTag: 'HTTPS',
+    httpsNote: 'any browser · no VPN',
+    entry: { name: 'HexaLabs', host: 'labsoncloud.online' },
+    trainer: { label: 'trainer', notes: ['deploy 1–100+', 'bulk start · stop', 'usage reports'] },
+    guardrails: ['hour caps', 'idle auto-stop', 'auto clean-up'],
+    isolationTag: 'isolated per learner',
+    groups: [
+      {
+        label: 'Cloud sandboxes',
+        items: ['Azure', 'AWS', 'Google Cloud', 'Oracle Cloud', 'Databricks', 'Azure AI Foundry'],
+      },
+      {
+        label: 'Lab machines',
+        items: ['Windows Server', 'Ubuntu', 'RHEL · Rocky', 'Oracle Linux', 'Kubernetes · AKS', 'OpenShift · ARO'],
+      },
+    ],
+    /** [group, item] of the environment the traced learner reaches. */
+    tracedTarget: [0, 0] as const,
+    official: {
+      label: 'Official course labs',
+      /** Counted from the official-labs page content, so it stays true when courses change. */
+      count: `${officialVendors.azure.courses.length} Azure · ${officialVendors.aws.courses.length} AWS`,
+      codesWide: 'AZ-104T00 · AZ-305T00 · AZ-400T00 · SC-200T00 · Architecting on AWS',
+      codesNarrow: ['AZ-104T00 · AZ-305T00 · SC-200T00', 'Architecting on AWS'],
+    },
+  },
 };
 
 export const proofStrip = [

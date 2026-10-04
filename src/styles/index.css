@@ -142,6 +142,26 @@
     background-size: var(--grid-cell) var(--grid-cell);
     mask-image: radial-gradient(ellipse 70% 65% at 72% 35%, #000 25%, transparent 75%);
   }
+  /* Home hero: keep the grid in the top-left corner so it never runs through the diagram's lines. */
+  .bg-grid-hero {
+    mask-image: radial-gradient(ellipse 55% 75% at 0% 0%, #000 0%, transparent 70%);
+  }
+
+  /* Home hero headline: two lines at desktop and on phones; three in the narrow lg column. */
+  .hero-title {
+    font-size: clamp(2.25rem, 0.75rem + 7.5vw, 2.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    @media (width >= 40rem) {
+      font-size: 4.25rem;
+    }
+    @media (width >= 64rem) {
+      font-size: 3.5rem;
+    }
+    @media (width >= 80rem) {
+      font-size: 4.25rem;
+    }
+  }
 
   /* Form controls (light surfaces) */
   .field {

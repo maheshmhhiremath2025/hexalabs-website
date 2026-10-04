@@ -1,95 +1,75 @@
-import { ArrowRight } from 'lucide-react';
-import { hero, proofStrip } from '../../../content/home';
-import { site } from '../../../content/site';
+import { hero } from '../../../content/home';
 import { ButtonLink } from '../../ui/Button';
-import { SmartLink } from '../../ui/SmartLink';
 import { Accent } from '../../ui/Accent';
-import { FleetGraphic } from '../../graphics/FleetGraphic';
+import { Reveal } from '../../ui/Reveal';
+import { OfferPill, ProofStrip } from './HeroParts';
+import { ArchDiagram } from './hero/ArchDiagram';
 
-function HeroVisual() {
+/**
+ * Hairline "Built for" row under the CTAs: the three audiences, in priority order.
+ * One row where all three fit (sm, xl); a clean stack where a row would wrap 2 + 1 (phones, lg).
+ */
+function Audience() {
   return (
-    <figure>
-      <FleetGraphic />
-      <figcaption className="sr-only">{hero.visualSummary}</figcaption>
-    </figure>
+    <div className="mt-10 flex max-w-xl flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-baseline sm:gap-5 lg:flex-col lg:gap-3 xl:flex-row xl:gap-5">
+      <p id="hero-audience" className="flex-none font-mono text-eyebrow text-muted uppercase">
+        {hero.audience.label}
+      </p>
+      <ul aria-labelledby="hero-audience" className="flex flex-col gap-x-4 gap-y-2 sm:flex-row sm:flex-wrap lg:flex-col xl:flex-row text-[0.8125rem] leading-5 text-body">
+        {hero.audience.items.map((item, i) => (
+          <li key={item} className="flex items-baseline gap-2 whitespace-nowrap">
+            <span aria-hidden="true" className="font-mono text-micro text-muted">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
-function OfferPill() {
-  return (
-    <SmartLink
-      href={site.offer.href}
-      className="group inline-flex max-w-full items-center gap-2.5 rounded-full border border-ink-700 bg-ink-900 py-1 pr-3 pl-1 text-sm text-slate-300 transition-colors hover:border-ink-600"
-    >
-      <span className="rounded-full bg-orange-500/15 px-2 py-0.5 font-mono text-micro text-orange-500 uppercase">Offer</span>
-      <span className="truncate text-white">
-        <span className="sm:hidden">{site.offer.labelCompact}</span>
-        <span className="hidden sm:inline">{site.offer.label}</span>
-      </span>
-      <ArrowRight className="h-3.5 w-3.5 flex-none transition-transform group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden="true" />
-    </SmartLink>
-  );
-}
-
+/**
+ * Home hero. Copy on the left; on the right a line diagram of how a batch runs:
+ * learners → one HTTPS entry point → an isolated environment per learner, with
+ * the trainer's console on the side and the official course labs underneath.
+ */
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="surface-dark relative overflow-hidden">
-      <div aria-hidden="true" className="bg-grid pointer-events-none absolute inset-0" />
+      <div aria-hidden="true" className="bg-grid bg-grid-hero pointer-events-none absolute inset-0" />
 
-      <div className="container-site relative grid grid-cols-12 items-center gap-x-6 gap-y-16 pt-12 pb-20 sm:pt-16 lg:pt-20 lg:pb-28">
-        <div className="col-span-12 lg:col-span-6">
+      <div className="container-site relative grid grid-cols-12 items-start gap-x-6 gap-y-14 pt-10 pb-16 sm:pt-14 lg:pt-16 lg:pb-20 xl:pt-[4.5rem]">
+        <div className="col-span-12 lg:col-span-5 xl:col-span-6">
           <OfferPill />
-          <h1 id="hero-title" className="mt-7 text-display">
+          {/* No fade on the h1: it is the LCP element and must paint immediately. */}
+          <h1 id="hero-title" className="hero-title mt-7 text-heading">
             {hero.headline.before}
             <Accent className="text-blue-400">{hero.headline.accent}</Accent>
             {hero.headline.after}
           </h1>
           <p className="mt-6 max-w-xl text-lead text-body">{hero.subcopy}</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href={hero.primaryCta.href} size="lg">
+            <ButtonLink href={hero.primaryCta.href} size="lg" className="w-full sm:w-auto">
               {hero.primaryCta.label}
             </ButtonLink>
-            <ButtonLink href={hero.secondaryCta.href} variant="secondary" size="lg">
+            <ButtonLink href={hero.secondaryCta.href} variant="secondary" size="lg" className="w-full sm:w-auto">
               {hero.secondaryCta.label}
             </ButtonLink>
           </div>
-          <p className="mt-6 font-mono text-micro text-muted">{hero.footnote}</p>
+          <Audience />
         </div>
 
-        <div className="col-span-12 lg:col-span-6 lg:pl-4">
-          <HeroVisual />
-        </div>
+        <Reveal className="col-span-12 lg:col-span-7 xl:col-span-6" delay={0.1}>
+          <figure className="mx-auto max-w-[720px] lg:mx-0 lg:max-w-none">
+            <ArchDiagram variant="wide" className="hidden sm:block" />
+            <ArchDiagram variant="narrow" className="mx-auto max-w-[400px] sm:hidden" />
+            <figcaption className="mt-6 max-w-[34rem] font-mono text-[0.8125rem] leading-5 text-body">{hero.caption}</figcaption>
+          </figure>
+        </Reveal>
       </div>
 
       <ProofStrip />
     </section>
-  );
-}
-
-// Thin dividers: stacked on phones, 2×2 on tablets, one row on desktop.
-const dividers = [
-  '',
-  'border-t sm:border-t-0 sm:border-l sm:pl-6',
-  'border-t lg:border-t-0 lg:border-l lg:pl-6',
-  'border-t lg:border-t-0 sm:border-l sm:pl-6',
-];
-
-function ProofStrip() {
-  return (
-    <div className="relative border-t border-ink-700">
-      <ul className="container-site grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" aria-label="Key facts">
-        {proofStrip.map((fact, i) => (
-          <li
-            key={fact}
-            className={`flex items-baseline gap-3 border-ink-700 py-5 text-sm text-white lg:py-7 ${dividers[i % dividers.length]}`}
-          >
-            <span aria-hidden="true" className="font-mono text-micro text-muted">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            {fact}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
