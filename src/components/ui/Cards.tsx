@@ -94,6 +94,36 @@ export function PhotoMedia({ image, focus, className = '' }: { image: ArtName; f
   );
 }
 
+/**
+ * Card media: a transparent illustration (public/illustrations/<name>, built by
+ * `npm run art` from brand-source/illustrations) centred on a clean white stage, above
+ * the part the overlapping panel covers. Scales a little on hover.
+ */
+export function IllustrationMedia({
+  name,
+  overlap = '3.5rem',
+  className = '',
+}: {
+  name: string;
+  /** How much of the media the white panel overlaps (keeps the illustration clear of it). */
+  overlap?: string;
+  className?: string;
+}) {
+  const base = `/illustrations/${name}`;
+  const sizes = '(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw';
+  return (
+    <div aria-hidden="true" className={`art-card-media illus-stage ${className}`}>
+      <div className="absolute inset-x-0 top-0 p-2 sm:p-3" style={{ bottom: overlap }}>
+        <picture className="block h-full w-full">
+          <source type="image/avif" srcSet={`${base}-640.avif 640w, ${base}-1280.avif 1280w`} sizes={sizes} />
+          <source type="image/webp" srcSet={`${base}-640.webp 640w, ${base}-1280.webp 1280w`} sizes={sizes} />
+          <img src={`${base}.png`} alt="" width={640} height={533} loading="lazy" decoding="async" className="h-full w-full object-contain" />
+        </picture>
+      </div>
+    </div>
+  );
+}
+
 /** Media for non-product art cards: a line icon in a white badge on a soft stage. */
 export function IconTile({ icon: Icon, overlap = '4.5rem' }: { icon?: LucideIcon; overlap?: string }) {
   return (

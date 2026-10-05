@@ -27,3 +27,23 @@ for (const f of files) {
   console.log(`  ${name}`);
 }
 console.log(`Done: ${files.length} artworks → ${OUT}`);
+
+// Transparent illustrations (brand-source/illustrations/*.png) → public/illustrations/:
+// <name>-640 / -1280 .avif + .webp (alpha kept) and <name>.png (640w fallback).
+// Served by IllustrationMedia (src/components/ui/Cards.tsx).
+const ISRC = 'brand-source/illustrations';
+const IOUT = 'public/illustrations';
+await fs.mkdir(IOUT, { recursive: true });
+const ifiles = (await fs.readdir(ISRC).catch(() => [])).filter((f) => f.endsWith('.png'));
+for (const f of ifiles) {
+  const name = f.replace(/\.png$/, '');
+  const src = path.join(ISRC, f);
+  for (const w of [640, 1280]) {
+    const img = sharp(src).resize({ width: w, withoutEnlargement: true });
+    await img.clone().avif({ quality: 60 }).toFile(path.join(IOUT, `${name}-${w}.avif`));
+    await img.clone().webp({ quality: 82, alphaQuality: 90 }).toFile(path.join(IOUT, `${name}-${w}.webp`));
+  }
+  await sharp(src).resize({ width: 640 }).png({ compressionLevel: 9 }).toFile(path.join(IOUT, `${name}.png`));
+  console.log(`  ${name} (illustration)`);
+}
+console.log(`Done: ${ifiles.length} illustrations → ${IOUT}`);

@@ -486,6 +486,21 @@
   .photo-stage-wash {
     background: linear-gradient(180deg, rgb(4 11 23 / 0.05) 0%, rgb(4 11 23 / 0.22) 40%, rgb(4 11 23 / 0.55) 100%);
   }
+  /* Card illustration: transparent artwork on a clean white stage with a faint blue lift. */
+  .illus-stage {
+    background:
+      radial-gradient(60% 55% at 50% 42%, rgb(10 102 194 / 0.06), transparent 75%),
+      var(--white);
+    box-shadow: inset 0 0 0 1px var(--slate-200);
+  }
+  .illus-stage img {
+    transition: transform 900ms var(--ease-smooth);
+  }
+  .group:hover .illus-stage img,
+  .group:focus-within .illus-stage img {
+    transform: scale(1.04);
+  }
+
   /* Card photo: a light shade at the bottom so the overlapping panel sits on it. */
   .photo-media::after {
     content: '';
@@ -787,7 +802,9 @@
   .group:hover .art-zoom img,
   .group:focus-within .art-zoom img,
   .group:hover .logo-tile img,
-  .group:focus-within .logo-tile img {
+  .group:focus-within .logo-tile img,
+  .group:hover .illus-stage img,
+  .group:focus-within .illus-stage img {
     transform: none;
   }
   .carousel-track {

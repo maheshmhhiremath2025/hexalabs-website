@@ -129,6 +129,8 @@ export const catalogue = {
     {
       id: 'official',
       image: 'ph-cat-official',
+      /** Transparent illustration shown instead of the photo (public/illustrations). */
+      illustration: 'official-labs',
       chip: 'Azure · AWS',
       title: 'Official course labs',
       line: 'Official lab environments for Microsoft Azure and AWS classroom courses, from fundamentals to expert.',
