@@ -1,16 +1,10 @@
 import { voucherSteps } from '../../../content/certifications';
-import type { ArtName } from '../../ui/Art';
-import { ArtCard } from '../../ui/Cards';
-import { Carousel } from '../../ui/Carousel';
+import { NumberedSteps } from '../../ui/NumberedSteps';
 import { Reveal } from '../../ui/Reveal';
 import { Section, SectionIntro } from '../../ui/Section';
 import { accentWord } from '../official/accentWord';
-import { stepLabel } from '../official/OfficialSteps';
 
-/** Artwork for each step card, in step order (each light artwork once per page). */
-const stepArt: ArtName[] = ['honeycomb', 'white-label', 'ask-hexa', 'security'];
-
-/** Dark feature section: the four voucher steps as an art-card carousel. */
+/** Dark feature section: the four voucher steps as numbered white cards. */
 export function VoucherSteps() {
   return (
     <Section tone="dark" glow id="how-it-works" labelledBy="voucher-steps-title">
@@ -20,18 +14,7 @@ export function VoucherSteps() {
         title={accentWord(voucherSteps.title, 'vouchers')}
         intro={voucherSteps.intro}
       />
-      <Carousel label="How vouchers work" className="mt-14">
-        {voucherSteps.steps.map((step, i) => (
-          <ArtCard
-            key={step.title}
-            art={stepArt[i % stepArt.length]}
-            chip={stepLabel(i)}
-            title={step.title}
-            body={step.body}
-            sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 86vw"
-          />
-        ))}
-      </Carousel>
+      <NumberedSteps steps={voucherSteps.steps} className="mt-12 sm:mt-14" />
     </Section>
   );
 }

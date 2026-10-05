@@ -26,7 +26,7 @@ export default function Home() {
       <WhiteLabel />
       <AskHexa />
       <Security />
-      <CtaBand art="training" />
+      <CtaBand />
     </>
   );
 }

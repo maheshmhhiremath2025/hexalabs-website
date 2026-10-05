@@ -5,9 +5,8 @@ import { CtaBand } from '../components/sections/CtaBand';
 import { ButtonLink } from '../components/ui/Button';
 import { Section, SectionIntro } from '../components/ui/Section';
 import { Accent } from '../components/ui/Accent';
-import { Art } from '../components/ui/Art';
 import { Chip } from '../components/ui/Chip';
-import { Reveal, RevealGroup, RevealItem } from '../components/ui/Reveal';
+import { RevealGroup, RevealItem } from '../components/ui/Reveal';
 import { accentText } from '../components/sections/training/accentText';
 
 /** Current offer as one white card overlapping the hero's bottom edge. */
@@ -101,8 +100,6 @@ export default function Pricing() {
         eyebrow={pricingHero.eyebrow}
         title={pricingHero.title}
         body={pricingHero.body}
-        art="dark-silk"
-        feature="security"
         overlap={<OfferCard />}
       />
 
@@ -130,11 +127,6 @@ export default function Pricing() {
         <div className="grid grid-cols-12 items-start gap-x-6 gap-y-12">
           <div className="col-span-12 lg:col-span-5">
             <SectionIntro id="factors-title" eyebrow="How we quote" title={accentText(priceFactors.title, 'the price')} align="left" />
-            <Reveal className="mt-10 hidden lg:block">
-              <div className="group art-zoom overflow-hidden rounded-[20px] shadow-card">
-                <Art name="honeycomb" sizes="(min-width: 1024px) 460px, 0px" className="aspect-[3/2]" />
-              </div>
-            </Reveal>
           </div>
           <RevealGroup as="ul" className="col-span-12 grid gap-4 sm:grid-cols-2 lg:col-span-7 lg:col-start-6 lg:gap-5">
             {priceFactors.items.map((item, i) => {

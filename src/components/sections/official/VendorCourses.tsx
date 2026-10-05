@@ -2,9 +2,7 @@ import { courseItemName, courseRequestLink, courseRow, type OfficialCourse, type
 import { requestLink } from '../../../content/requestTypes';
 import { site } from '../../../content/site';
 import { ButtonLink } from '../../ui/Button';
-import { Art } from '../../ui/Art';
-import { ProductMark } from '../../ui/ProductMark';
-import { products } from '../../../content/products';
+import { LogoTile } from '../../ui/LogoTile';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
@@ -75,17 +73,8 @@ export function VendorCourses({ vendor, tone }: { vendor: OfficialVendor; tone: 
           className="col-span-12 lg:col-span-8"
         />
         <div className="col-span-12 flex flex-col items-start gap-4 lg:col-span-4 lg:items-end">
-          {/* The vendor's own artwork + official mark (decorative: the eyebrow names it). */}
-          <div aria-hidden="true" className="relative w-full sm:max-w-md lg:max-w-none">
-            <div className="aspect-[5/2] overflow-hidden rounded-card bg-canvas-200 shadow-card sm:aspect-[2/1]">
-              <Art
-                name={products[vendor.id].art}
-                sizes="(min-width: 1024px) 400px, (min-width: 640px) 448px, 100vw"
-                className="h-full w-full"
-              />
-            </div>
-            <ProductMark id={vendor.id} size="large" className="absolute top-3 left-3" />
-          </div>
+          {/* The vendor's official logo (decorative: the eyebrow names it). */}
+          <LogoTile ids={[vendor.id]} className="aspect-[5/2] w-full rounded-card shadow-card sm:aspect-[2/1] sm:max-w-md lg:max-w-none" />
           <div className="flex flex-wrap items-center gap-2 lg:justify-end">
             <Chip tone="accent">
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-orange-500" />

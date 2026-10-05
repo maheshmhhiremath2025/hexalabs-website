@@ -18,8 +18,8 @@ export default function Labs() {
         eyebrow={labsHero.eyebrow}
         title={labsHero.title}
         body={labsHero.body}
-        art="dark-silk"
-        feature="lab-machines"
+        logos={['windows-server', 'ubuntu', 'rhel', 'kubernetes']}
+        logosLabel="Lab machine platforms"
         actions={
           <>
             <ButtonLink href="/labs#catalogue" size="lg" arrow="right">
@@ -35,7 +35,7 @@ export default function Labs() {
       <LabCatalogue />
       <ImageProcess />
       <OtherLabPages />
-      <CtaBand title={labsCta.title} body={labsCta.body} cta={labsCta.cta} art="honeycomb" chip={labsHero.eyebrow} />
+      <CtaBand title={labsCta.title} body={labsCta.body} cta={labsCta.cta} chip={labsHero.eyebrow} />
     </>
   );
 }

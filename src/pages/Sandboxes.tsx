@@ -19,8 +19,8 @@ export default function Sandboxes() {
         eyebrow={sandboxesHero.eyebrow}
         title={sandboxesHero.title}
         body={sandboxesHero.body}
-        art="dark-spiral"
-        feature="sandboxes"
+        logos={['azure', 'aws', 'gcp', 'oci', 'databricks', 'ai-foundry']}
+        logosLabel="Sandbox providers"
         actions={
           <>
             <ButtonLink href={sandboxesHero.primary.href} size="lg" arrow="up-right">

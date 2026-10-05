@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { AccentHeadline, type AccentTitle } from '../ui/Accent';
-import { Art, type ArtName } from '../ui/Art';
+import type { ProductId } from '../../content/products';
 import { Chip } from '../ui/Chip';
+import { LogoCluster } from '../ui/LogoCluster';
 
 type Props = {
   eyebrow: string;
@@ -10,30 +11,28 @@ type Props = {
   actions?: ReactNode;
   /** Right-hand column on desktop (dark-styled content: vendor lists, facts…). */
   aside?: ReactNode;
-  /** Dark background artwork behind the text: 'hero' | 'dark-silk' | 'dark-spiral'. Default 'dark-silk'. */
-  art?: ArtName;
   /**
-   * A light artwork shown framed on the right (desktop) when there is no aside —
-   * e.g. 'sandboxes' on the sandboxes page.
+   * Official logos of the platforms the page covers, shown as a tile grid on the right
+   * (desktop) when there is no aside — e.g. the six cloud providers on the sandboxes page.
    */
-  feature?: ArtName;
+  logos?: readonly ProductId[];
+  /** Accessible name for the logo grid. */
+  logosLabel?: string;
   /** Content (usually a row of white cards) that overlaps the hero's bottom edge. */
   overlap?: ReactNode;
 };
 
 /**
- * Inner-page hero: an inset, rounded dark panel with brand artwork drifting slowly
- * behind a big light-weight headline. The h1 renders immediately (no fade — LCP).
+ * Inner-page hero: an inset, rounded dark panel on a plain gradient with a big
+ * light-weight headline. The h1 renders immediately (no fade — LCP).
  */
-export function PageHero({ eyebrow, title, body, actions, aside, art = 'dark-silk', feature, overlap }: Props) {
-  const right = aside ?? (feature ? <FeatureArt name={feature} /> : null);
+export function PageHero({ eyebrow, title, body, actions, aside, logos, logosLabel = 'Platforms', overlap }: Props) {
+  const right =
+    aside ?? (logos?.length ? <LogoCluster ids={logos} label={logosLabel} className="mx-auto hidden max-w-md lg:flex" /> : null);
   return (
     <section aria-labelledby="page-title" className="relative px-2 sm:px-3">
       <div className="surface-dark relative overflow-hidden rounded-[20px] sm:rounded-panel">
-        <div aria-hidden="true" className="art-drift absolute inset-0">
-          <Art name={art} priority sizes="100vw" className="h-full w-full" />
-        </div>
-        <div aria-hidden="true" className="hero-scrim absolute inset-0" />
+        <div aria-hidden="true" className="hero-gradient absolute inset-0" />
 
         <div
           className={`container-site relative grid grid-cols-12 items-center gap-x-6 gap-y-10 pt-14 sm:pt-20 lg:pt-24 ${
@@ -56,15 +55,5 @@ export function PageHero({ eyebrow, title, body, actions, aside, art = 'dark-sil
 
       {overlap ? <div className="container-site relative z-10 -mt-20 sm:-mt-24 lg:-mt-28">{overlap}</div> : null}
     </section>
-  );
-}
-
-function FeatureArt({ name }: { name: ArtName }) {
-  return (
-    <div className="mx-auto hidden max-w-md lg:block">
-      <div className="overflow-hidden rounded-card shadow-[0_30px_60px_-24px_rgb(0_0_0/0.6)] ring-1 ring-white/10">
-        <Art name={name} sizes="(min-width: 1024px) 420px, 0px" className="aspect-[3/2]" />
-      </div>
-    </div>
   );
 }

@@ -31,13 +31,10 @@ export function HeroVendors() {
           <li key={v.id}>
             <SmartLink
               href={`/certifications?vendor=${v.id}#exams`}
-              className="group inline-flex h-10 items-center gap-2 rounded-full bg-canvas pr-3 pl-2.5 text-sm text-heading transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:bg-ink-950 hover:text-white hover:shadow-btn"
+              className="group inline-flex h-10 items-center gap-2 rounded-full bg-canvas pr-3 pl-2 text-sm text-heading transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:bg-ink-950 hover:text-white hover:shadow-btn"
             >
-              <VendorLogo id={v.id} />
-              <span>
-                <span className="sr-only">{vendorPanel.srPrefix} </span>
-                {v.label}
-              </span>
+              <span className="sr-only">{vendorPanel.srPrefix} </span>
+              <VendorLogo id={v.id} label={v.label} />
               <span className="font-mono text-micro text-muted transition-colors group-hover:text-slate-300">
                 {vendorCount(v.id)}
               </span>

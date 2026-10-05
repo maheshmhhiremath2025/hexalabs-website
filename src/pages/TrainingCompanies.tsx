@@ -29,8 +29,8 @@ export default function TrainingCompanies() {
         eyebrow={trainingHero.eyebrow}
         title={trainingHero.title}
         body={trainingHero.body}
-        art="dark-spiral"
-        feature="training"
+        logos={['azure', 'aws', 'gcp', 'windows-server', 'ubuntu', 'kubernetes']}
+        logosLabel="Platforms your courses can run on"
         actions={
           <>
             <ButtonLink href={trainingHero.primaryCta.href} size="lg" arrow="up-right" className="w-full sm:w-auto">
@@ -62,7 +62,7 @@ export default function TrainingCompanies() {
       <DeepDives />
       <Partners />
       <Faq />
-      <CtaBand art="security" />
+      <CtaBand />
     </>
   );
 }

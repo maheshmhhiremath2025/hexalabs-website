@@ -20,8 +20,8 @@ export default function Certifications() {
         eyebrow={certHero.eyebrow}
         title={certHero.title}
         body={certHero.body}
-        art="dark-spiral"
-        feature="certifications"
+        logos={['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks']}
+        logosLabel="Certification vendors"
         actions={
           <>
             <ButtonLink href={certHero.primaryCta.href} size="lg" arrow="up-right">
@@ -39,7 +39,7 @@ export default function Certifications() {
       <BookingTable />
       <VoucherPairing />
       <VendorDisclaimer />
-      <CtaBand title={certCta.title} body={certCta.body} cta={certCta.cta} art="training" chip="Certifications" />
+      <CtaBand title={certCta.title} body={certCta.body} cta={certCta.cta} chip="Certifications" />
     </>
   );
 }

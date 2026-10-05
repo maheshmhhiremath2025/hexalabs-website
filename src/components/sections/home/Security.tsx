@@ -1,8 +1,7 @@
 import { Building2, Gauge, KeyRound, Lock, Power, ScrollText, type LucideIcon } from 'lucide-react';
 import { security } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
-import { Art } from '../../ui/Art';
-import { Reveal, RevealGroup, RevealItem } from '../../ui/Reveal';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
 /** One icon per control, in content order. */
@@ -18,13 +17,8 @@ export function Security() {
         intro={security.intro}
       />
 
-      <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-3">
-        <Reveal>
-          <div aria-hidden="true" className="h-full overflow-hidden rounded-card shadow-card">
-            <Art name="security" sizes="(min-width: 1024px) 390px, 100vw" className="aspect-[2/1] h-full w-full sm:aspect-[3/2] lg:aspect-auto" />
-          </div>
-        </Reveal>
-        <RevealGroup as="ul" className="grid gap-5 sm:grid-cols-2 lg:col-span-2">
+      <div className="mt-14 lg:mt-16">
+        <RevealGroup as="ul" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {security.items.map((item, i) => {
             const Icon = icons[i];
             return (

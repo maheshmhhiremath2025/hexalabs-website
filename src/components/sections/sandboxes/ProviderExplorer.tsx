@@ -5,9 +5,8 @@ import { providers, providersSection, sandboxRequestLink, type SandboxProvider, 
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
-import { Art } from '../../ui/Art';
-import { ProductMark } from '../../ui/ProductMark';
-import { products } from '../../../content/products';
+import { LogoTile } from '../../ui/LogoTile';
+import { MarkBadge } from '../../ui/MarkBadge';
 import { Reveal } from '../../ui/Reveal';
 import { PillScroller, pillClass, pillRailClass, withAccent } from './pills';
 
@@ -35,15 +34,9 @@ function List({ title, items, icon: Icon }: { title: string; items: string[]; ic
   );
 }
 
-/** Tiny official mark in a provider tab: the logo where the brand allows it, else a brand-coloured dot. */
+/** Compact official mark in a provider tab: a round white badge, so it reads on the dark (active) pill. */
 function TabMark({ id }: { id: SandboxProviderId }) {
-  const p = products[id];
-  const logo = 'logo' in p ? p.logo : undefined;
-  return logo ? (
-    <img src={logo} alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4 flex-none rounded-[3px] bg-white p-px" decoding="async" />
-  ) : (
-    <span aria-hidden="true" className="h-2 w-2 flex-none rounded-full ring-2 ring-white" style={{ backgroundColor: p.brandHex }} />
-  );
+  return <MarkBadge id={id} size={22} />;
 }
 
 function ProviderPanel({ provider, active }: { provider: SandboxProvider; active: boolean }) {
@@ -73,17 +66,8 @@ function ProviderPanel({ provider, active }: { provider: SandboxProvider; active
             <span className="sr-only">: {provider.name}</span>
           </ButtonLink>
         </div>
-        {/* The provider's own artwork + official mark (decorative: the heading names it). */}
-        <div aria-hidden="true" className="relative order-first md:order-none">
-          <div className="aspect-[2/1] overflow-hidden rounded-[14px] bg-canvas-200 ring-1 ring-slate-200 md:aspect-[3/2]">
-            <Art
-              name={products[provider.id].art}
-              sizes="(min-width: 1024px) 352px, (min-width: 768px) 272px, 100vw"
-              className="h-full w-full"
-            />
-          </div>
-          <ProductMark id={provider.id} size="large" className="absolute top-3 left-3" />
-        </div>
+        {/* The provider's official logo (decorative: the heading names it). */}
+        <LogoTile ids={[provider.id]} className="order-first aspect-[2/1] rounded-[14px] md:order-none md:aspect-[3/2]" />
       </div>
 
       <div className="grid gap-x-10 gap-y-10 pt-8 md:grid-cols-2 lg:grid-cols-3">

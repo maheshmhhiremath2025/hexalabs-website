@@ -1,7 +1,6 @@
 import { CalendarPlus, Hourglass, Play, Power, ScrollText, UserCog, type LucideIcon } from 'lucide-react';
 import { trainers } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
-import { Art } from '../../ui/Art';
 import { Reveal } from '../../ui/Reveal';
 import { DayTimeline } from '../../graphics/DayTimeline';
 import { accentTitle } from './accentTitle';
@@ -39,12 +38,11 @@ export function TrainersSplit() {
           </ul>
         </div>
 
-        {/* Artwork with the lab-day card overlapping its lower part */}
+        {/* The lab-day timeline on a soft stage */}
         <Reveal className="col-span-12 lg:col-span-6">
-          <div className="overflow-hidden rounded-[20px]">
-            <Art name="honeycomb" sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[3/2]" />
+          <div className="ui-stage rounded-[20px] p-3 sm:p-8">
+            <DayTimeline />
           </div>
-          <DayTimeline className="relative mx-3 -mt-20 sm:mx-8 sm:-mt-32" />
         </Reveal>
       </div>
     </Section>

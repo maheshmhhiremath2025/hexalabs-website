@@ -1,11 +1,12 @@
-import { Briefcase, Building2, GraduationCap, type LucideIcon } from 'lucide-react';
+import { Briefcase, Building2, GraduationCap, Palette, type LucideIcon } from 'lucide-react';
 import { aboutHero, audiences, principles, whatWeDo } from '../content/about';
 import { labsMenu, site } from '../content/site';
 import { PageHero } from '../components/sections/PageHero';
 import { CtaBand } from '../components/sections/CtaBand';
 import { Section, SectionIntro } from '../components/ui/Section';
 import { Accent } from '../components/ui/Accent';
-import { Art, type ArtName } from '../components/ui/Art';
+import { LogoCluster } from '../components/ui/LogoCluster';
+import type { ProductId } from '../content/products';
 import { ArtCard, IconCard } from '../components/ui/Cards';
 import { ButtonLink } from '../components/ui/Button';
 import { Carousel } from '../components/ui/Carousel';
@@ -13,21 +14,29 @@ import { Chip } from '../components/ui/Chip';
 import { Reveal, RevealGroup, RevealItem } from '../components/ui/Reveal';
 import { accentText } from '../components/sections/training/accentText';
 
+/** Official logos of a few platforms in each kind of lab (same as the home catalogue). */
+const kindLogos: ProductId[][] = [
+  ['azure', 'aws'],
+  ['azure', 'aws', 'gcp', 'oci', 'databricks', 'ai-foundry'],
+  ['windows-server', 'ubuntu', 'rhel', 'kubernetes'],
+  ['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks'],
+];
+
 /** What HexaLabs runs — the four kinds of lab plus the training-company program. */
-const offerings: { chip: string; title: string; body: string; href: string; art: ArtName }[] = [
+const offerings: { chip: string; title: string; body: string; href: string; logos?: ProductId[]; icon?: LucideIcon }[] = [
   ...labsMenu.items.map((item, i) => ({
     chip: ['Course labs', 'Sandboxes', 'Browser labs', 'Vouchers'][i] ?? 'Labs',
     title: item.label,
     body: `${item.description ?? ''}.`,
     href: item.href,
-    art: (['official-labs', 'sandboxes', 'lab-machines', 'certifications'] as const)[i] ?? 'official-labs',
+    logos: kindLogos[i],
   })),
   {
     chip: 'For trainers',
     title: 'For training companies',
     body: 'Lab Console, reports, white-label and the partner program.',
     href: '/for-training-companies',
-    art: 'white-label',
+    icon: Palette,
   },
 ];
 
@@ -44,7 +53,6 @@ export default function About() {
         eyebrow={aboutHero.eyebrow}
         title={aboutHero.title}
         body={aboutHero.body}
-        art="hero"
         actions={
           <>
             <ButtonLink href="/contact" size="lg" arrow="up-right" className="w-full sm:w-auto">
@@ -57,7 +65,7 @@ export default function About() {
         }
       />
 
-      {/* What we do — editorial split: statement and text left, framed artwork right */}
+      {/* What we do — editorial split: statement and text left, official platform logos right */}
       <Section tone="paper" labelledBy="what-title">
         <div className="grid grid-cols-12 items-center gap-x-6 gap-y-12">
           <div className="col-span-12 lg:col-span-6">
@@ -70,13 +78,14 @@ export default function About() {
             ))}
           </div>
           <Reveal className="col-span-12 lg:col-span-5 lg:col-start-8">
-            <figure aria-hidden="true" className="group relative">
-              <div className="art-zoom overflow-hidden rounded-[20px] shadow-card">
-                <Art name="training" sizes="(min-width: 1024px) 480px, 100vw" className="aspect-[4/3] lg:aspect-[4/5]" />
-              </div>
-              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+            <figure className="ui-stage rounded-[20px] p-4 sm:p-8">
+              <p className="mb-5">
                 <Chip className="font-mono">{site.portalLabel}</Chip>
-              </div>
+              </p>
+              <LogoCluster
+                ids={['azure', 'aws', 'gcp', 'oci', 'windows-server', 'ubuntu', 'rhel', 'kubernetes', 'databricks']}
+                label="Platforms we run labs on"
+              />
             </figure>
           </Reveal>
         </div>
@@ -98,7 +107,8 @@ export default function About() {
           {offerings.map((o) => (
             <ArtCard
               key={o.title}
-              art={o.art}
+              logos={o.logos}
+              icon={o.icon}
               chip={o.chip}
               title={o.title}
               body={o.body}
@@ -149,7 +159,7 @@ export default function About() {
         </p>
       </Section>
 
-      <CtaBand art="honeycomb" chip="About HexaLabs" />
+      <CtaBand chip="About HexaLabs" />
     </>
   );
 }

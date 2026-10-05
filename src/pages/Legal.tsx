@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { site } from '../content/site';
 import { legalDocs, type LegalBlock, type LegalKind, type LegalListItem } from '../content/legal';
-import { Art } from '../components/ui/Art';
 import { Chip } from '../components/ui/Chip';
 import { SmartLink } from '../components/ui/SmartLink';
 import { CtaBand } from '../components/sections/CtaBand';
@@ -74,11 +73,6 @@ export default function Legal({ kind }: Props) {
               Last updated: <time dateTime={doc.lastUpdatedIso}>{doc.lastUpdated}</time>
             </p>
           </div>
-          <div aria-hidden="true" className="col-span-4 hidden lg:block">
-            <div className="overflow-hidden rounded-[20px] shadow-card">
-              <Art name="security" priority sizes="(min-width: 1024px) 360px, 0px" className="aspect-[4/3]" />
-            </div>
-          </div>
         </div>
       </section>
 
@@ -134,7 +128,7 @@ export default function Legal({ kind }: Props) {
         </div>
       </div>
 
-      <CtaBand title={doc.cta.title} body={doc.cta.body} cta={{ label: doc.cta.label, href: doc.cta.href }} art="white-label" chip="Contact" />
+      <CtaBand title={doc.cta.title} body={doc.cta.body} cta={{ label: doc.cta.label, href: doc.cta.href }} chip="Contact" />
     </>
   );
 }

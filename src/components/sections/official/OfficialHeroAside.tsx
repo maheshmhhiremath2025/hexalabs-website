@@ -1,10 +1,8 @@
 import { courseRow, officialHero, officialVendors, type OfficialVendor } from '../../../content/officialLabs';
 import { site } from '../../../content/site';
-import { Art } from '../../ui/Art';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
-import { ProductMark } from '../../ui/ProductMark';
-import { products } from '../../../content/products';
+import { LogoTile } from '../../ui/LogoTile';
 
 /** "Fundamentals to Expert" — the first and last level that have courses. */
 function levelRange(v: OfficialVendor) {
@@ -13,13 +11,11 @@ function levelRange(v: OfficialVendor) {
   return used.length === 1 ? used[0].label : `${used[0].label} to ${used[used.length - 1].label}`;
 }
 
-/** The current offer as a featured horizontal card: artwork left, text right. */
+/** The current offer as a featured horizontal card: the official Azure and AWS logos left, text right. */
 function OfferCard() {
   return (
     <article className="card card-hover group grid h-full overflow-hidden sm:grid-cols-[5fr_6fr]">
-      <div className="art-zoom aspect-[2/1] sm:aspect-auto">
-        <Art name="official-labs" sizes="(min-width: 1024px) 260px, (min-width: 640px) 45vw, 100vw" className="h-full w-full" />
-      </div>
+      <LogoTile ids={['azure', 'aws']} priority className="m-1.5 aspect-[2/1] rounded-[12px] sm:m-2 sm:mr-0 sm:aspect-auto" />
       <div className="flex flex-col p-5 sm:p-6">
         <p>
           <Chip tone="accent">
@@ -38,15 +34,12 @@ function OfferCard() {
   );
 }
 
-/** One vendor's course list as a card: its own artwork + official mark on top, then the count. */
+/** One vendor's course list as a card: its official logo on top, then the count. */
 function VendorCard({ v }: { v: OfficialVendor }) {
   return (
     <article className="card card-hover group flex h-full flex-col overflow-hidden">
       {/* Decorative: the heading below names the vendor. */}
-      <div aria-hidden="true" className="art-zoom relative aspect-[3/2] bg-canvas-200">
-        <Art name={products[v.id].art} sizes="(min-width: 1024px) 270px, 46vw" className="h-full w-full" />
-        <ProductMark id={v.id} className="absolute top-2 left-2 sm:top-3 sm:left-3" />
-      </div>
+      <LogoTile ids={[v.id]} priority className="m-1.5 aspect-[3/2] rounded-[12px] sm:m-2" />
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         <h2 className="text-base leading-snug font-medium tracking-tight sm:text-lg">{v.eyebrow}</h2>
         <p className="mt-1.5 text-[0.8125rem] leading-5 text-body sm:text-sm sm:leading-6">

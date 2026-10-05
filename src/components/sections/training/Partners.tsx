@@ -32,11 +32,9 @@ export function Partners() {
       <RevealGroup className="mt-12 grid items-stretch gap-6 lg:mt-14 lg:grid-cols-2 lg:gap-8">
         <RevealItem className="h-full">
           <ArtCard
-            art="white-label"
             chip="Your brand"
             title={whiteLabel.title}
             body={whiteLabel.body}
-            sizes="(min-width: 1024px) 580px, 100vw"
             action={
               <ButtonLink href="/contact?item=White-label" variant="dark" arrow="up-right">
                 Ask about white-label

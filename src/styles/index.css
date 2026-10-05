@@ -374,6 +374,82 @@
     transform: scale(1.06);
   }
 
+  /* ── Logo tile: official product logo on a clean, softly tinted panel ─ */
+  /* --brand is set per tile from the product's brand colour (content data). */
+  .logo-tile {
+    --brand: var(--blue-600);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(58% 64% at 50% 44%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 72%),
+      linear-gradient(160deg, var(--white) 35%, color-mix(in srgb, var(--brand) 5%, var(--paper-50)) 100%);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--brand) 12%, var(--slate-200)),
+      inset 0 1px 0 var(--white);
+  }
+  /* Faint dot grid that fades out toward the edges. */
+  .logo-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(color-mix(in srgb, var(--brand) 22%, transparent) 1px, transparent 1.2px);
+    background-size: 14px 14px;
+    background-position: center;
+    opacity: 0.55;
+    mask-image: radial-gradient(70% 70% at 50% 45%, black, transparent 78%);
+  }
+  .logo-tile img {
+    transition: transform 900ms var(--ease-smooth);
+    filter: drop-shadow(0 8px 18px rgb(6 20 38 / 0.08));
+  }
+  .group:hover .logo-tile img,
+  .group:focus-within .logo-tile img {
+    transform: scale(1.05);
+  }
+  /* Square white badge holding one compact official mark (rows of 2+ logos). */
+  .logo-badge {
+    display: grid;
+    flex: none;
+    place-items: center;
+    border-radius: calc(var(--s, 3rem) * 0.26);
+    background: var(--white);
+    box-shadow:
+      0 0 0 1px rgb(15 23 42 / 0.07),
+      0 6px 16px -8px rgb(6 20 38 / 0.18);
+  }
+  .logo-tile .logo-badge img {
+    filter: none;
+  }
+
+  /* Soft light stage behind product UI mock-ups (in place of artwork). */
+  .ui-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(70% 60% at 80% 0%, color-mix(in srgb, var(--blue-600) 10%, transparent), transparent 70%),
+      linear-gradient(160deg, var(--canvas) 0%, var(--canvas-200) 100%);
+  }
+  .ui-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(color-mix(in srgb, var(--blue-600) 16%, transparent) 1px, transparent 1.2px);
+    background-size: 16px 16px;
+    opacity: 0.6;
+  }
+
+  /* Plain dark gradient behind hero text (no artwork). */
+  .hero-gradient {
+    background:
+      radial-gradient(60% 70% at 88% 12%, rgb(10 102 194 / 0.34), transparent 70%),
+      radial-gradient(45% 55% at 6% 100%, rgb(90 166 255 / 0.12), transparent 70%),
+      linear-gradient(165deg, #0c1c33 0%, #060e1c 55%, #040b17 100%);
+  }
+
   /* ── Hero art ─────────────────────────────────────────────────────── */
   /* Slow drift/zoom on hero backgrounds (disabled for reduced motion). */
   .art-drift img {
@@ -683,7 +759,9 @@
   .art-card:hover .art-card-panel,
   .art-card:focus-within .art-card-panel,
   .group:hover .art-zoom img,
-  .group:focus-within .art-zoom img {
+  .group:focus-within .art-zoom img,
+  .group:hover .logo-tile img,
+  .group:focus-within .logo-tile img {
     transform: none;
   }
   .carousel-track {

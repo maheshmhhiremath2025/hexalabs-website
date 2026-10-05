@@ -2,21 +2,22 @@ import { ArrowRight, CalendarCheck, FlaskConical, Plus, Ticket } from 'lucide-re
 import type { LucideIcon } from 'lucide-react';
 import { pairing, practiceExamples, type PracticeKind } from '../../../content/certifications';
 import { AccentHeadline } from '../../ui/Accent';
-import type { ArtName } from '../../ui/Art';
 import { ArtCard } from '../../ui/Cards';
 import { Chip } from '../../ui/Chip';
+import type { ProductId } from '../../../content/products';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { Section, SectionIntro } from '../../ui/Section';
 
 const partIcons: LucideIcon[] = [Ticket, FlaskConical, CalendarCheck];
 const connectors: LucideIcon[] = [Plus, ArrowRight];
-const destinationArt: Record<PracticeKind, ArtName> = {
-  official: 'official-labs',
-  sandbox: 'sandboxes',
-  machine: 'lab-machines',
+/** Official logos of a few platforms in each practice environment (same sets as the home catalogue). */
+const destinationLogos: Record<PracticeKind, ProductId[]> = {
+  official: ['azure', 'aws'],
+  sandbox: ['gcp', 'oci', 'databricks'],
+  machine: ['windows-server', 'ubuntu', 'kubernetes'],
 };
 
-/** Voucher + practice environment → exam day, then the three HexaLabs environments as art cards. */
+/** Voucher + practice environment → exam day, then the three HexaLabs environments as cards with official logos. */
 export function VoucherPairing() {
   const { diagram, destinations } = pairing;
   const last = diagram.parts.length - 1;
@@ -73,12 +74,11 @@ export function VoucherPairing() {
           return (
             <RevealItem as="li" key={d.kind}>
               <ArtCard
-                art={destinationArt[d.kind]}
+                logos={destinationLogos[d.kind]}
                 title={d.name}
                 body={d.body}
                 href={d.href}
                 linkLabel={d.linkLabel}
-                sizes="(min-width: 768px) 380px, 100vw"
               >
                 {examples.length ? (
                   <div className="mt-5">

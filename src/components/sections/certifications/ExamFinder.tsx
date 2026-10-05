@@ -11,10 +11,9 @@ import {
   type Certification,
   type VendorId,
 } from '../../../content/certifications';
-import { products } from '../../../content/products';
-import { Art } from '../../ui/Art';
+import type { ProductId } from '../../../content/products';
 import { Chip } from '../../ui/Chip';
-import { ProductMark } from '../../ui/ProductMark';
+import { LogoTile } from '../../ui/LogoTile';
 import { LinkArrow } from '../../ui/LinkArrow';
 import { Reveal } from '../../ui/Reveal';
 import { Section, SectionIntro } from '../../ui/Section';
@@ -23,6 +22,9 @@ import { accentWord } from '../official/accentWord';
 import { VendorLogo } from './VendorLogo';
 
 type FilterId = VendorId | 'all';
+
+/** Official logo in each vendor's group header (CNCF shows its own mark; the heading names the Linux Foundation). */
+const vendorLogos = (id: VendorId): ProductId[] => [id];
 const isFilter = (v: string | null): v is FilterId => v === 'all' || vendors.some((x) => x.id === v);
 
 const filters: { id: FilterId; label: string }[] = [{ id: 'all', label: examFinder.allLabel }, ...vendors];
@@ -200,8 +202,7 @@ export function ExamFinder() {
           const active = filter === f.id;
           return (
             <button key={f.id} type="button" aria-pressed={active} onClick={() => choose(f.id)} className={pillClass(active, f.id !== 'all')}>
-              {f.id === 'all' ? null : <VendorLogo id={f.id} />}
-              {f.label}
+              {f.id === 'all' ? f.label : <VendorLogo id={f.id} label={f.label} />}
               <span className={`font-mono text-micro ${active ? 'text-slate-300' : 'text-slate-500'}`}>{countFor(f.id)}</span>
             </button>
           );
@@ -217,24 +218,15 @@ export function ExamFinder() {
           <Reveal key={g.id}>
             {/* content-visibility lets the browser skip laying out vendor groups until they are near the screen. */}
             <div data-exam-group className="card scroll-mt-28 overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
-              {/* Vendor header: its own product artwork as a thumbnail + its official mark. */}
+              {/* Vendor header: its official logo on a small tile (decorative — the heading names it). */}
               <div className="flex items-center gap-4 border-b border-line px-5 py-4 sm:gap-5 sm:px-7">
-                <Art
-                  name={products[g.id].art}
-                  sizes="128px"
-                  className="aspect-[3/2] w-20 flex-none overflow-hidden rounded-xl bg-canvas ring-1 ring-line sm:w-28"
+                <LogoTile
+                  ids={vendorLogos(g.id)}
+                  size="sm"
+                  className="aspect-[3/2] w-24 flex-none rounded-xl sm:w-32"
                 />
                 <div className="flex min-w-0 flex-1 flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-4">
-                  <h3 className="min-w-0 text-xl leading-snug font-medium tracking-tight">
-                    {/* Screen readers hear the vendor name once; the mark below is visual only. */}
-                    <span className="sr-only">{g.label}</span>
-                    <span aria-hidden="true" className="block">
-                      <ProductMark id={g.id} size="large" />
-                      {g.label !== products[g.id].label ? (
-                        <span className="mt-1.5 block text-sm font-normal tracking-normal text-muted">{g.label}</span>
-                      ) : null}
-                    </span>
-                  </h3>
+                  <h3 className="min-w-0 text-xl leading-snug font-medium tracking-tight">{g.label}</h3>
                   <Chip tone="soft">{examFinder.groupCount(g.exams.length)}</Chip>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { products, type ProductId } from '../../content/products';
+import { product, type ProductId } from '../../content/products';
 
 type Props = {
   id: ProductId;
@@ -8,27 +8,29 @@ type Props = {
 };
 
 /**
- * A platform's official mark: its SVG logo plus name where the brand allows it,
- * otherwise the name in the brand colour (Microsoft, AWS, Oracle).
+ * A platform's official logo in a white pill, always followed by its name.
  */
 export function ProductMark({ id, size = 'chip', className = '' }: Props) {
-  const p = products[id];
-  const logo = 'logo' in p ? p.logo : undefined;
+  const p = product(id);
   const big = size === 'large';
+  const h = big ? 20 : 16;
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full bg-white font-medium shadow-card ring-1 ring-slate-200 ${
-        big ? 'px-3.5 py-2 text-sm' : 'px-2.5 py-1 text-xs'
+      className={`relative inline-flex items-center gap-2 rounded-full bg-white font-medium text-ink-950 shadow-card ring-1 ring-slate-200 ${
+        big ? 'h-9 px-3.5 text-sm' : 'h-7 px-2.5 text-xs'
       } ${className}`}
     >
-      {logo ? (
-        <img src={logo} alt="" width={big ? 20 : 16} height={big ? 20 : 16} className={big ? 'h-5 w-5' : 'h-4 w-4'} loading="lazy" decoding="async" />
-      ) : (
-        <span aria-hidden="true" className={`${big ? 'h-2.5 w-2.5' : 'h-2 w-2'} rounded-full`} style={{ backgroundColor: p.brandHex }} />
-      )}
-      <span style={logo ? undefined : { color: p.brandHex === '#232F3E' ? '#232F3E' : p.brandHex }} className={logo ? 'text-ink-950' : ''}>
-        {p.label}
-      </span>
+      <img
+        src={p.officialLogo}
+        alt=""
+        width={Math.round(h * p.logoAspect)}
+        height={h}
+        style={{ height: h, width: 'auto', maxWidth: big ? 120 : 96 }}
+        className="flex-none object-contain"
+        loading="lazy"
+        decoding="async"
+      />
+      <span>{p.label}</span>
     </span>
   );
 }

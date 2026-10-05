@@ -18,7 +18,6 @@ export default function NotFound() {
         eyebrow="Error 404"
         title={{ before: 'This page ', accent: 'doesn’t exist', after: '.' }}
         body="The link may be old or mistyped. The lab catalogue and the demo form are a good place to start."
-        art="dark-spiral"
         actions={
           <>
             <ButtonLink href="/labs" size="lg" arrow="up-right" className="w-full sm:w-auto">

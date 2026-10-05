@@ -124,11 +124,10 @@ export const catalogue = {
   title: 'Pick the stack your course teaches.',
   accent: 'stack',
   action: { label: 'See all lab machines', href: '/labs' },
-  /** The four art cards on the home page — one per kind of environment. */
+  /** The four cards on the home page — one per kind of environment (logos: Catalogue.tsx). */
   cards: [
     {
       id: 'official',
-      art: 'official-labs',
       chip: 'Azure · AWS',
       title: 'Official course labs',
       line: 'Official lab environments for Microsoft Azure and AWS classroom courses, from fundamentals to expert.',
@@ -138,7 +137,6 @@ export const catalogue = {
     },
     {
       id: 'sandboxes',
-      art: 'sandboxes',
       chip: 'Six providers',
       title: 'Cloud sandboxes',
       line: 'Real cloud consoles for each learner, with limits on services, hours and spend.',
@@ -148,7 +146,6 @@ export const catalogue = {
     },
     {
       id: 'machines',
-      art: 'lab-machines',
       chip: 'In the browser',
       title: 'Lab machines',
       line: 'Windows Server and Linux desktops with admin rights, plus AKS and ARO clusters with a namespace and quota per learner.',
@@ -158,7 +155,6 @@ export const catalogue = {
     },
     {
       id: 'certifications',
-      art: 'certifications',
       chip: 'Seven vendors',
       title: 'Certification vouchers',
       line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day.',
@@ -311,7 +307,8 @@ export const security = {
 };
 
 /**
- * "Use case" cards in the dark carousel. Generic setups built only from the
+ * "Use case" cards in the dark carousel. Product cards show official logos (`logos`,
+ * ids from src/content/products.ts); the non-product white-label card shows a line icon. Generic setups built only from the
  * offerings described on this site — no customers, numbers or results.
  */
 export const useCases = {
@@ -325,49 +322,41 @@ export const useCases = {
       title: 'Run an AZ-104 batch for 30 learners',
       body: 'An official Azure lab environment for every learner, opened from any browser with nothing to install.',
       href: '/official-labs#azure',
-      art: 'p-azure',
-      focus: '50% 50%',
+      logos: ['azure'],
     },
     {
       chip: 'Cloud sandbox',
       title: 'Give each learner an OCI sandbox',
       body: 'Their own compartment and console sign-in, with allowed services, shape limits and daily hour caps.',
       href: '/sandboxes?provider=oci#providers',
-      art: 'p-oci',
-      focus: '50% 50%',
+      logos: ['oci'],
     },
     {
       chip: 'Lab machines',
       title: 'Deploy 30 identical Windows Server machines',
       body: 'We build one image with your software, then clone it so every learner gets the same machine.',
       href: '/labs?type=windows',
-      art: 'p-windows-server',
-      focus: '50% 48%',
+      logos: ['windows-server'],
     },
     {
       chip: 'Kubernetes',
       title: 'Teach Kubernetes with a namespace per learner',
       body: 'A managed AKS cluster with a namespace and quota per learner, plus kubectl on their desktop.',
       href: '/labs?type=kubernetes',
-      art: 'p-kubernetes',
-      focus: '50% 50%',
+      logos: ['kubernetes', 'aks'],
     },
     {
       chip: 'Certifications',
       title: 'Pair a course with exam vouchers',
       body: 'Order official vouchers for the whole batch or one learner, and add practice labs before exam day.',
       href: '/certifications',
-      art: 'certifications',
-      focus: '50% 50%',
-      flip: true,
+      logos: ['microsoft', 'aws', 'google'],
     },
     {
       chip: 'White-label',
       title: 'Run the labs under your own brand',
       body: 'Learners sign in on your domain, see your logo and get emails from your name.',
       href: '/for-training-companies',
-      art: 'white-label',
-      focus: '50% 50%',
     },
   ],
 } as const;

@@ -20,7 +20,6 @@ export default function OfficialLabs() {
         eyebrow={officialHero.eyebrow}
         title={officialHero.title}
         body={officialHero.body}
-        art="dark-silk"
         actions={
           <>
             <ButtonLink href={actions.primary.href} size="lg" arrow="up-right">
@@ -41,7 +40,6 @@ export default function OfficialLabs() {
         title={officialCta.title}
         body={officialCta.body}
         cta={officialCta.cta}
-        art="training"
         chip="Official labs"
       />
     </>

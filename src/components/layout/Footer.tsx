@@ -68,9 +68,10 @@ export function Footer() {
           </ul>
         </div>
         <p className="container-site pb-7 text-xs leading-5 text-muted">
-          Microsoft, Azure, Windows, AWS, Google Cloud, Oracle, Databricks, Red Hat, OpenShift, Ubuntu, Kubernetes,
-          Jupyter, Jenkins and CNCF are trademarks of their respective owners. They are shown only to identify the
-          platforms our labs run on; this does not imply endorsement.
+          Microsoft, Azure, Windows, Entra, AWS, Google Cloud, Oracle, Databricks, Red Hat, OpenShift, Rocky Linux,
+          Ubuntu, Kubernetes, CNCF, The Linux Foundation, Python, Jupyter, Jenkins and Kiro names and logos are
+          trademarks of their respective owners. They are shown only to identify the platforms our labs run on; this
+          does not imply endorsement.
         </p>
       </div>
     </footer>

@@ -3,44 +3,36 @@ import { catalogue } from '../../../content/home';
 import { site } from '../../../content/site';
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
-import { Art } from '../../ui/Art';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
-import { ProductMark } from '../../ui/ProductMark';
+import { LogoTile } from '../../ui/LogoTile';
 import type { ProductId } from '../../../content/products';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
 type Card = (typeof catalogue.cards)[number];
 
-/** Official marks of a few platforms inside each kind (the card's tags list them in text). */
+/**
+ * Official marks of the platforms in each kind, as equal square badges (same size on
+ * every card): all six sandbox providers and all seven voucher vendors (the card's tags list them in text).
+ */
 const cardMarks: Record<Card['id'], ProductId[]> = {
   official: ['azure', 'aws'],
-  sandboxes: ['gcp', 'oci', 'databricks'],
-  machines: ['windows-server', 'ubuntu', 'kubernetes'],
-  certifications: ['microsoft', 'aws', 'google'],
+  sandboxes: ['azure', 'aws', 'gcp', 'oci', 'databricks', 'ai-foundry'],
+  machines: ['windows-server', 'ubuntu', 'rhel', 'kubernetes'],
+  certifications: ['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks'],
 };
 
 /**
- * Art card with its kind's category artwork (each kind spans several products, so no
- * single product's artwork fits — product artwork lives on the product cards), a row
- * of official marks over it, and a taller image than the default ArtCard (the row is four-up, so the
- * default 3:2 image would be mostly hidden behind the panel on wide screens). Same classes and motion.
+ * Art card whose media is a clean tile with the official logos of a few platforms in
+ * that kind, taller than the default ArtCard (the row is four-up, so a 3:2 tile would be
+ * mostly hidden behind the panel on wide screens). Same classes and motion.
  */
 function KindCard({ c }: { c: Card }) {
   return (
     <article className="art-card group">
-      <div className="art-card-media art-zoom xl:aspect-[5/4]">
-        <Art name={c.art} sizes="(min-width: 1280px) 290px, (min-width: 640px) 50vw, 100vw" className="h-full w-full" />
-      </div>
-      {/* Visual only: the tags below name the same platforms for screen readers. Kept outside .art-zoom so the logos don't zoom. */}
-      <ul aria-hidden="true" className="pointer-events-none absolute inset-x-3 top-3 z-[2] flex flex-wrap gap-1.5">
-        {cardMarks[c.id].map((id) => (
-          <li key={id}>
-            <ProductMark id={id} />
-          </li>
-        ))}
-      </ul>
+      {/* Visual only: the tags below name the same platforms for screen readers. */}
+      <LogoTile ids={cardMarks[c.id]} badge="3rem" overlap="3.5rem" className="art-card-media xl:aspect-[5/4]" />
       <div className="art-card-panel card -mt-14">
         <p className="flex flex-wrap gap-1.5">
           <Chip>{c.chip}</Chip>

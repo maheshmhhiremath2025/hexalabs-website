@@ -5,7 +5,8 @@
  * Dark backgrounds: hero, dark-silk, dark-spiral.
  * Light backgrounds: official-labs, sandboxes, lab-machines, certifications,
  * training, ask-hexa, white-label, security, honeycomb.
- * Per-product (p-*): one per platform, mapped in src/content/products.ts.
+ * Per-product (p-*): kept for reference only. Product cards now show official logos
+ * (LogoTile + src/content/products.ts); artwork is for heroes, CTA bands and feature sections.
  */
 export const artNames = [
   'hero',
@@ -20,7 +21,7 @@ export const artNames = [
   'white-label',
   'security',
   'honeycomb',
-  // Per-product artwork, themed to each product's own colours (light backgrounds).
+  // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',
   'p-gcp',

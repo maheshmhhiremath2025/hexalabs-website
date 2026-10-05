@@ -1,13 +1,19 @@
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { Art, type ArtName } from './Art';
 import { Chip } from './Chip';
 import { LinkArrow } from './LinkArrow';
+import { LogoTile } from './LogoTile';
+import type { ProductId } from '../../content/products';
 
 type Heading = 'h2' | 'h3' | 'h4';
 
 type ArtCardProps = {
-  art: ArtName;
+  /** Non-product cards: a line icon on a soft tile. */
+  icon?: LucideIcon;
+  /** Product cards: official logo(s) on a clean tile (wins over `icon`). */
+  logos?: readonly ProductId[];
+  /** 'named' when nothing else on the card names the product (alt text = product name). */
+  logosAlt?: 'decorative' | 'named';
   title: string;
   body?: ReactNode;
   /** Small dark label above the title, e.g. "Use case", "Azure". */
@@ -20,18 +26,19 @@ type ArtCardProps = {
   /** Extra content between body and link (lists, meta). */
   children?: ReactNode;
   as?: Heading;
-  /** `sizes` for the artwork; default suits a 3-up grid. */
-  sizes?: string;
   className?: string;
 };
 
 /**
- * Reference-style card: artwork on top (zooms on hover), white panel overlapping
+ * Reference-style card: a product's official logos (or, for non-product cards, a line
+ * icon) on a soft tile on top, white panel overlapping
  * the image's lower part, chip, title, short body and an underlined "Know more ↗".
  * The link is stretched over the panel.
  */
 export function ArtCard({
-  art,
+  icon,
+  logos,
+  logosAlt = 'decorative',
   title,
   body,
   chip,
@@ -40,15 +47,17 @@ export function ArtCard({
   action,
   children,
   as: H = 'h3',
-  sizes,
   className = '',
 }: ArtCardProps) {
   return (
     <article className={`art-card group ${className}`}>
-      <div className="art-card-media art-zoom">
-        <Art name={art} sizes={sizes} className="h-full w-full" />
-      </div>
-      <div className="art-card-panel card">
+      {logos?.length ? (
+        <LogoTile ids={logos} alt={logosAlt} overlap="4.5rem" className="art-card-media" />
+      ) : icon ? (
+        <IconTile icon={icon} />
+      ) : null}
+      {/* With no media on top, the panel is a plain card. */}
+      <div className={`art-card-panel card ${logos?.length || icon ? '' : 'm-0!'}`}>
         {chip ? (
           <p>
             <Chip>{chip}</Chip>
@@ -64,6 +73,21 @@ export function ArtCard({
         ) : null}
       </div>
     </article>
+  );
+}
+
+/** Media for non-product art cards: a line icon in a white badge on a soft stage. */
+export function IconTile({ icon: Icon, overlap = '4.5rem' }: { icon?: LucideIcon; overlap?: string }) {
+  return (
+    <div aria-hidden="true" className="art-card-media ui-stage">
+      <div className="absolute inset-x-0 top-0 grid place-items-center" style={{ bottom: overlap }}>
+        {Icon ? (
+          <span className="grid h-20 w-20 place-items-center rounded-[22px] bg-white text-blue-600 shadow-card ring-1 ring-slate-200 transition-transform duration-700 ease-[var(--ease-smooth)] group-hover:scale-105">
+            <Icon className="h-9 w-9" strokeWidth={1.5} />
+          </span>
+        ) : null}
+      </div>
+    </div>
   );
 }
 

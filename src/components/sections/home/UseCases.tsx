@@ -1,52 +1,28 @@
-import type { CSSProperties } from 'react';
+import { Palette } from 'lucide-react';
 import { useCases } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { Carousel } from '../../ui/Carousel';
 import { Chip } from '../../ui/Chip';
-import { Art } from '../../ui/Art';
-import { ProductMark } from '../../ui/ProductMark';
-import type { ProductId } from '../../../content/products';
+import { IconTile } from '../../ui/Cards';
+import { LogoTile } from '../../ui/LogoTile';
 import { accentTitle } from './accentTitle';
 
 type UseCase = (typeof useCases.items)[number];
 
-/** Official marks shown over each card's artwork (keyed by link, so a changed link fails type-checking). */
-const useCaseMarks: Record<UseCase['href'], ProductId[]> = {
-  '/official-labs#azure': ['azure'],
-  '/sandboxes?provider=oci#providers': ['oci'],
-  '/labs?type=windows': ['windows-server'],
-  '/labs?type=kubernetes': ['kubernetes'],
-  '/certifications': ['microsoft', 'aws', 'google'],
-  '/for-training-companies': [],
-};
-
 /**
- * Use-case card: the product's own artwork (cropped in) with its official mark,
- * white panel overlapping it, dark pill action. The mark is visual only — the chip,
- * title and body already name the platform.
+ * Use-case card: product cards show the official logo(s) on a clean tile; the
+ * non-product card (white-label) shows a line icon. White panel overlaps
+ * it, dark pill action. Logos are visual only — the chip, title and body name the platform.
  */
 function UseCaseCard({ u }: { u: UseCase }) {
-  const flip = 'flip' in u && u.flip;
   return (
     <article className="art-card group">
-      <div className="art-card-media art-zoom ring-1 ring-white/10" style={{ '--focus': u.focus } as CSSProperties}>
-        <Art
-          name={u.art}
-          sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 86vw"
-          className={`h-full w-full ${flip ? '-scale-x-100' : ''}`}
-          imgClassName="h-full w-full scale-[1.3] object-cover [object-position:var(--focus)] [transform-origin:var(--focus)]"
-        />
-      </div>
-      {useCaseMarks[u.href].length ? (
-        <ul aria-hidden="true" className="pointer-events-none absolute inset-x-3.5 top-3.5 z-[2] flex flex-wrap gap-1.5">
-          {useCaseMarks[u.href].map((id) => (
-            <li key={id}>
-              <ProductMark id={id} />
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      {'logos' in u ? (
+        <LogoTile ids={u.logos} overlap="4.5rem" className="art-card-media" />
+      ) : (
+        <IconTile icon={Palette} />
+      )}
       <div className="art-card-panel card">
         <p>
           <Chip>{u.chip}</Chip>

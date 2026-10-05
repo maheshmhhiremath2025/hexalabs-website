@@ -14,15 +14,16 @@ import { LinkArrow } from '../components/ui/LinkArrow';
 import { RevealGroup, RevealItem } from '../components/ui/Reveal';
 import { PageHero } from '../components/sections/PageHero';
 import { CtaBand } from '../components/sections/CtaBand';
-import { Art, type ArtName } from '../components/ui/Art';
+import { LogoTile } from '../components/ui/LogoTile';
+import type { ProductId } from '../content/products';
 
-const useCases: { art: ArtName; title: string; body: string; href: string }[] = [
-  { art: 'official-labs', title: 'Run an AZ-104 batch for 30 learners', body: 'Official Azure course labs, one environment per learner.', href: '/official-labs' },
-  { art: 'sandboxes', title: 'Give each learner an OCI sandbox', body: 'A real cloud console with limits on services, hours and spend.', href: '/sandboxes' },
-  { art: 'lab-machines', title: 'Teach Linux on a browser desktop', body: 'Ubuntu, Rocky, RHEL or Oracle Linux — nothing to install.', href: '/labs' },
-  { art: 'certifications', title: 'Pair the course with exam vouchers', body: 'Official vouchers from seven vendors.', href: '/certifications' },
-  { art: 'white-label', title: 'Run the portal under your brand', body: 'Your logo, colours and domain on every screen.', href: '/for-training-companies' },
-  { art: 'security', title: 'Cap each learner’s daily hours', body: 'Hour caps reset at midnight; idle machines stop on their own.', href: '/for-training-companies' },
+const useCases: { logos: ProductId[]; title: string; body: string; href: string }[] = [
+  { logos: ['azure'], title: 'Run an AZ-104 batch for 30 learners', body: 'Official Azure course labs, one environment per learner.', href: '/official-labs' },
+  { logos: ['oci'], title: 'Give each learner an OCI sandbox', body: 'A real cloud console with limits on services, hours and spend.', href: '/sandboxes' },
+  { logos: ['ubuntu', 'rocky', 'rhel'], title: 'Teach Linux on a browser desktop', body: 'Ubuntu, Rocky, RHEL or Oracle Linux — nothing to install.', href: '/labs' },
+  { logos: ['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks'], title: 'Pair the course with exam vouchers', body: 'Official vouchers from seven vendors.', href: '/certifications' },
+  { logos: ['azure', 'aws'], title: 'Run the portal under your brand', body: 'Your logo, colours and domain on every screen.', href: '/for-training-companies' },
+  { logos: ['windows-server'], title: 'Cap each learner’s daily hours', body: 'Hour caps reset at midnight; idle machines stop on their own.', href: '/for-training-companies' },
 ];
 
 export default function StyleGuide() {
@@ -42,7 +43,7 @@ export default function StyleGuide() {
             </ButtonLink>
           </>
         }
-        feature="honeycomb"
+        logos={['azure', 'aws', 'kubernetes']}
         overlap={
           <RevealGroup as="ul" className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
             {[
@@ -78,7 +79,7 @@ export default function StyleGuide() {
         <RevealGroup as="ul" className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {useCases.slice(0, 3).map((u) => (
             <RevealItem as="li" key={u.title}>
-              <ArtCard art={u.art} title={u.title} body={u.body} href={u.href} />
+              <ArtCard logos={u.logos} title={u.title} body={u.body} href={u.href} />
             </RevealItem>
           ))}
         </RevealGroup>
@@ -98,7 +99,7 @@ export default function StyleGuide() {
           {useCases.map((u) => (
             <ArtCard
               key={u.title}
-              art={u.art}
+              logos={u.logos}
               chip="Use case"
               title={u.title}
               body={u.body}
@@ -135,9 +136,7 @@ export default function StyleGuide() {
         >
           {useCases.map((u) => (
             <article key={u.title} className="card card-hover group grid h-full overflow-hidden sm:grid-cols-[2fr_3fr]">
-              <div className="art-zoom aspect-[3/2] sm:aspect-auto">
-                <Art name={u.art} className="h-full w-full" sizes="(min-width: 1024px) 300px, 86vw" />
-              </div>
+              <LogoTile ids={u.logos} className="m-2 aspect-[3/2] rounded-[12px] sm:mr-0 sm:aspect-auto" />
               <div className="flex flex-col p-6 sm:p-8">
                 <h3 className="text-xl">{u.title}</h3>
                 <p className="mt-2 text-sm text-body">{u.body}</p>

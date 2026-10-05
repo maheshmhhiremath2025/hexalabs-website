@@ -71,7 +71,6 @@ export default function Contact() {
         eyebrow={contactHero.eyebrow}
         title={contactHero.title}
         body={contactHero.body}
-        art="dark-silk"
         overlap={
           <div className="grid grid-cols-12 gap-x-6 gap-y-6 pb-20 lg:pb-28">
             <div className="rise-in col-span-12 lg:col-span-7 xl:col-span-8" style={{ ['--d' as string]: '150ms' }}>
