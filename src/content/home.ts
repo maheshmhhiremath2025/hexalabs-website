@@ -262,6 +262,7 @@ export const askHexa = {
   },
 };
 
+/** Security controls, each with its own illustration (il-sec-*, cut from one 3×2 artwork). */
 export const security = {
   eyebrow: 'Security & reliability',
   title: 'Plain controls, applied to every lab.',
@@ -270,30 +271,36 @@ export const security = {
   items: [
     {
       term: 'Role-based access',
+      image: 'il-sec-roles',
       body: 'Five roles — super-admin, organisation admin, partner, instructor and learner. Each sees only what it needs.',
     },
     {
       term: 'Per-organisation isolation',
+      image: 'il-sec-isolation',
       body: 'Organisations can’t see each other’s users, machines or reports.',
     },
     {
       term: 'Auto-shutdown',
+      image: 'il-sec-autoshutdown',
       body: 'Idle machines stop on their own. Daily hour caps stop runaway usage.',
     },
     {
       term: 'SSL everywhere',
+      image: 'il-sec-ssl',
       body: 'The portal and every lab URL are served over HTTPS.',
     },
     {
       term: 'Activity log',
+      image: 'il-sec-activity',
       body: 'Every start, stop and session is recorded with user, machine and time.',
     },
     {
       term: 'Cost control',
+      image: 'il-sec-cost',
       body: 'Spot-based infrastructure, idle auto-stop and daily caps keep lab costs down.',
     },
   ],
-};
+} as const;
 
 /**
  * "Use case" cards in the dark photo band, each with one illustration (`image`: il-uc-*,
@@ -362,7 +369,7 @@ export const howItWorks = {
     { title: 'Trainer', body: 'Deploys 1 to 100+ labs, starts and stops the batch, downloads usage reports.' },
     { title: 'Platform', body: 'Hour caps, idle auto-stop and auto clean-up on every lab.' },
   ],
-};
+} as const;
 
 export const finalCta = {
   title: 'Running a batch next week?',

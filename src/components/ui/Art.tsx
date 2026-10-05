@@ -64,6 +64,13 @@ export const artNames = [
   'il-whitelabel',
   // Closing banner illustration for "Running a batch next week?" (shown whole, 3:2)
   'il-cta-batch',
+  // Security controls (square tiles cut from one 3×2 artwork, 2× upscaled)
+  'il-sec-roles',
+  'il-sec-isolation',
+  'il-sec-autoshutdown',
+  'il-sec-ssl',
+  'il-sec-activity',
+  'il-sec-cost',
   // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',
