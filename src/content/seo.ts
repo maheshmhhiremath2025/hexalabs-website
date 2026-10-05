@@ -19,7 +19,7 @@ export type PageMeta = {
 export const pages: PageMeta[] = [
   {
     path: '/',
-    title: 'HexaLabs — Cloud labs your learners open in a browser tab',
+    title: 'HexaLabs',
     description:
       'Windows, Linux, Azure and AWS lab machines for training batches. Deploy 1–100+ identical labs, open them in the browser, track usage. No installs or VPN.',
     sitemap: true,
@@ -27,7 +27,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/official-labs',
-    title: 'Official Microsoft Azure & AWS labs — up to 30% off | HexaLabs',
+    title: 'Official labs | HexaLabs',
     description:
       'Official lab environments for Microsoft Azure and AWS courses, ready for instructor-led batches. Bulk access, usage reports and up to 30% off.',
     sitemap: true,
@@ -35,7 +35,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/sandboxes',
-    title: 'Cloud sandboxes — Azure, AWS, GCP, OCI, Databricks, AI Foundry | HexaLabs',
+    title: 'Cloud sandboxes | HexaLabs',
     description:
       'Per-learner cloud sandboxes with guardrails: Azure, AWS, Google Cloud, Oracle Cloud, Databricks and Azure AI Foundry. Real consoles, limited spend, automatic expiry.',
     sitemap: true,
@@ -43,7 +43,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/labs',
-    title: 'Lab machines — Windows, Linux, Kubernetes in the browser | HexaLabs',
+    title: 'Lab machines | HexaLabs',
     description:
       'Browser-based lab machines for training batches: Windows Server 2022, Ubuntu, RHEL, Rocky and Oracle Linux desktops, plus AKS and OpenShift clusters.',
     sitemap: true,
@@ -51,7 +51,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/certifications',
-    title: 'Official certification exam vouchers — Microsoft, AWS, Google Cloud and more | HexaLabs',
+    title: 'Certification vouchers | HexaLabs',
     description:
       'Official exam vouchers for Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF and Databricks certifications, with optional practice labs before exam day.',
     sitemap: true,
@@ -59,7 +59,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/for-training-companies',
-    title: 'Cloud labs for training companies | HexaLabs',
+    title: 'For training companies | HexaLabs',
     description:
       'Run instructor-led batches on ready lab machines: bulk deploy, daily hour limits, idle auto-stop, PDF usage reports, white-label and a partner program.',
     sitemap: true,
@@ -75,7 +75,7 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/about',
-    title: 'About HexaLabs',
+    title: 'About | HexaLabs',
     description:
       'HexaLabs runs browser-based cloud lab machines for training companies, corporate L&D teams and learners, through the labsoncloud.online portal.',
     sitemap: true,
@@ -91,14 +91,14 @@ export const pages: PageMeta[] = [
   },
   {
     path: '/privacy',
-    title: 'Privacy policy | HexaLabs',
+    title: 'Privacy | HexaLabs',
     description: 'How HexaLabs collects and uses personal data.',
     sitemap: true,
     priority: 0.2,
   },
   {
     path: '/terms',
-    title: 'Terms of service | HexaLabs',
+    title: 'Terms | HexaLabs',
     description: 'Terms that apply to the HexaLabs website and lab platform.',
     sitemap: true,
     priority: 0.2,
