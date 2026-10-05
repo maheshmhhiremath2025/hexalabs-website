@@ -609,41 +609,40 @@
     padding-inline: 0.5rem;
     transition: transform var(--dur-move) var(--ease-smooth);
   }
+  /* Frosted-glass pill behind the nav: see-through with a strong blur, a fine light
+     edge and a soft float shadow. Visible from the top; firms up a little on scroll. */
   .site-header-pill {
     position: absolute;
     inset: 6px 0.5rem;
     border-radius: 9999px;
-    background: rgb(255 255 255 / 0.86);
-    -webkit-backdrop-filter: blur(16px) saturate(1.5);
-    backdrop-filter: blur(16px) saturate(1.5);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.38));
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
     box-shadow:
-      0 0 0 1px rgb(6 20 38 / 0.06),
+      inset 0 1px 0 rgb(255 255 255 / 0.7),
+      0 0 0 1px rgb(255 255 255 / 0.45),
+      0 0 0 1.5px rgb(6 20 38 / 0.05),
       var(--shadow-float);
-    opacity: 0;
-    transform: scale(0.97);
     transition:
-      opacity var(--dur-move) var(--ease-smooth),
+      background var(--dur-move) var(--ease-smooth),
       transform var(--dur-move) var(--ease-smooth);
-    pointer-events: none;
   }
   .site-header[data-scrolled="true"]:not([data-open="true"]) .site-header-inner {
     transform: translateY(8px);
   }
-  .site-header[data-scrolled="true"] .site-header-pill,
-  .site-header[data-open="true"] .site-header-pill {
-    opacity: 1;
-    transform: none;
+  .site-header[data-scrolled="true"] .site-header-pill {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.66), rgb(255 255 255 / 0.5));
   }
   .site-header[data-open="true"] .site-header-pill {
     background: var(--white);
   }
   .nav-rail {
     @apply flex items-center gap-0.5 rounded-full p-1;
-    background: color-mix(in srgb, var(--canvas-200) 70%, transparent);
+    background: rgb(6 20 38 / 0.05);
   }
   .nav-item {
     @apply inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm;
-    color: var(--slate-600);
+    color: var(--ink-700);
     transition:
       color 300ms var(--ease-smooth),
       background-color 300ms var(--ease-smooth),

@@ -93,7 +93,7 @@ export function Header() {
           <div className="flex items-center gap-1.5">
             <a
               href={site.loginUrl}
-              className="hidden rounded-full px-3.5 py-2 text-sm text-slate-600 transition-colors hover:text-ink-950 sm:inline-flex"
+              className="hidden rounded-full px-3.5 py-2 text-sm text-ink-700 transition-colors hover:text-ink-950 sm:inline-flex"
             >
               Log in
             </a>
