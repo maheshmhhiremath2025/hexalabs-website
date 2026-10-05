@@ -12,7 +12,7 @@ import { CtaBand } from '../components/sections/CtaBand';
 /**
  * Section rhythm: hero (canvas) → catalogue art cards (paper) → use cases carousel (short dark band)
  * → how it works (white) → batch steps (paper) → trainers (white) → white-label (paper) → Ask Hexa (white)
- * → security (paper) → CTA band (dark).
+ * → security (paper) → CTA band (dark, text + illustration).
  */
 export default function Home() {
   return (
@@ -26,7 +26,7 @@ export default function Home() {
       <WhiteLabel />
       <AskHexa />
       <Security />
-      <CtaBand />
+      <CtaBand illustration="il-cta-batch" />
     </>
   );
 }

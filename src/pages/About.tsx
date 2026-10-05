@@ -152,7 +152,7 @@ export default function About() {
         </p>
       </Section>
 
-      <CtaBand chip="About HexaLabs" />
+      <CtaBand chip="About HexaLabs" illustration="il-cta-batch" />
     </>
   );
 }

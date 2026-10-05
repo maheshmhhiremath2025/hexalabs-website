@@ -62,6 +62,8 @@ export const artNames = [
   'il-uc-whitelabel',
   // White-label section illustration (shown whole, 3:2)
   'il-whitelabel',
+  // Closing banner illustration for "Running a batch next week?" (shown whole, 3:2)
+  'il-cta-batch',
   // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',

@@ -61,7 +61,7 @@ export default function TrainingCompanies() {
       <DeepDives />
       <Partners />
       <Faq />
-      <CtaBand />
+      <CtaBand illustration="il-cta-batch" />
     </>
   );
 }
