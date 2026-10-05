@@ -5,6 +5,9 @@ import { providers, providersSection, sandboxRequestLink, type SandboxProvider, 
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
+import { Art } from '../../ui/Art';
+import { ProductMark } from '../../ui/ProductMark';
+import { products } from '../../../content/products';
 import { Reveal } from '../../ui/Reveal';
 import { PillScroller, pillClass, pillRailClass, withAccent } from './pills';
 
@@ -32,6 +35,17 @@ function List({ title, items, icon: Icon }: { title: string; items: string[]; ic
   );
 }
 
+/** Tiny official mark in a provider tab: the logo where the brand allows it, else a brand-coloured dot. */
+function TabMark({ id }: { id: SandboxProviderId }) {
+  const p = products[id];
+  const logo = 'logo' in p ? p.logo : undefined;
+  return logo ? (
+    <img src={logo} alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4 flex-none rounded-[3px] bg-white p-px" decoding="async" />
+  ) : (
+    <span aria-hidden="true" className="h-2 w-2 flex-none rounded-full ring-2 ring-white" style={{ backgroundColor: p.brandHex }} />
+  );
+}
+
 function ProviderPanel({ provider, active }: { provider: SandboxProvider; active: boolean }) {
   const { labels } = providersSection;
   return (
@@ -45,7 +59,7 @@ function ProviderPanel({ provider, active }: { provider: SandboxProvider; active
       // Soft fade-up whenever a panel is shown (CSS keyframe; off under reduced motion).
       style={{ animation: 'rise-in 560ms var(--ease-smooth) both' }}
     >
-      <div className="flex flex-col gap-6 border-b border-line pb-8 md:flex-row md:items-end md:justify-between md:gap-10">
+      <div className="grid gap-6 border-b border-line pb-8 md:grid-cols-[minmax(0,1fr)_17rem] md:items-center md:gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="max-w-2xl">
           <p>
             <Chip tone="soft" className="font-mono uppercase">
@@ -54,11 +68,22 @@ function ProviderPanel({ provider, active }: { provider: SandboxProvider; active
           </p>
           <h3 className="mt-4 text-[1.75rem] leading-tight font-light tracking-[-0.03em] sm:text-[2.125rem]">{provider.name}</h3>
           <p className="mt-3 text-body sm:text-lg sm:leading-7">{provider.summary}</p>
+          <ButtonLink href={sandboxRequestLink(provider)} variant="dark" arrow="up-right" className="mt-6">
+            {labels.request}
+            <span className="sr-only">: {provider.name}</span>
+          </ButtonLink>
         </div>
-        <ButtonLink href={sandboxRequestLink(provider)} variant="dark" arrow="up-right" className="flex-none self-start md:self-auto">
-          {labels.request}
-          <span className="sr-only">: {provider.name}</span>
-        </ButtonLink>
+        {/* The provider's own artwork + official mark (decorative: the heading names it). */}
+        <div aria-hidden="true" className="relative order-first md:order-none">
+          <div className="aspect-[2/1] overflow-hidden rounded-[14px] bg-canvas-200 ring-1 ring-slate-200 md:aspect-[3/2]">
+            <Art
+              name={products[provider.id].art}
+              sizes="(min-width: 1024px) 352px, (min-width: 768px) 272px, 100vw"
+              className="h-full w-full"
+            />
+          </div>
+          <ProductMark id={provider.id} size="large" className="absolute top-3 left-3" />
+        </div>
       </div>
 
       <div className="grid gap-x-10 gap-y-10 pt-8 md:grid-cols-2 lg:grid-cols-3">
@@ -153,6 +178,7 @@ export function ProviderExplorer() {
                   onClick={() => choose(p.id)}
                   className={pillClass(active)}
                 >
+                  <TabMark id={p.id} />
                   <span className="lg:hidden">{p.shortName}</span>
                   <span className="hidden lg:inline">{p.name}</span>
                 </button>

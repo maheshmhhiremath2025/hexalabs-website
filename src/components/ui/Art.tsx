@@ -5,6 +5,7 @@
  * Dark backgrounds: hero, dark-silk, dark-spiral.
  * Light backgrounds: official-labs, sandboxes, lab-machines, certifications,
  * training, ask-hexa, white-label, security, honeycomb.
+ * Per-product (p-*): one per platform, mapped in src/content/products.ts.
  */
 export const artNames = [
   'hero',
@@ -19,6 +20,24 @@ export const artNames = [
   'white-label',
   'security',
   'honeycomb',
+  // Per-product artwork, themed to each product's own colours (light backgrounds).
+  'p-azure',
+  'p-aws',
+  'p-gcp',
+  'p-oci',
+  'p-databricks',
+  'p-ai-foundry',
+  'p-windows-server',
+  'p-active-directory',
+  'p-hyper-v',
+  'p-ubuntu',
+  'p-rhel',
+  'p-oracle-db',
+  'p-kubernetes',
+  'p-openshift',
+  'p-azure-openai',
+  'p-jupyter',
+  'p-devops',
 ] as const;
 
 export type ArtName = (typeof artNames)[number];

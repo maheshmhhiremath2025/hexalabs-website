@@ -1,6 +1,7 @@
 import { ArrowUpRight, Ticket } from 'lucide-react';
 import { certHero, certifications, examFinder, vendorCount, vendors } from '../../../content/certifications';
 import { SmartLink } from '../../ui/SmartLink';
+import { VendorLogo } from './VendorLogo';
 
 /**
  * White panel that overlaps the bottom of the hero: the seven vendors as pill
@@ -30,8 +31,9 @@ export function HeroVendors() {
           <li key={v.id}>
             <SmartLink
               href={`/certifications?vendor=${v.id}#exams`}
-              className="group inline-flex h-10 items-center gap-2 rounded-full bg-canvas pr-3 pl-4 text-sm text-heading transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:bg-ink-950 hover:text-white hover:shadow-btn"
+              className="group inline-flex h-10 items-center gap-2 rounded-full bg-canvas pr-3 pl-2.5 text-sm text-heading transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:bg-ink-950 hover:text-white hover:shadow-btn"
             >
+              <VendorLogo id={v.id} />
               <span>
                 <span className="sr-only">{vendorPanel.srPrefix} </span>
                 {v.label}

@@ -11,12 +11,16 @@ import {
   type Certification,
   type VendorId,
 } from '../../../content/certifications';
+import { products } from '../../../content/products';
+import { Art } from '../../ui/Art';
 import { Chip } from '../../ui/Chip';
+import { ProductMark } from '../../ui/ProductMark';
 import { LinkArrow } from '../../ui/LinkArrow';
 import { Reveal } from '../../ui/Reveal';
 import { Section, SectionIntro } from '../../ui/Section';
 import { SmartLink } from '../../ui/SmartLink';
 import { accentWord } from '../official/accentWord';
+import { VendorLogo } from './VendorLogo';
 
 type FilterId = VendorId | 'all';
 const isFilter = (v: string | null): v is FilterId => v === 'all' || vendors.some((x) => x.id === v);
@@ -100,8 +104,9 @@ function ExamRow({ cert, className = '', delay }: { cert: Certification; classNa
   );
 }
 
-const pillClass = (active: boolean) =>
-  `inline-flex h-10 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-sm whitespace-nowrap transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] ${
+/** Vendor pills start with a round logo badge, so they take less left padding than "All". */
+const pillClass = (active: boolean, withLogo: boolean) =>
+  `inline-flex h-10 shrink-0 snap-start items-center gap-2 rounded-full ${withLogo ? 'pr-4 pl-2' : 'px-4'} text-sm whitespace-nowrap transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] ${
     active ? 'bg-ink-950 text-white shadow-btn' : 'text-slate-600 hover:bg-canvas hover:text-ink-950'
   }`;
 
@@ -110,7 +115,7 @@ const PREVIEW = 4;
 const PREVIEW_PHONE = 3;
 /** Soft fade at both ends of the phone-width filter rail, so it reads as scrollable. */
 const railMask =
-  'max-lg:[mask-image:linear-gradient(to_right,transparent,#000_0.75rem,#000_calc(100%-2.5rem),transparent)]';
+  'max-xl:[mask-image:linear-gradient(to_right,transparent,#000_0.75rem,#000_calc(100%-2.5rem),transparent)]';
 
 export function ExamFinder() {
   const [params] = useSearchParams();
@@ -183,18 +188,19 @@ export function ExamFinder() {
         intro={examFinder.intro}
       />
 
-      {/* Vendor filter: a white pill rail. Below lg it stays one row and scrolls inside itself. */}
-      <div className="mx-auto mt-10 max-w-full overflow-hidden rounded-full bg-white shadow-card lg:w-max">
+      {/* Vendor filter: a white pill rail. Below xl it stays one row and scrolls inside itself. */}
+      <div className="mx-auto mt-10 max-w-full overflow-hidden rounded-full bg-white shadow-card xl:w-max">
         <div
           ref={railRef}
           role="group"
           aria-label={examFinder.filterLabel}
-          className={`flex snap-x snap-mandatory scroll-px-1.5 gap-1 overflow-x-auto overscroll-x-contain p-1.5 [scrollbar-width:none] max-lg:pr-10 max-lg:pl-3 lg:overflow-visible [&::-webkit-scrollbar]:hidden ${railMask}`}
+          className={`flex snap-x snap-mandatory scroll-px-1.5 gap-1 overflow-x-auto overscroll-x-contain p-1.5 [scrollbar-width:none] max-xl:pr-10 max-xl:pl-3 xl:overflow-visible [&::-webkit-scrollbar]:hidden ${railMask}`}
         >
         {filters.map((f) => {
           const active = filter === f.id;
           return (
-            <button key={f.id} type="button" aria-pressed={active} onClick={() => choose(f.id)} className={pillClass(active)}>
+            <button key={f.id} type="button" aria-pressed={active} onClick={() => choose(f.id)} className={pillClass(active, f.id !== 'all')}>
+              {f.id === 'all' ? null : <VendorLogo id={f.id} />}
               {f.label}
               <span className={`font-mono text-micro ${active ? 'text-slate-300' : 'text-slate-500'}`}>{countFor(f.id)}</span>
             </button>
@@ -211,9 +217,26 @@ export function ExamFinder() {
           <Reveal key={g.id}>
             {/* content-visibility lets the browser skip laying out vendor groups until they are near the screen. */}
             <div data-exam-group className="card scroll-mt-28 overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
-              <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-5 sm:px-7">
-                <h3 className="text-xl leading-snug font-medium tracking-tight">{g.label}</h3>
-                <Chip tone="soft">{examFinder.groupCount(g.exams.length)}</Chip>
+              {/* Vendor header: its own product artwork as a thumbnail + its official mark. */}
+              <div className="flex items-center gap-4 border-b border-line px-5 py-4 sm:gap-5 sm:px-7">
+                <Art
+                  name={products[g.id].art}
+                  sizes="128px"
+                  className="aspect-[3/2] w-20 flex-none overflow-hidden rounded-xl bg-canvas ring-1 ring-line sm:w-28"
+                />
+                <div className="flex min-w-0 flex-1 flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-4">
+                  <h3 className="min-w-0 text-xl leading-snug font-medium tracking-tight">
+                    {/* Screen readers hear the vendor name once; the mark below is visual only. */}
+                    <span className="sr-only">{g.label}</span>
+                    <span aria-hidden="true" className="block">
+                      <ProductMark id={g.id} size="large" />
+                      {g.label !== products[g.id].label ? (
+                        <span className="mt-1.5 block text-sm font-normal tracking-normal text-muted">{g.label}</span>
+                      ) : null}
+                    </span>
+                  </h3>
+                  <Chip tone="soft">{examFinder.groupCount(g.exams.length)}</Chip>
+                </div>
               </div>
               {/* Column labels for wide screens. Each row also carries its own screen-reader labels. */}
               <div

@@ -6,13 +6,25 @@ import { ButtonLink } from '../../ui/Button';
 import { Art } from '../../ui/Art';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
+import { ProductMark } from '../../ui/ProductMark';
+import type { ProductId } from '../../../content/products';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
 type Card = (typeof catalogue.cards)[number];
 
+/** Official marks of a few platforms inside each kind (the card's tags list them in text). */
+const cardMarks: Record<Card['id'], ProductId[]> = {
+  official: ['azure', 'aws'],
+  sandboxes: ['gcp', 'oci', 'databricks'],
+  machines: ['windows-server', 'ubuntu', 'kubernetes'],
+  certifications: ['microsoft', 'aws', 'google'],
+};
+
 /**
- * Art card with a taller image than the default ArtCard (the row is four-up, so the
+ * Art card with its kind's category artwork (each kind spans several products, so no
+ * single product's artwork fits — product artwork lives on the product cards), a row
+ * of official marks over it, and a taller image than the default ArtCard (the row is four-up, so the
  * default 3:2 image would be mostly hidden behind the panel on wide screens). Same classes and motion.
  */
 function KindCard({ c }: { c: Card }) {
@@ -21,6 +33,14 @@ function KindCard({ c }: { c: Card }) {
       <div className="art-card-media art-zoom xl:aspect-[5/4]">
         <Art name={c.art} sizes="(min-width: 1280px) 290px, (min-width: 640px) 50vw, 100vw" className="h-full w-full" />
       </div>
+      {/* Visual only: the tags below name the same platforms for screen readers. Kept outside .art-zoom so the logos don't zoom. */}
+      <ul aria-hidden="true" className="pointer-events-none absolute inset-x-3 top-3 z-[2] flex flex-wrap gap-1.5">
+        {cardMarks[c.id].map((id) => (
+          <li key={id}>
+            <ProductMark id={id} />
+          </li>
+        ))}
+      </ul>
       <div className="art-card-panel card -mt-14">
         <p className="flex flex-wrap gap-1.5">
           <Chip>{c.chip}</Chip>

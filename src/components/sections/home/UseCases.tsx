@@ -5,13 +5,26 @@ import { ButtonLink } from '../../ui/Button';
 import { Carousel } from '../../ui/Carousel';
 import { Chip } from '../../ui/Chip';
 import { Art } from '../../ui/Art';
+import { ProductMark } from '../../ui/ProductMark';
+import type { ProductId } from '../../../content/products';
 import { accentTitle } from './accentTitle';
 
 type UseCase = (typeof useCases.items)[number];
 
+/** Official marks shown over each card's artwork (keyed by link, so a changed link fails type-checking). */
+const useCaseMarks: Record<UseCase['href'], ProductId[]> = {
+  '/official-labs#azure': ['azure'],
+  '/sandboxes?provider=oci#providers': ['oci'],
+  '/labs?type=windows': ['windows-server'],
+  '/labs?type=kubernetes': ['kubernetes'],
+  '/certifications': ['microsoft', 'aws', 'google'],
+  '/for-training-companies': [],
+};
+
 /**
- * Use-case card: artwork the catalogue above does not use (cropped in, some mirrored),
- * white panel overlapping it, dark pill action.
+ * Use-case card: the product's own artwork (cropped in) with its official mark,
+ * white panel overlapping it, dark pill action. The mark is visual only — the chip,
+ * title and body already name the platform.
  */
 function UseCaseCard({ u }: { u: UseCase }) {
   const flip = 'flip' in u && u.flip;
@@ -25,6 +38,15 @@ function UseCaseCard({ u }: { u: UseCase }) {
           imgClassName="h-full w-full scale-[1.3] object-cover [object-position:var(--focus)] [transform-origin:var(--focus)]"
         />
       </div>
+      {useCaseMarks[u.href].length ? (
+        <ul aria-hidden="true" className="pointer-events-none absolute inset-x-3.5 top-3.5 z-[2] flex flex-wrap gap-1.5">
+          {useCaseMarks[u.href].map((id) => (
+            <li key={id}>
+              <ProductMark id={id} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
       <div className="art-card-panel card">
         <p>
           <Chip>{u.chip}</Chip>

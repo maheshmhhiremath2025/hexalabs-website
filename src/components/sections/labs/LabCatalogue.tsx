@@ -13,8 +13,6 @@ import { LabCard } from './LabCard';
 
 type FilterId = LabCategory | 'all';
 
-/** How many earlier visible cards share this card's category — picks a different crop of the same artwork. */
-const cropIndex = (list: typeof labs, i: number) => list.slice(0, i).filter((l) => l.categories[0] === list[i].categories[0]).length;
 const isFilter = (v: string | null): v is FilterId => !!v && labFilters.some((f) => f.id === v);
 
 export const labCounts: Record<string, number> = Object.fromEntries(
@@ -124,9 +122,9 @@ export function LabCatalogue() {
           trackClassName="scroll-px-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3"
           controlsClassName="sm:hidden"
         >
-          {visible.map((lab, i) => (
+          {visible.map((lab) => (
             <RevealItem key={lab.id} className="h-full">
-              <LabCard lab={lab} crop={cropIndex(visible, i)} />
+              <LabCard lab={lab} />
             </RevealItem>
           ))}
           <RevealItem className="h-full">

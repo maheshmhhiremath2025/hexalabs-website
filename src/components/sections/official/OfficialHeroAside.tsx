@@ -1,10 +1,10 @@
-import { Cloud, Server } from 'lucide-react';
 import { courseRow, officialHero, officialVendors, type OfficialVendor } from '../../../content/officialLabs';
 import { site } from '../../../content/site';
 import { Art } from '../../ui/Art';
 import { Chip } from '../../ui/Chip';
-import { IconCard } from '../../ui/Cards';
 import { LinkArrow } from '../../ui/LinkArrow';
+import { ProductMark } from '../../ui/ProductMark';
+import { products } from '../../../content/products';
 
 /** "Fundamentals to Expert" — the first and last level that have courses. */
 function levelRange(v: OfficialVendor) {
@@ -38,32 +38,45 @@ function OfferCard() {
   );
 }
 
+/** One vendor's course list as a card: its own artwork + official mark on top, then the count. */
+function VendorCard({ v }: { v: OfficialVendor }) {
+  return (
+    <article className="card card-hover group flex h-full flex-col overflow-hidden">
+      {/* Decorative: the heading below names the vendor. */}
+      <div aria-hidden="true" className="art-zoom relative aspect-[3/2] bg-canvas-200">
+        <Art name={products[v.id].art} sizes="(min-width: 1024px) 270px, 46vw" className="h-full w-full" />
+        <ProductMark id={v.id} className="absolute top-2 left-2 sm:top-3 sm:left-3" />
+      </div>
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h2 className="text-base leading-snug font-medium tracking-tight sm:text-lg">{v.eyebrow}</h2>
+        <p className="mt-1.5 text-[0.8125rem] leading-5 text-body sm:text-sm sm:leading-6">
+          {courseRow.countLabel(v.courses.length)} · {levelRange(v)}
+        </p>
+        <div className="mt-auto pt-4">
+          <LinkArrow href={`#${v.id}`} stretched srContext={v.eyebrow}>
+            See courses
+          </LinkArrow>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 /**
  * White cards that overlap the bottom of the hero: the featured offer, then a
  * card for each vendor's course list on this page.
  */
 export function OfficialHeroCards() {
-  const vendors = [
-    { v: officialVendors.azure, icon: Cloud },
-    { v: officialVendors.aws, icon: Server },
-  ];
+  const vendors = [officialVendors.azure, officialVendors.aws];
   return (
     <nav aria-label={officialHero.aside.title}>
       <ul className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
         <li className="rise-in col-span-2" style={{ ['--d' as string]: '150ms' }}>
           <OfferCard />
         </li>
-        {vendors.map(({ v, icon }, i) => (
+        {vendors.map((v, i) => (
           <li key={v.id} className="rise-in" style={{ ['--d' as string]: `${250 + i * 100}ms` }}>
-            <IconCard
-              as="h2"
-              compact
-              icon={icon}
-              title={v.eyebrow}
-              body={`${courseRow.countLabel(v.courses.length)} · ${levelRange(v)}`}
-              href={`#${v.id}`}
-              linkLabel="See courses"
-            />
+            <VendorCard v={v} />
           </li>
         ))}
       </ul>
