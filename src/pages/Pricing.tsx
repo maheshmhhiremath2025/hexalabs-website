@@ -6,6 +6,7 @@ import { ButtonLink } from '../components/ui/Button';
 import { Section, SectionIntro } from '../components/ui/Section';
 import { Accent } from '../components/ui/Accent';
 import { Chip } from '../components/ui/Chip';
+import { Art } from '../components/ui/Art';
 import { RevealGroup, RevealItem } from '../components/ui/Reveal';
 import { accentText } from '../components/sections/training/accentText';
 
@@ -97,10 +98,23 @@ export default function Pricing() {
   return (
     <>
       <PageHero
-        image="ph-hero-pricing"
         eyebrow={pricingHero.eyebrow}
         title={pricingHero.title}
         body={pricingHero.body}
+        aside={
+          // The lab-quote illustration, shown whole beside the headline.
+          <figure className="group overflow-hidden rounded-[16px] shadow-card ring-1 ring-white/10 sm:rounded-[20px]">
+            <div className="art-zoom">
+              <Art
+                name="il-pricing-hero"
+                priority
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="block"
+                imgClassName="block h-auto w-full"
+              />
+            </div>
+          </figure>
+        }
         overlap={<OfferCard />}
       />
 

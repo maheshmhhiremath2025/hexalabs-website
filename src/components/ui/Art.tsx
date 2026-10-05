@@ -64,6 +64,8 @@ export const artNames = [
   'il-whitelabel',
   // Closing banner illustration for "Running a batch next week?" (shown whole, 3:2)
   'il-cta-batch',
+  // Pricing hero illustration (shown whole, 3:2)
+  'il-pricing-hero',
   // Security controls (square tiles cut from one 3×2 artwork, 2× upscaled)
   'il-sec-roles',
   'il-sec-isolation',
