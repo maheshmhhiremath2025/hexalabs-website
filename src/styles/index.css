@@ -510,6 +510,335 @@
     pointer-events: none;
   }
 
+  /* ── Hexa website assistant (bottom-right chat) ───────────────────── */
+  .hexa-root {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    /* Above the sticky header (50), so the open chat is never covered on phones. */
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    pointer-events: none;
+  }
+  .hexa-root > * {
+    pointer-events: auto;
+  }
+  @media (width >= 40rem) {
+    .hexa-root {
+      right: 1.5rem;
+      bottom: 1.5rem;
+    }
+  }
+  /* Out of the way while the mobile menu is open. */
+  body:has(.site-header[data-open="true"]) .hexa-root {
+    display: none;
+  }
+  .hexa-launcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 9999px;
+    padding: 0.375rem;
+    background: var(--ink-950);
+    color: var(--white);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08),
+      0 18px 40px -14px rgb(6 20 38 / 0.55),
+      0 0 0 6px rgb(10 102 194 / 0.12);
+    transition:
+      transform var(--dur-hover) var(--ease-smooth),
+      box-shadow var(--dur-hover) var(--ease-smooth);
+  }
+  .hexa-launcher:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.12),
+      0 22px 48px -14px rgb(6 20 38 / 0.6),
+      0 0 0 8px rgb(10 102 194 / 0.16);
+  }
+  .hexa-launcher:not(.hexa-launcher-open)::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    border: 2px solid rgb(90 166 255 / 0.55);
+    animation: hexa-pulse 2.8s var(--ease-smooth) infinite;
+    pointer-events: none;
+  }
+  .hexa-launcher-label {
+    display: none;
+    padding-right: 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+  @media (width >= 40rem) {
+    .hexa-launcher-label {
+      display: inline;
+    }
+  }
+  .hexa-launcher-open {
+    background: var(--white);
+    color: var(--ink-950);
+  }
+  .hexa-teaser {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    max-width: 16.5rem;
+    border-radius: 1rem;
+    background: var(--white);
+    padding: 0.75rem 0.5rem 0.75rem 0.875rem;
+    box-shadow: var(--shadow-float), 0 0 0 1px rgb(6 20 38 / 0.06);
+    animation: rise-in 600ms var(--ease-smooth) both;
+  }
+  .hexa-teaser-text {
+    text-align: left;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--ink-950);
+  }
+  .hexa-teaser-close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    color: var(--slate-500);
+  }
+  .hexa-teaser-close:hover {
+    background: var(--canvas);
+    color: var(--ink-950);
+  }
+
+  .hexa-panel {
+    --surface-heading: var(--ink-950);
+    --surface-body: var(--slate-600);
+    --surface-muted: var(--slate-500);
+    --surface-link: var(--blue-600);
+    display: flex;
+    flex-direction: column;
+    width: min(25rem, calc(100vw - 2rem));
+    height: min(40rem, calc(100dvh - 7.5rem));
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: var(--white);
+    box-shadow:
+      0 0 0 1px rgb(6 20 38 / 0.08),
+      0 30px 80px -24px rgb(6 20 38 / 0.45);
+    animation: rise-in 450ms var(--ease-smooth) both;
+  }
+  @media (width < 40rem) {
+    .hexa-panel {
+      position: fixed;
+      inset: 0.5rem 0.5rem 4.75rem;
+      width: auto;
+      height: auto;
+    }
+  }
+  .hexa-panel-loading {
+    background: linear-gradient(180deg, var(--ink-950) 0 4.25rem, var(--canvas) 4.25rem);
+  }
+  .hexa-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 0.875rem 0.875rem 1rem;
+    background:
+      radial-gradient(80% 140% at 100% 0%, rgb(10 102 194 / 0.45), transparent 70%),
+      var(--ink-950);
+  }
+  .hexa-icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    color: var(--white);
+    transition: background-color 200ms;
+  }
+  .hexa-icon-btn:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+  .hexa-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1rem 0.875rem;
+    background: var(--canvas);
+  }
+  .hexa-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .hexa-bubble {
+    max-width: 85%;
+    border-radius: 1rem;
+    padding: 0.625rem 0.8125rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .hexa-bot {
+    border-bottom-left-radius: 0.375rem;
+    background: var(--white);
+    color: var(--ink-950);
+    box-shadow: 0 1px 2px rgb(6 20 38 / 0.06);
+  }
+  .hexa-user {
+    border-bottom-right-radius: 0.375rem;
+    background: var(--blue-600);
+    color: var(--white);
+    white-space: pre-wrap;
+  }
+  .hexa-link {
+    color: var(--blue-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .hexa-chip {
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--blue-600) 30%, transparent);
+    background: var(--white);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--blue-600);
+    transition:
+      background-color 200ms,
+      border-color 200ms;
+  }
+  .hexa-chip:hover {
+    border-color: var(--blue-600);
+    background: color-mix(in srgb, var(--blue-600) 6%, var(--white));
+  }
+  .hexa-chip-accent {
+    border-color: var(--ink-950);
+    background: var(--ink-950);
+    color: var(--white);
+  }
+  .hexa-chip-accent:hover {
+    border-color: var(--ink-950);
+    background: var(--ink-900);
+  }
+  .hexa-typing {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem 0;
+  }
+  .hexa-typing span {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: var(--slate-400);
+    animation: hexa-dot 1.2s infinite ease-in-out;
+  }
+  .hexa-typing span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .hexa-typing span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .hexa-form {
+    margin-left: 2.25rem;
+    border-radius: 1rem;
+    background: var(--white);
+    padding: 0.875rem;
+    box-shadow:
+      0 0 0 1px rgb(6 20 38 / 0.06),
+      0 10px 24px -14px rgb(6 20 38 / 0.25);
+  }
+  .hexa-field {
+    width: 100%;
+    min-height: 2.5rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--slate-250);
+    background: var(--white);
+    padding: 0.5rem 0.625rem;
+    font-size: 0.8125rem;
+    color: var(--ink-950);
+  }
+  .hexa-field::placeholder {
+    color: var(--slate-500);
+  }
+  .hexa-field:focus {
+    outline: none;
+    border-color: var(--blue-600);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue-600) 18%, transparent);
+  }
+  .hexa-submit {
+    width: 100%;
+    border-radius: 9999px;
+    background: var(--blue-600);
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--white);
+    transition: filter 200ms;
+  }
+  .hexa-submit:hover {
+    filter: brightness(1.08);
+  }
+  .hexa-submit:disabled {
+    opacity: 0.6;
+  }
+  .hexa-compose {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    border-top: 1px solid var(--slate-200);
+    background: var(--white);
+    padding: 0.625rem 0.625rem 0.375rem;
+  }
+  .hexa-input {
+    flex: 1;
+    max-height: 7.5rem;
+    min-height: 2.5rem;
+    resize: none;
+    border-radius: 0.875rem;
+    background: var(--canvas);
+    padding: 0.5625rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--ink-950);
+    field-sizing: content;
+  }
+  .hexa-input::placeholder {
+    color: var(--slate-500);
+  }
+  .hexa-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-600) 40%, transparent);
+  }
+  .hexa-send {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background: var(--blue-600);
+    color: var(--white);
+    transition: opacity 200ms;
+  }
+  .hexa-send:disabled {
+    opacity: 0.35;
+  }
+  .hexa-note {
+    background: var(--white);
+    padding: 0 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    color: var(--slate-500);
+  }
+
   /* Rising-in on first paint (hero cards). Uses --d for stagger. */
   .rise-in {
     animation: rise-in 800ms var(--ease-smooth) both;
@@ -763,6 +1092,31 @@
   }
   to {
     transform: scale(1.12) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+@keyframes hexa-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70%,
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes hexa-dot {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 1;
   }
 }
 

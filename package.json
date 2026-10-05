@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "build": "node scripts/build-hexa-knowledge.mjs && tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview --port 4173",
     "images": "node scripts/optimize-images.mjs",
-    "art": "node scripts/build-art.mjs"
+    "art": "node scripts/build-art.mjs",
+    "hexa-knowledge": "node scripts/build-hexa-knowledge.mjs",
+    "favicons": "node scripts/build-favicons.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -28,6 +30,7 @@
     "@fontsource/instrument-serif": "^5.3.0",
     "lucide-react": "^1.51.0",
     "motion": "^14.0.0",
+    "nodemailer": "^7.0.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.18.4"

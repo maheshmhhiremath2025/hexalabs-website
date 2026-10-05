@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { Seo } from './Seo';
 import { ScrollManager } from './ScrollManager';
+import { HexaLauncher } from '../hexa/HexaLauncher';
 
 export function Layout() {
   return (
@@ -21,6 +22,7 @@ export function Layout() {
         </Suspense>
       </main>
       <Footer />
+      <HexaLauncher />
     </>
   );
 }

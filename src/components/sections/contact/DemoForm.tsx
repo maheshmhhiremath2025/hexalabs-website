@@ -18,23 +18,10 @@ type Values = {
 };
 
 type Errors = Partial<Record<keyof Values, string>>;
-type Status = 'idle' | 'submitting' | 'success' | 'emailed' | 'error';
+type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-const endpoint = (import.meta.env.VITE_DEMO_ENDPOINT ?? '').trim();
-/** Plain-text summary of the request, used for the email fallback. */
-function emailBody(v: Values) {
-  const types = v.labTypes.map((t) => requestTypeOptions.find((o) => o.id === t)?.label ?? t).join(', ');
-  return [
-    `Name: ${v.name.trim()}`,
-    `Work email: ${v.email.trim()}`,
-    `Company: ${v.company.trim()}`,
-    `Batch size: ${v.batchSize}`,
-    `Lab type: ${types}`,
-    `Preferred demo date: ${v.preferredDate || 'Not set'}`,
-    '',
-    v.message.trim(),
-  ].join('\n');
-}
+/** The site's own lead endpoint (api/lead.js emails it to the sales inbox). Override with VITE_DEMO_ENDPOINT. */
+const endpoint = (import.meta.env.VITE_DEMO_ENDPOINT ?? '').trim() || '/api/lead';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -130,16 +117,6 @@ export function DemoForm() {
       return;
     }
 
-    // No form endpoint configured: open the visitor's email app with the
-    // request filled in, addressed to support. Set VITE_DEMO_ENDPOINT to post JSON instead.
-    if (!endpoint) {
-      const subject = `Demo request: ${values.company.trim()} (${values.batchSize})`;
-      window.location.href = `mailto:${site.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody(values))}`;
-      setSubmitted({ name: values.name.trim(), email: values.email.trim() });
-      setStatus('emailed');
-      return;
-    }
-
     setStatus('submitting');
     try {
       const res = await fetch(endpoint, {
@@ -153,7 +130,7 @@ export function DemoForm() {
           labTypes: values.labTypes.map((t) => requestTypeOptions.find((o) => o.id === t)?.label ?? t),
           preferredDate: values.preferredDate || null,
           message: values.message.trim(),
-          source: 'hexalabs-website',
+          source: 'demo-form',
           page: window.location.href,
           submittedAt: new Date().toISOString(),
         }),
@@ -166,19 +143,6 @@ export function DemoForm() {
       console.error('[DemoForm] submit failed', err);
       setStatus('error');
     }
-  }
-
-  if (status === 'emailed' && submitted) {
-    return (
-      <div role="status" className="card p-8 sm:p-10">
-        <CircleCheck className="h-8 w-8 text-success" strokeWidth={1.5} aria-hidden="true" />
-        <h2 className="mt-4 text-h3">{formCopy.emailFallbackTitle}</h2>
-        <p className="mt-2 text-body">{formCopy.emailFallbackBody(site.contact.email)}</p>
-        <a href={`mailto:${site.contact.email}`} className="link mt-4 inline-block font-medium">
-          {site.contact.email}
-        </a>
-      </div>
-    );
   }
 
   if (status === 'success' && submitted) {
@@ -207,12 +171,6 @@ export function DemoForm() {
       aria-label="Book a demo"
       className="card p-6 sm:p-10"
     >
-      {!endpoint && import.meta.env.DEV ? (
-        <div role="note" className="mb-6 rounded-xl border border-dashed border-line-strong p-4 text-sm text-body">
-          <span className="mr-2 rounded bg-paper-50 px-1.5 py-0.5 font-mono text-micro text-ink-950">DEV</span>
-          Dev only: <code className="font-mono">VITE_DEMO_ENDPOINT</code> is not set, so submitting opens an email to {site.contact.email}.
-        </div>
-      ) : null}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>

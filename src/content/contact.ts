@@ -18,9 +18,5 @@ export const formCopy = {
   successTitle: 'Request received.',
   successBody: (name: string, email: string) =>
     `Thanks, ${name}. We’ll reply to ${email} with a few time slots for a call.`,
-  /** Shown after the form opens the visitor's email app (used when no form endpoint is set). */
-  emailFallbackTitle: 'Your email is ready to send.',
-  emailFallbackBody: (email: string) =>
-    `We opened your email app with the details filled in. Press send and it reaches ${email}. If nothing opened, email us directly.`,
   genericError: 'Something went wrong sending the form. Please try again or email us.',
 };

@@ -7,7 +7,7 @@ This list records what was decided and what is worth a final look before going l
 
 - **Brand:** real HexaLabs logo (brain + wordmark) in header and footer, favicons from the brain mark, Hexa robot as the Ask Hexa avatar, social card with the real logo. Originals in `brand-source/`.
 - **Contact:** support@hexalabs.online everywhere. No phone number.
-- **Demo form:** works without a backend. Submitting opens the visitor's email app, addressed to support@hexalabs.online with the request filled in. Set `VITE_DEMO_ENDPOINT` later to post JSON to a form handler instead.
+- **Leads:** the Book-a-demo form and the Hexa chat post to `/api/lead` (Vercel function), which emails **kumar@hexalabs.online** via Gmail. Needs `GMAIL_USER` + `GMAIL_APP_PASSWORD` in Vercel. Hexa (`/api/hexa-chat`) needs `OPENAI_API_KEY`. Set a monthly budget limit on that OpenAI project, and optionally a Vercel Firewall rate-limit rule for `/api/*`.
 - **No portal imagery:** the site shows no screenshots or mockups of the labsoncloud portal. Product ideas are shown with diagrams (fleet infographic, lab-day timeline, Ask Hexa flow, brand-kit cards, report documents).
 - **Pages:** Official labs, Cloud sandboxes, Lab machines, Certifications (official exam vouchers for Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF, Databricks), For training companies, Pricing, About, Contact, Privacy policy, Terms of service.
 - **Exam and course lists:** checked against vendor sites on 4 October 2026. Retired exams removed or replaced (AZ-204 → AI-200, AZ-500 → SC-500, AZ-800/801 → AZ-802, AI-900 → AI-901, AI-102 → AI-103).

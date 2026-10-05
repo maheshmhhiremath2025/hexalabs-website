@@ -8,7 +8,7 @@ search engines and link previews see full content without running JavaScript.
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm run build      # → dist/  (static files for nginx)
+npm run build      # → dist/ (static pages; Vercel also deploys the api/ functions)
 npm run preview    # serve dist/ locally on http://localhost:4173
 npm run images     # convert screenshots/logos to .webp + .avif
 ```
@@ -66,36 +66,33 @@ timeline, Ask Hexa flow, brand-kit cards, report documents).
 **Social card.** `public/og/og-default.png` (1200×630) is used for link
 previews on every page. Replace it any time with the same size.
 
-## 3. Connecting the demo form
+## 3. Leads: the demo form and the Hexa assistant
 
-The Book-a-demo form POSTs JSON to `VITE_DEMO_ENDPOINT`:
+Two Vercel functions in `api/` (plain Node, no framework) handle visitors:
 
-```json
-{
-  "name": "…", "email": "…", "company": "…",
-  "batchSize": "11–30 learners",
-  "labTypes": ["Microsoft Azure", "Linux desktops"],
-  "preferredDate": "2026-10-20",
-  "message": "…",
-  "source": "hexalabs-website", "page": "https://…/contact", "submittedAt": "ISO-8601"
-}
-```
+- **`api/lead.js`** emails every lead to **kumar@hexalabs.online** (and nowhere else),
+  with Reply-To set to the visitor. Used by the Book-a-demo form (`/contact`) and the
+  details form inside the Hexa chat (which also attaches the chat transcript).
+- **`api/hexa-chat.js`** is **Hexa**, the website assistant (bottom-right on every
+  page). It answers only from the site content: `npm run build` (and
+  `npm run hexa-knowledge`) turns `src/content/*` into `api/_lib/knowledge.js`, so
+  edit the content files and Hexa follows. When a visitor shows buying interest it
+  shows the details form. Widget: `src/components/hexa/`, copy: `src/content/hexa.ts`.
 
-Set it at build time:
+Set these in **Vercel → Project → Settings → Environment Variables** (Production),
+then redeploy. For `npm run dev`, put the same lines in `.env.local` (never committed):
 
-```bash
-cp .env.example .env.production
-# edit VITE_DEMO_ENDPOINT=https://your-form-handler.example/demo
-npm run build
-```
+| Variable | What |
+|---|---|
+| `OPENAI_API_KEY` | OpenAI key for Hexa (model `gpt-4o-mini`; override with `HEXA_MODEL`) |
+| `GMAIL_USER` | The Gmail address that sends the lead emails |
+| `GMAIL_APP_PASSWORD` | That account's 16-character app password (needs 2-step verification) |
 
-Any endpoint that accepts a JSON POST and returns 2xx works (your own API,
-Formspree, Basin, an n8n/Make webhook…). If it's on another domain it must
-allow CORS from the site's origin.
-
-Until it is set, submitting opens the visitor's email app with the request
-already written, addressed to support@hexalabs.online. Nothing is posted
-anywhere. (In `npm run dev` a small note reminds you the endpoint is unset.)
+Without the OpenAI key Hexa says it can't answer and offers the details form; without
+the Gmail settings the forms show an error asking visitors to email
+support@hexalabs.online. Both functions accept requests only from the site's own
+domains, cap input sizes, rate-limit per visitor and drop honeypot (bot) submissions.
+`VITE_DEMO_ENDPOINT` can still point the demo form somewhere else.
 
 Built in: client-side validation with inline errors (focus jumps to the first
 invalid field), a hidden honeypot field (bots that fill it get a fake success),
@@ -106,7 +103,17 @@ pre-fill the form — every "Request" link on the catalogue pages uses
 Also set `VITE_SITE_URL` to the final domain: it is used for canonical links,
 Open Graph URLs, `sitemap.xml` and `robots.txt`.
 
-## 4. Deploying to nginx
+## 4. Deploying
+
+**Vercel (live setup):** push to `main` on GitHub and Vercel builds and deploys
+(`vercel.json` sets the build, output and headers). Vercel also runs the `api/`
+functions, so the demo form and Hexa work there once the environment variables in
+section 3 are set.
+
+**Plain static host (nginx), only if you ever move off Vercel:** the pages work,
+but nginx does not run `api/lead.js` or `api/hexa-chat.js`. Give it a separate
+`/api` backend, or set `VITE_DEMO_ENDPOINT` at build time, or the demo form and
+Hexa will fail.
 
 ```bash
 npm ci
