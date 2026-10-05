@@ -1,28 +1,18 @@
-import { Palette } from 'lucide-react';
 import { useCases } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { Carousel } from '../../ui/Carousel';
 import { Chip } from '../../ui/Chip';
-import { IconTile } from '../../ui/Cards';
-import { LogoTile } from '../../ui/LogoTile';
+import { PhotoMedia } from '../../ui/Cards';
 import { accentTitle } from './accentTitle';
 
 type UseCase = (typeof useCases.items)[number];
 
-/**
- * Use-case card: product cards show the official logo(s) on a clean tile; the
- * non-product card (white-label) shows a line icon. White panel overlaps
- * it, dark pill action. Logos are visual only — the chip, title and body name the platform.
- */
+/** Use-case card: one photo on top, white panel overlapping it, dark pill action. */
 function UseCaseCard({ u }: { u: UseCase }) {
   return (
     <article className="art-card group">
-      {'logos' in u ? (
-        <LogoTile ids={u.logos} overlap="4.5rem" className="art-card-media" />
-      ) : (
-        <IconTile icon={Palette} />
-      )}
+      <PhotoMedia image={u.image} />
       <div className="art-card-panel card">
         <p>
           <Chip>{u.chip}</Chip>
@@ -39,10 +29,10 @@ function UseCaseCard({ u }: { u: UseCase }) {
   );
 }
 
-/** Short dark feature band: a carousel of use-case cards. */
+/** Dark photo band (data-centre aisle under a navy wash): a carousel of use-case cards. */
 export function UseCases() {
   return (
-    <Section tone="dark" glow labelledBy="usecases-title">
+    <Section tone="dark" image="ph-band-datacenter" labelledBy="usecases-title">
       <SectionIntro
         id="usecases-title"
         eyebrow={useCases.eyebrow}

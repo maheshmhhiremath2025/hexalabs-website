@@ -4,6 +4,7 @@ import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { BrandKit } from '../../graphics/BrandKit';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { PhotoStage } from '../../ui/PhotoStage';
 import { accentTitle } from './accentTitle';
 
 export function WhiteLabel() {
@@ -35,15 +36,17 @@ export function WhiteLabel() {
           </div>
         </div>
 
-        {/* The two example brand kits on a soft stage */}
+        {/* The two example brand kits over a photo of a brand team at work */}
         <div className="col-span-12 lg:order-1 lg:col-span-7">
-          <RevealGroup className="ui-stage rounded-[20px] grid gap-4 p-3 sm:grid-cols-2 sm:p-8 sm:pb-12 lg:gap-5">
-            {whiteLabel.themes.map((theme, i) => (
-              <RevealItem key={theme.name} className={i === 1 ? 'sm:mt-10' : ''}>
-                <BrandKit theme={theme} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          <PhotoStage image="ph-wl-studio" focus="50% 30%">
+            <RevealGroup className="grid gap-4 sm:grid-cols-2 sm:pb-4 lg:gap-5">
+              {whiteLabel.themes.map((theme, i) => (
+                <RevealItem key={theme.name} className={i === 1 ? 'sm:mt-10' : ''}>
+                  <BrandKit theme={theme} />
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </PhotoStage>
           <p className="mt-6 text-sm text-muted sm:mx-6">{whiteLabel.caption}</p>
         </div>
       </div>

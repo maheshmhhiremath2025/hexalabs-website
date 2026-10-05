@@ -68,6 +68,7 @@ export default function Contact() {
   return (
     <>
       <PageHero
+        image="ph-hero-contact"
         eyebrow={contactHero.eyebrow}
         title={contactHero.title}
         body={contactHero.body}

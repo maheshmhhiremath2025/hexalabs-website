@@ -4,20 +4,20 @@ import { pairing, practiceExamples, type PracticeKind } from '../../../content/c
 import { AccentHeadline } from '../../ui/Accent';
 import { ArtCard } from '../../ui/Cards';
 import { Chip } from '../../ui/Chip';
-import type { ProductId } from '../../../content/products';
+import type { ArtName } from '../../ui/Art';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { Section, SectionIntro } from '../../ui/Section';
 
 const partIcons: LucideIcon[] = [Ticket, FlaskConical, CalendarCheck];
 const connectors: LucideIcon[] = [Plus, ArrowRight];
-/** Official logos of a few platforms in each practice environment (same sets as the home catalogue). */
-const destinationLogos: Record<PracticeKind, ProductId[]> = {
-  official: ['azure', 'aws'],
-  sandbox: ['gcp', 'oci', 'databricks'],
-  machine: ['windows-server', 'ubuntu', 'kubernetes'],
+/** One photo per practice environment (same photos as the home catalogue). */
+const destinationImages: Record<PracticeKind, ArtName> = {
+  official: 'ph-cat-official',
+  sandbox: 'ph-cat-sandboxes',
+  machine: 'ph-cat-machines',
 };
 
-/** Voucher + practice environment → exam day, then the three HexaLabs environments as cards with official logos. */
+/** Voucher + practice environment → exam day, then the three HexaLabs environments as photo cards. */
 export function VoucherPairing() {
   const { diagram, destinations } = pairing;
   const last = diagram.parts.length - 1;
@@ -74,7 +74,7 @@ export function VoucherPairing() {
           return (
             <RevealItem as="li" key={d.kind}>
               <ArtCard
-                logos={destinationLogos[d.kind]}
+                image={destinationImages[d.kind]}
                 title={d.name}
                 body={d.body}
                 href={d.href}

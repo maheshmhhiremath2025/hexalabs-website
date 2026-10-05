@@ -4,11 +4,14 @@ import { Section, SectionIntro } from '../../ui/Section';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
-/** Four numbered white cards; on desktop a small arrow bubble links each card to the next. */
+/**
+ * Dark photo band (office tower at blue hour): four numbered white cards; on desktop a
+ * small arrow bubble links each card to the next.
+ */
 export function BatchTimeline() {
   const last = batchSteps.steps.length - 1;
   return (
-    <Section tone="paper" labelledBy="batch-title">
+    <Section tone="dark" image="ph-steps-bg" imageFocus="50% 40%" labelledBy="batch-title">
       <SectionIntro id="batch-title" eyebrow={batchSteps.eyebrow} title={accentTitle(batchSteps.title, batchSteps.accent)} />
 
       <RevealGroup as="ol" className="mt-14 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">

@@ -97,6 +97,7 @@ export default function Pricing() {
   return (
     <>
       <PageHero
+        image="ph-hero-pricing"
         eyebrow={pricingHero.eyebrow}
         title={pricingHero.title}
         body={pricingHero.body}

@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { AccentHeadline, type AccentTitle } from '../ui/Accent';
-import type { ProductId } from '../../content/products';
+import { Art, type ArtName } from '../ui/Art';
 import { Chip } from '../ui/Chip';
-import { LogoCluster } from '../ui/LogoCluster';
 
 type Props = {
   eyebrow: string;
@@ -11,28 +10,33 @@ type Props = {
   actions?: ReactNode;
   /** Right-hand column on desktop (dark-styled content: vendor lists, facts…). */
   aside?: ReactNode;
-  /**
-   * Official logos of the platforms the page covers, shown as a tile grid on the right
-   * (desktop) when there is no aside — e.g. the six cloud providers on the sandboxes page.
-   */
-  logos?: readonly ProductId[];
-  /** Accessible name for the logo grid. */
-  logosLabel?: string;
+  /** Low-key photo behind the hero (ph-hero-*: dark space on the left for the headline). */
+  image?: ArtName;
+  /** CSS object-position for the photo's focal point. */
+  imageFocus?: string;
   /** Content (usually a row of white cards) that overlaps the hero's bottom edge. */
   overlap?: ReactNode;
 };
 
 /**
- * Inner-page hero: an inset, rounded dark panel on a plain gradient with a big
- * light-weight headline. The h1 renders immediately (no fade — LCP).
+ * Inner-page hero: an inset, rounded dark panel with a photo drifting slowly behind a
+ * big light-weight headline. The h1 renders immediately (no fade — LCP).
  */
-export function PageHero({ eyebrow, title, body, actions, aside, logos, logosLabel = 'Platforms', overlap }: Props) {
-  const right =
-    aside ?? (logos?.length ? <LogoCluster ids={logos} label={logosLabel} className="mx-auto hidden max-w-md lg:flex" /> : null);
+export function PageHero({ eyebrow, title, body, actions, aside, image, imageFocus = '75% 50%', overlap }: Props) {
+  const right = aside ?? null;
   return (
     <section aria-labelledby="page-title" className="relative px-2 sm:px-3">
       <div className="surface-dark relative overflow-hidden rounded-[20px] sm:rounded-panel">
-        <div aria-hidden="true" className="hero-gradient absolute inset-0" />
+        {image ? (
+          <>
+            <div aria-hidden="true" className="art-drift absolute inset-0">
+              <Art name={image} priority sizes="100vw" className="h-full w-full" position={imageFocus} />
+            </div>
+            <div aria-hidden="true" className="hero-scrim absolute inset-0" />
+          </>
+        ) : (
+          <div aria-hidden="true" className="hero-gradient absolute inset-0" />
+        )}
 
         <div
           className={`container-site relative grid grid-cols-12 items-center gap-x-6 gap-y-10 pt-14 sm:pt-20 lg:pt-24 ${

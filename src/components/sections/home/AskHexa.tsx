@@ -2,6 +2,7 @@ import { askHexa } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
 import { AskHexaFlow } from '../../graphics/AskHexaFlow';
 import { Reveal } from '../../ui/Reveal';
+import { PhotoStage } from '../../ui/PhotoStage';
 import { accentTitle } from './accentTitle';
 
 export function AskHexa() {
@@ -28,13 +29,13 @@ export function AskHexa() {
           </ul>
         </div>
 
-        {/* The assistant conversation on a soft stage */}
+        {/* The assistant conversation over a photo of the support team */}
         <Reveal className="col-span-12 lg:col-span-7">
-          <div className="ui-stage rounded-[20px] p-3 sm:p-8">
+          <PhotoStage image="ph-support" focus="50% 25%">
             <div className="mx-auto max-w-xl">
               <AskHexaFlow />
             </div>
-          </div>
+          </PhotoStage>
         </Reveal>
       </div>
     </Section>

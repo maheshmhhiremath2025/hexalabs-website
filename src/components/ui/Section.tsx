@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
+import { Art, type ArtName } from './Art';
 
 /**
  * paper — pale blue-grey canvas (the default page background)
  * white — white band; cards on it use the canvas colour or a border
- * dark  — navy feature section (carousels, "how it works"), white cards pop on it
+ * dark  — navy feature section (carousels, steps); pass `image` for a photo band
  */
 export type Tone = 'dark' | 'paper' | 'white';
 
@@ -23,16 +24,42 @@ type SectionProps = {
   flush?: boolean;
   /** Soft blue glow in the background (dark sections only). */
   glow?: boolean;
+  /**
+   * Full-bleed photo behind a dark section, under a navy wash so white cards and
+   * text stay readable. Use with tone="dark".
+   */
+  image?: ArtName;
+  /** CSS object-position for the photo's focal point. */
+  imageFocus?: string;
 };
 
-export function Section({ tone, id, labelledBy, className = '', children, flush = false, glow = false }: SectionProps) {
+export function Section({
+  tone,
+  id,
+  labelledBy,
+  className = '',
+  children,
+  flush = false,
+  glow = false,
+  image,
+  imageFocus = '50% 50%',
+}: SectionProps) {
   return (
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={`${toneClass[tone]} relative ${glow ? 'overflow-hidden' : ''} ${flush ? '' : 'py-20 sm:py-24 lg:py-28'} ${className}`}
+      className={`${toneClass[tone]} relative ${glow || image ? 'overflow-hidden' : ''} ${flush ? '' : 'py-20 sm:py-24 lg:py-28'} ${className}`}
     >
-      {glow ? <div aria-hidden="true" className="glow-dark pointer-events-none absolute inset-0" /> : null}
+      {image ? (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <div className="art-drift absolute inset-0">
+            <Art name={image} sizes="100vw" className="h-full w-full" position={imageFocus} />
+          </div>
+          <div className="band-wash absolute inset-0" />
+        </div>
+      ) : glow ? (
+        <div aria-hidden="true" className="glow-dark pointer-events-none absolute inset-0" />
+      ) : null}
       <div className="container-site relative">{children}</div>
     </section>
   );

@@ -20,8 +20,7 @@ export default function Certifications() {
         eyebrow={certHero.eyebrow}
         title={certHero.title}
         body={certHero.body}
-        logos={['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks']}
-        logosLabel="Certification vendors"
+        image="ph-hero-certifications"
         actions={
           <>
             <ButtonLink href={certHero.primaryCta.href} size="lg" arrow="up-right">

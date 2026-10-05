@@ -11,7 +11,7 @@ const icons: LucideIcon[] = [KeyRound, SlidersHorizontal, Wallet, Gauge, Calenda
 export function Guardrails() {
   const { items } = guardrailsSection;
   return (
-    <Section tone="dark" glow labelledBy="guardrails-title" id="guardrails">
+    <Section tone="dark" image="ph-band-datacenter" labelledBy="guardrails-title" id="guardrails">
       <SectionIntro
         id="guardrails-title"
         eyebrow={guardrailsSection.eyebrow}

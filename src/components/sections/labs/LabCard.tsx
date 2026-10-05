@@ -1,7 +1,7 @@
 import { BrainCircuit, Boxes, Monitor, SquareTerminal, type LucideIcon } from 'lucide-react';
 import type { Lab, LabCategory } from '../../../content/labs';
 import { requestLink } from '../../../content/requestTypes';
-import { logosForLab } from '../../../content/products';
+import { labProduct } from '../../../content/products';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
 import { LogoTile } from '../../ui/LogoTile';
@@ -15,13 +15,14 @@ export const categoryIcons: Record<LabCategory, LucideIcon> = {
 };
 
 /**
- * White lab card: an inset tile with the lab's official product logo(s) (scales a little
+ * White lab card: an inset tile with the lab's main official product logo (scales a little
  * on hover), then platform chip, title, typical use, summary, access periods and
  * "Request this lab ↗". The logos are visual only — the chip and title name the product.
  */
 export function LabCard({ lab }: { lab: Lab }) {
-  // Every lab in labs.ts is mapped; a new, unmapped lab simply has no logo tile.
-  const logos = logosForLab(lab.id);
+  // One official logo per card: the lab's main product. An unmapped lab has no logo tile.
+  const main = labProduct[lab.id];
+  const logos = main ? [main] : [];
   return (
     <article className="card card-hover group flex h-full flex-col overflow-hidden">
       {logos.length ? <LogoTile ids={logos} className="m-2 mb-0 h-36 rounded-[12px] sm:h-40" /> : null}

@@ -18,8 +18,7 @@ export default function Labs() {
         eyebrow={labsHero.eyebrow}
         title={labsHero.title}
         body={labsHero.body}
-        logos={['windows-server', 'ubuntu', 'rhel', 'kubernetes']}
-        logosLabel="Lab machine platforms"
+        image="ph-hero-labs"
         actions={
           <>
             <ButtonLink href="/labs#catalogue" size="lg" arrow="right">

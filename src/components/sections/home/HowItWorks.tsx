@@ -9,6 +9,7 @@ import {
 import { hero, howItWorks } from "../../../content/home";
 import { Section, SectionIntro } from "../../ui/Section";
 import { Reveal } from "../../ui/Reveal";
+import { PhotoStage } from "../../ui/PhotoStage";
 import { accentTitle } from "./accentTitle";
 
 const roleIcons: LucideIcon[] = [MonitorSmartphone, UserCog, ShieldCheck];
@@ -74,7 +75,7 @@ function FlowPanel() {
   return (
     <div
       aria-hidden="true"
-      className="rounded-[var(--panel-radius)] bg-canvas p-4 sm:p-8"
+      className="rounded-[16px] bg-canvas/92 p-4 shadow-card backdrop-blur-md sm:p-7"
     >
       {/* Learners — three on phones, four from sm up */}
       <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">
@@ -255,7 +256,9 @@ export function HowItWorks() {
           </ul>
         </div>
         <Reveal className="col-span-12 lg:col-span-7">
-          <FlowPanel />
+          <PhotoStage image="ph-howitworks" focus="50% 18%">
+            <FlowPanel />
+          </PhotoStage>
         </Reveal>
       </div>
     </Section>

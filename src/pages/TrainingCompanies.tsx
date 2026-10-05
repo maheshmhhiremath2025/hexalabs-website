@@ -29,8 +29,7 @@ export default function TrainingCompanies() {
         eyebrow={trainingHero.eyebrow}
         title={trainingHero.title}
         body={trainingHero.body}
-        logos={['azure', 'aws', 'gcp', 'windows-server', 'ubuntu', 'kubernetes']}
-        logosLabel="Platforms your courses can run on"
+        image="ph-hero-training"
         actions={
           <>
             <ButtonLink href={trainingHero.primaryCta.href} size="lg" arrow="up-right" className="w-full sm:w-auto">

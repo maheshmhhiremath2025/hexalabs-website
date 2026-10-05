@@ -43,7 +43,7 @@ export default function StyleGuide() {
             </ButtonLink>
           </>
         }
-        logos={['azure', 'aws', 'kubernetes']}
+        image="ph-hero-official"
         overlap={
           <RevealGroup as="ul" className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
             {[

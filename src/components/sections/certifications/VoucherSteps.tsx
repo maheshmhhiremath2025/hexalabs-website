@@ -7,7 +7,7 @@ import { accentWord } from '../official/accentWord';
 /** Dark feature section: the four voucher steps as numbered white cards. */
 export function VoucherSteps() {
   return (
-    <Section tone="dark" glow id="how-it-works" labelledBy="voucher-steps-title">
+    <Section tone="dark" image="ph-uc-certifications" imageFocus="50% 30%" id="how-it-works" labelledBy="voucher-steps-title">
       <SectionIntro
         id="voucher-steps-title"
         eyebrow={voucherSteps.eyebrow}

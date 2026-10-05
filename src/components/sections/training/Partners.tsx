@@ -26,12 +26,13 @@ function Points({ items }: { items: string[] }) {
 export function Partners() {
   const { whiteLabel, reseller } = partners;
   return (
-    <Section tone="dark" id="partners" labelledBy="partners-title" glow className="scroll-mt-20">
+    <Section tone="dark" image="ph-steps-bg" id="partners" labelledBy="partners-title" className="scroll-mt-20">
       <SectionIntro id="partners-title" eyebrow={partners.eyebrow} title={accentText(partners.title, 'your own name')} />
 
       <RevealGroup className="mt-12 grid items-stretch gap-6 lg:mt-14 lg:grid-cols-2 lg:gap-8">
         <RevealItem className="h-full">
           <ArtCard
+            image="ph-wl-studio"
             chip="Your brand"
             title={whiteLabel.title}
             body={whiteLabel.body}

@@ -133,10 +133,12 @@ Sizes `sm` (36px), `md` (44px), `lg` (48px).
   interactive cards. Padding `p-6 sm:p-8` (compact `p-5`).
 - **`<IconCard icon title body href />`** — icon in a soft circle (`.icon-bubble`),
   title, one line, "Know more". `compact` = tighter on phones (2-up grids).
-- **`<ArtCard art title body chip href | action />`** — artwork on top (zooms on
-  hover), white panel overlapping the lower part of the image, chip, title, body,
+- **`<ArtCard image | logos | icon title body chip href | action />`** — ONE visual on
+  top (zooms on hover), white panel overlapping its lower part, chip, title, body,
   "Know more ↗" or a custom `action` (e.g. `ButtonLink variant="dark" size="sm"`).
-  Works on paper, white and dark sections.
+  `image` = one photo (`ph-*`) for kinds of lab, use cases and programs; `logos` = the
+  product's single official logo, only on cards about one product. Never a cluster of
+  logos on a card. `PhotoMedia` is the same photo block for custom cards.
 - **Horizontal story card** (see `/_styleguide` "Top stories"): `card card-hover group grid
   overflow-hidden sm:grid-cols-[2fr_3fr]` with an `.art-zoom` image cell and text cell.
 - `.card-night` — dark card for dark sections when white would be too loud (stats, specs).
@@ -147,6 +149,20 @@ Sizes `sm` (36px), `md` (44px), `lg` (48px).
 No customer names, logos, stats, testimonials or prices. Use-case cards are built
 from real offerings: chip "Use case", titles like "Run an AZ-104 batch for 30
 learners", "Give each learner an OCI sandbox", body = a fact from `src/content/*`.
+
+### Photography — `ph-*` (the main visual language)
+Editorial photos of learners, trainers, engineers and data centres, one cool blue-teal
+grade (originals in `brand-source/art/ph-*.png`, regenerated with the same style prompt).
+No text, logos or readable screens in any photo, and never a portal screenshot.
+- **Cards**: one photo per card (`ArtCard image` / `PhotoMedia`).
+- **`<PhotoStage image>`** (`ui/PhotoStage.tsx`): rounded photo panel with white product
+  cards (diagrams, timelines, chats) floating over its lower part. Use instead of a plain
+  gradient stage.
+- **`<Section tone="dark" image>`**: full-bleed photo band under a navy wash
+  (`.band-wash`) for carousels and step rows.
+- **Heroes**: `PageHero image="ph-hero-*"` (low-key, dark space on the left);
+  `CtaBand` is an inset photo banner (`image`, default `ph-cta`).
+- Don't put a plain colour gradient behind a section's visual when a photo fits.
 
 ### Art — `ui/Art.tsx`
 `<Art name="sandboxes" />` — `<picture>` with AVIF/WebP 800w/1600w + JPG fallback,
@@ -174,17 +190,18 @@ Use each light artwork once per page. Match art to topic (sandboxes page → `sa
 - Use in the **dark** feature section (1 per page) or a white/paper "stories" row.
 
 ### Hero — `sections/PageHero.tsx`
-Inset rounded dark panel (8–12px margin), dark artwork drifting slowly behind a
+Inset rounded dark panel (8–12px margin), a low-key photo drifting slowly behind a
 light-weight h1 with one gradient accent word, chip eyebrow, lead, actions.
 Props: `eyebrow`, `title` (AccentTitle), `body`, `actions`, `aside`,
-`art` (dark art, default `dark-silk`), `feature` (a light artwork framed on the right
-when there is no aside), `overlap` (a row of white cards overlapping the bottom edge —
+`image` (a `ph-hero-*` photo; `imageFocus` sets the focal point), `overlap` (a row of
+white cards overlapping the bottom edge —
 use `IconCard`s, `grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4`).
 Hero actions: `primary` + `ghost` (both `size="lg"`).
 
 ### CtaBand — `sections/CtaBand.tsx`
-Dark band: chip, big light h2, body, white pill + "Existing customer? Log in", framed
-artwork right. Props `title`, `body`, `cta`, `art` (light art, default `training`), `chip`.
+Inset rounded photo banner (navy wash, slow drift): chip, big light h2, body, white pill
++ "Existing customer? Log in". Props `title`, `body`, `cta`, `chip`, `image` (default
+`ph-cta`), `imageFocus`.
 
 ### Forms
 `.field` (48px, radius 12, blue focus ring), `.field-label`, `.field-error`. Forms sit in

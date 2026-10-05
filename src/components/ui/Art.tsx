@@ -5,8 +5,10 @@
  * Dark backgrounds: hero, dark-silk, dark-spiral.
  * Light backgrounds: official-labs, sandboxes, lab-machines, certifications,
  * training, ask-hexa, white-label, security, honeycomb.
- * Per-product (p-*): kept for reference only. Product cards now show official logos
- * (LogoTile + src/content/products.ts); artwork is for heroes, CTA bands and feature sections.
+ * Photography (ph-*): editorial photos for card media, photo stages, image bands and
+ * inner-page heroes (ph-hero-* are low-key with dark space on the left for the headline).
+ * Per-product (p-*): kept for reference only. Product cards show official logos
+ * (LogoTile + src/content/products.ts).
  */
 export const artNames = [
   'hero',
@@ -21,6 +23,36 @@ export const artNames = [
   'white-label',
   'security',
   'honeycomb',
+  // Photography
+  'ph-cat-official',
+  'ph-cat-sandboxes',
+  'ph-cat-machines',
+  'ph-cat-certifications',
+  'ph-uc-batch',
+  'ph-uc-sandbox',
+  'ph-uc-windows',
+  'ph-uc-kubernetes',
+  'ph-uc-certifications',
+  'ph-uc-whitelabel',
+  'ph-band-datacenter',
+  'ph-howitworks',
+  'ph-steps-bg',
+  'ph-trainer',
+  'ph-support',
+  'ph-security',
+  'ph-cta',
+  'ph-hero-official',
+  'ph-hero-sandboxes',
+  'ph-hero-labs',
+  'ph-hero-certifications',
+  'ph-hero-training',
+  'ph-hero-pricing',
+  'ph-hero-about',
+  'ph-hero-contact',
+  'ph-dd-console',
+  'ph-dd-reports',
+  'ph-about-team',
+  'ph-wl-studio',
   // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',
@@ -58,6 +90,8 @@ type Props = {
   className?: string;
   /** Classes on the <img> (default: fills the wrapper with object-cover). */
   imgClassName?: string;
+  /** CSS object-position for the photo's focal point, e.g. '50% 30%'. */
+  position?: string;
 };
 
 export function Art({
@@ -67,6 +101,7 @@ export function Art({
   sizes = '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
   className = '',
   imgClassName = 'h-full w-full object-cover',
+  position,
 }: Props) {
   const base = `/art/${name}`;
   // React 18 does not know the fetchPriority prop; the lowercase DOM attribute passes through.
@@ -84,6 +119,7 @@ export function Art({
         decoding={priority ? 'auto' : 'async'}
         {...priorityAttrs}
         className={imgClassName}
+        style={position ? { objectPosition: position } : undefined}
       />
     </picture>
   );

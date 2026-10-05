@@ -4,10 +4,15 @@ import { Chip } from './Chip';
 import { LinkArrow } from './LinkArrow';
 import { LogoTile } from './LogoTile';
 import type { ProductId } from '../../content/products';
+import { Art, type ArtName } from './Art';
 
 type Heading = 'h2' | 'h3' | 'h4';
 
 type ArtCardProps = {
+  /** One photo on top of the card (wins over `logos` and `icon`). */
+  image?: ArtName;
+  /** CSS object-position for the photo's focal point. */
+  imageFocus?: string;
   /** Non-product cards: a line icon on a soft tile. */
   icon?: LucideIcon;
   /** Product cards: official logo(s) on a clean tile (wins over `icon`). */
@@ -30,12 +35,14 @@ type ArtCardProps = {
 };
 
 /**
- * Reference-style card: a product's official logos (or, for non-product cards, a line
- * icon) on a soft tile on top, white panel overlapping
+ * Reference-style card: one photo (or a product's official logo, or a line icon) on
+ * top, white panel overlapping
  * the image's lower part, chip, title, short body and an underlined "Know more ↗".
  * The link is stretched over the panel.
  */
 export function ArtCard({
+  image,
+  imageFocus,
   icon,
   logos,
   logosAlt = 'decorative',
@@ -51,13 +58,15 @@ export function ArtCard({
 }: ArtCardProps) {
   return (
     <article className={`art-card group ${className}`}>
-      {logos?.length ? (
+      {image ? (
+        <PhotoMedia image={image} focus={imageFocus} />
+      ) : logos?.length ? (
         <LogoTile ids={logos} alt={logosAlt} overlap="4.5rem" className="art-card-media" />
       ) : icon ? (
         <IconTile icon={icon} />
       ) : null}
       {/* With no media on top, the panel is a plain card. */}
-      <div className={`art-card-panel card ${logos?.length || icon ? '' : 'm-0!'}`}>
+      <div className={`art-card-panel card ${image || logos?.length || icon ? '' : 'm-0!'}`}>
         {chip ? (
           <p>
             <Chip>{chip}</Chip>
@@ -73,6 +82,15 @@ export function ArtCard({
         ) : null}
       </div>
     </article>
+  );
+}
+
+/** Card media: one photo that zooms slowly on hover, with a soft shade at the bottom. */
+export function PhotoMedia({ image, focus, className = '' }: { image: ArtName; focus?: string; className?: string }) {
+  return (
+    <div aria-hidden="true" className={`art-card-media art-zoom photo-media ${className}`}>
+      <Art name={image} position={focus} className="h-full w-full" />
+    </div>
   );
 }
 

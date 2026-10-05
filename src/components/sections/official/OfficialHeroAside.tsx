@@ -3,6 +3,7 @@ import { site } from '../../../content/site';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
 import { LogoTile } from '../../ui/LogoTile';
+import { Art } from '../../ui/Art';
 
 /** "Fundamentals to Expert" — the first and last level that have courses. */
 function levelRange(v: OfficialVendor) {
@@ -11,11 +12,13 @@ function levelRange(v: OfficialVendor) {
   return used.length === 1 ? used[0].label : `${used[0].label} to ${used[used.length - 1].label}`;
 }
 
-/** The current offer as a featured horizontal card: the official Azure and AWS logos left, text right. */
+/** The current offer as a featured horizontal card: a classroom photo left, text right. */
 function OfferCard() {
   return (
     <article className="card card-hover group grid h-full overflow-hidden sm:grid-cols-[5fr_6fr]">
-      <LogoTile ids={['azure', 'aws']} priority className="m-1.5 aspect-[2/1] rounded-[12px] sm:m-2 sm:mr-0 sm:aspect-auto" />
+      <div aria-hidden="true" className="art-zoom m-1.5 aspect-[2/1] overflow-hidden rounded-[12px] sm:m-2 sm:mr-0 sm:aspect-auto">
+        <Art name="ph-cat-official" sizes="(min-width: 1024px) 22vw, 100vw" className="h-full w-full" position="50% 30%" />
+      </div>
       <div className="flex flex-col p-5 sm:p-6">
         <p>
           <Chip tone="accent">

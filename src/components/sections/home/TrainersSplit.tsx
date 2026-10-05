@@ -2,6 +2,7 @@ import { CalendarPlus, Hourglass, Play, Power, ScrollText, UserCog, type LucideI
 import { trainers } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
 import { Reveal } from '../../ui/Reveal';
+import { PhotoStage } from '../../ui/PhotoStage';
 import { DayTimeline } from '../../graphics/DayTimeline';
 import { accentTitle } from './accentTitle';
 
@@ -38,11 +39,11 @@ export function TrainersSplit() {
           </ul>
         </div>
 
-        {/* The lab-day timeline on a soft stage */}
+        {/* The lab-day timeline over a photo of a trainer with the class */}
         <Reveal className="col-span-12 lg:col-span-6">
-          <div className="ui-stage rounded-[20px] p-3 sm:p-8">
+          <PhotoStage image="ph-trainer" focus="60% 25%">
             <DayTimeline />
-          </div>
+          </PhotoStage>
         </Reveal>
       </div>
     </Section>

@@ -6,23 +6,25 @@ import { DayTimeline } from '../../graphics/DayTimeline';
 import { ReportGraphic } from '../../graphics/ReportGraphic';
 import { Chip } from '../../ui/Chip';
 import { Reveal } from '../../ui/Reveal';
+import { PhotoStage } from '../../ui/PhotoStage';
+import type { ArtName } from '../../ui/Art';
 import { accentText } from './accentText';
 
 /** Product illustration and the accent phrase for each deep dive. */
-const look: Record<(typeof deepDives)[number]['id'], { visual: ReactNode; accent: string }> = {
-  console: { visual: <DayTimeline />, accent: 'whole batch' },
-  reports: { visual: <ReportGraphic className="bg-transparent!" />, accent: 'did the work' },
-  support: { visual: <AskHexaFlow className="mx-auto max-w-xl" />, accent: 'support queue' },
+const look: Record<(typeof deepDives)[number]['id'], { visual: ReactNode; accent: string; image: ArtName }> = {
+  console: { visual: <DayTimeline />, accent: 'whole batch', image: 'ph-dd-console' },
+  reports: { visual: <ReportGraphic className="bg-transparent!" />, accent: 'did the work', image: 'ph-dd-reports' },
+  support: { visual: <AskHexaFlow className="mx-auto max-w-xl" />, accent: 'support queue', image: 'ph-support' },
 };
 
-/** Feature deep-dives on white: text and a product illustration on a soft stage, alternating sides. */
+/** Feature deep-dives on white: text and a product illustration over a photo, alternating sides. */
 export function DeepDives() {
   return (
     <section aria-label="Features" className="surface-white py-20 sm:py-24 lg:py-28">
       <div className="container-site space-y-20 sm:space-y-24 lg:space-y-32">
         {deepDives.map((d, i) => {
           const flip = i % 2 === 1;
-          const { visual, accent } = look[d.id];
+          const { visual, accent, image } = look[d.id];
           return (
             <article
               key={d.id}
@@ -52,13 +54,15 @@ export function DeepDives() {
               </div>
 
               <Reveal className={`col-span-12 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1 lg:pr-4' : 'lg:pl-4'}`}>
-                <figure aria-hidden="true" className="ui-stage rounded-[20px] p-3 sm:p-8">
-                  <p className="mb-4 sm:mb-6">
-                    <Chip className="font-mono">
-                      {String(i + 1).padStart(2, '0')} · {d.eyebrow}
-                    </Chip>
-                  </p>
-                  {visual}
+                <figure aria-hidden="true">
+                  <PhotoStage image={image} focus="50% 25%">
+                    <p className="mb-4 sm:mb-5">
+                      <Chip className="font-mono shadow-card">
+                        {String(i + 1).padStart(2, '0')} · {d.eyebrow}
+                      </Chip>
+                    </p>
+                    {visual}
+                  </PhotoStage>
                 </figure>
               </Reveal>
             </article>

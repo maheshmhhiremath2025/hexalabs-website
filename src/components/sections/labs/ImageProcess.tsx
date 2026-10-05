@@ -6,7 +6,7 @@ import { Section, SectionIntro } from '../../ui/Section';
 /** Dark feature section: the four setup steps as numbered white cards that rise in one after another. */
 export function ImageProcess() {
   return (
-    <Section tone="dark" glow labelledBy="image-process-title">
+    <Section tone="dark" image="ph-uc-windows" labelledBy="image-process-title">
       <SectionIntro
         id="image-process-title"
         eyebrow={imageProcess.eyebrow}

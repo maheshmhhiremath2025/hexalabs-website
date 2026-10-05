@@ -17,6 +17,7 @@ export default function OfficialLabs() {
   return (
     <>
       <PageHero
+        image="ph-hero-official"
         eyebrow={officialHero.eyebrow}
         title={officialHero.title}
         body={officialHero.body}
