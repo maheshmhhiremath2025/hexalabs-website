@@ -124,12 +124,11 @@ export const catalogue = {
   title: 'Pick the stack your course teaches.',
   accent: 'stack',
   action: { label: 'See all lab machines', href: '/labs' },
-  /** The four cards on the home page — one per kind of environment, each with one photo. */
+  /** The four cards on the home page — one per kind of environment, each with one illustration. */
   cards: [
     {
       id: 'official',
-      image: 'ph-cat-official',
-      /** Transparent illustration shown instead of the photo (public/illustrations). */
+      /** Transparent illustration on the card (public/illustrations). */
       illustration: 'official-labs',
       chip: 'Azure · AWS',
       title: 'Official course labs',
@@ -140,7 +139,7 @@ export const catalogue = {
     },
     {
       id: 'sandboxes',
-      image: 'ph-cat-sandboxes',
+      illustration: 'sandboxes',
       chip: 'Six providers',
       title: 'Cloud sandboxes',
       line: 'Real cloud consoles for each learner, with limits on services, hours and spend.',
@@ -150,7 +149,7 @@ export const catalogue = {
     },
     {
       id: 'machines',
-      image: 'ph-cat-machines',
+      illustration: 'lab-machines',
       chip: 'In the browser',
       title: 'Lab machines',
       line: 'Windows Server and Linux desktops with admin rights, plus AKS and ARO clusters with a namespace and quota per learner.',
@@ -160,7 +159,7 @@ export const catalogue = {
     },
     {
       id: 'certifications',
-      image: 'ph-cat-certifications',
+      illustration: 'certifications',
       chip: 'Seven vendors',
       title: 'Certification vouchers',
       line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day.',
@@ -313,7 +312,8 @@ export const security = {
 };
 
 /**
- * "Use case" cards in the dark photo band, each with one photo (`image`, see Art.tsx).
+ * "Use case" cards in the dark photo band, each with one illustration (`image`: il-uc-*,
+ * cut from one 3×2 artwork — see Art.tsx).
  * Generic setups built only from the offerings described on this site — no customers,
  * numbers or results.
  */
@@ -328,42 +328,42 @@ export const useCases = {
       title: 'Run an AZ-104 batch for 30 learners',
       body: 'An official Azure lab environment for every learner, opened from any browser with nothing to install.',
       href: '/official-labs#azure',
-      image: 'ph-uc-batch',
+      image: 'il-uc-batch',
     },
     {
       chip: 'Cloud sandbox',
       title: 'Give each learner an OCI sandbox',
       body: 'Their own compartment and console sign-in, with allowed services, shape limits and daily hour caps.',
       href: '/sandboxes?provider=oci#providers',
-      image: 'ph-uc-sandbox',
+      image: 'il-uc-oci',
     },
     {
       chip: 'Lab machines',
       title: 'Deploy 30 identical Windows Server machines',
       body: 'We build one image with your software, then clone it so every learner gets the same machine.',
       href: '/labs?type=windows',
-      image: 'ph-uc-windows',
+      image: 'il-uc-windows',
     },
     {
       chip: 'Kubernetes',
       title: 'Teach Kubernetes with a namespace per learner',
       body: 'A managed AKS cluster with a namespace and quota per learner, plus kubectl on their desktop.',
       href: '/labs?type=kubernetes',
-      image: 'ph-uc-kubernetes',
+      image: 'il-uc-kubernetes',
     },
     {
       chip: 'Certifications',
       title: 'Pair a course with exam vouchers',
       body: 'Order official vouchers for the whole batch or one learner, and add practice labs before exam day.',
       href: '/certifications',
-      image: 'ph-uc-certifications',
+      image: 'il-uc-vouchers',
     },
     {
       chip: 'White-label',
       title: 'Run the labs under your own brand',
       body: 'Learners sign in on your domain, see your logo and get emails from your name.',
       href: '/for-training-companies',
-      image: 'ph-uc-whitelabel',
+      image: 'il-uc-whitelabel',
     },
   ],
 } as const;

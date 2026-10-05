@@ -5,24 +5,20 @@ import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
 import { LinkArrow } from '../../ui/LinkArrow';
-import { IllustrationMedia, PhotoMedia } from '../../ui/Cards';
+import { IllustrationMedia } from '../../ui/Cards';
 import { RevealGroup, RevealItem } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
 type Card = (typeof catalogue.cards)[number];
 
 /**
- * Art card with one photo (or the card's own illustration) on top, taller than the default ArtCard on wide screens
- * (the row is four-up, so a 3:2 photo would be mostly hidden behind the panel).
+ * Art card with the card's own illustration on top, taller than the default ArtCard on wide screens
+ * (the row is four-up, so a 3:2 tile would be mostly hidden behind the panel).
  */
 function KindCard({ c }: { c: Card }) {
   return (
     <article className="art-card group">
-      {'illustration' in c ? (
-        <IllustrationMedia name={c.illustration} className="xl:aspect-[5/4]" />
-      ) : (
-        <PhotoMedia image={c.image} className="xl:aspect-[5/4]" />
-      )}
+      <IllustrationMedia name={c.illustration} className="xl:aspect-[8/7]" />
       <div className="art-card-panel card -mt-14">
         <p className="flex flex-wrap gap-1.5">
           <Chip>{c.chip}</Chip>

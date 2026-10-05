@@ -8,11 +8,11 @@ import { accentTitle } from './accentTitle';
 
 type UseCase = (typeof useCases.items)[number];
 
-/** Use-case card: one photo on top, white panel overlapping it, dark pill action. */
+/** Use-case card: one illustration on top (square tile, shown 5:4), white panel overlapping it, dark pill action. */
 function UseCaseCard({ u }: { u: UseCase }) {
   return (
     <article className="art-card group">
-      <PhotoMedia image={u.image} />
+      <PhotoMedia image={u.image} className="aspect-[5/4]" />
       <div className="art-card-panel card">
         <p>
           <Chip>{u.chip}</Chip>

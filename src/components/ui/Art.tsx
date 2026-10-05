@@ -53,6 +53,13 @@ export const artNames = [
   'ph-dd-reports',
   'ph-about-team',
   'ph-wl-studio',
+  // Use-case illustrations (square tiles cut from one 3×2 artwork, 2× upscaled)
+  'il-uc-batch',
+  'il-uc-oci',
+  'il-uc-windows',
+  'il-uc-kubernetes',
+  'il-uc-vouchers',
+  'il-uc-whitelabel',
   // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',
