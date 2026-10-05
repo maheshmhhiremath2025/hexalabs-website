@@ -53,7 +53,7 @@ export const pages: PageMeta[] = [
     path: '/certifications',
     title: 'Certification vouchers | HexaLabs',
     description:
-      'Official exam vouchers for Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF and Databricks certifications, with optional practice labs before exam day.',
+      'Official exam vouchers for Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF, Databricks and other certifications, with optional practice labs before exam day.',
     sitemap: true,
     priority: 0.8,
   },

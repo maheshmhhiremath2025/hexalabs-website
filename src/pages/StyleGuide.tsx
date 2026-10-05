@@ -21,7 +21,7 @@ const useCases: { logos: ProductId[]; title: string; body: string; href: string 
   { logos: ['azure'], title: 'Run an AZ-104 batch for 30 learners', body: 'Official Azure course labs, one environment per learner.', href: '/official-labs' },
   { logos: ['oci'], title: 'Give each learner an OCI sandbox', body: 'A real cloud console with limits on services, hours and spend.', href: '/sandboxes' },
   { logos: ['ubuntu', 'rocky', 'rhel'], title: 'Teach Linux on a browser desktop', body: 'Ubuntu, Rocky, RHEL or Oracle Linux — nothing to install.', href: '/labs' },
-  { logos: ['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks'], title: 'Pair the course with exam vouchers', body: 'Official vouchers from seven vendors.', href: '/certifications' },
+  { logos: ['microsoft', 'aws', 'google', 'oracle', 'redhat', 'cncf', 'databricks'], title: 'Pair the course with exam vouchers', body: 'Official vouchers from all major vendors.', href: '/certifications' },
   { logos: ['azure', 'aws'], title: 'Run the portal under your brand', body: 'Your logo, colours and domain on every screen.', href: '/for-training-companies' },
   { logos: ['windows-server'], title: 'Cap each learner’s daily hours', body: 'Hour caps reset at midnight; idle machines stop on their own.', href: '/for-training-companies' },
 ];

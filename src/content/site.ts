@@ -76,7 +76,7 @@ export const labsMenu: NavGroup = {
     { label: 'Official labs', href: '/official-labs', description: 'Microsoft Azure and AWS official course labs' },
     { label: 'Cloud sandboxes', href: '/sandboxes', description: 'Azure, AWS, GCP, OCI, Databricks, AI Foundry' },
     { label: 'Lab machines', href: '/labs', description: 'Windows, Linux and Kubernetes in the browser' },
-    { label: 'Certifications', href: '/certifications', description: 'Official exam vouchers from seven vendors' },
+    { label: 'Certifications', href: '/certifications', description: 'Official exam vouchers: Microsoft, AWS, Google Cloud and more' },
   ],
 };
 

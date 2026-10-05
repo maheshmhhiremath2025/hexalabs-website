@@ -40,7 +40,7 @@ export const hero = {
     {
       id: 'certifications',
       title: 'Certification vouchers',
-      line: 'Official exam vouchers from seven vendors.',
+      line: 'Official exam vouchers from Microsoft, AWS, Google Cloud and more.',
       href: '/certifications',
     },
   ] as const,
@@ -160,10 +160,10 @@ export const catalogue = {
     {
       id: 'certifications',
       illustration: 'certifications',
-      chip: 'Seven vendors',
+      chip: 'All major vendors',
       title: 'Certification vouchers',
       line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day.',
-      tags: ['Microsoft', 'AWS', 'Google Cloud', 'Oracle', 'Red Hat', 'CNCF', 'Databricks'],
+      tags: ['Microsoft', 'AWS', 'Google Cloud', 'Oracle', 'Red Hat', 'CNCF', 'Databricks', 'and more'],
       offer: false,
       href: '/certifications',
     },

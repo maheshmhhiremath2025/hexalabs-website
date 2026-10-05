@@ -90,14 +90,16 @@ export type Certification = {
 export const certHero = {
   eyebrow: 'Certifications',
   title: { before: 'Official certification exam vouchers, with labs to ', accent: 'practise', after: ' on.' } satisfies AccentTitle,
-  body: 'Vouchers for official exams from Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF / Linux Foundation and Databricks. Order them through HexaLabs for a whole batch or a single learner, and add hands-on practice labs before exam day.',
+  body: 'Vouchers for official exams from Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF / Linux Foundation, Databricks and other certification vendors. Order them through HexaLabs for a whole batch or a single learner, and add hands-on practice labs before exam day.',
   primaryCta: { label: 'Request vouchers', href: requestLink('certification') },
   secondaryCta: { label: 'Find your exam', href: '#exams' },
   /** Vendor list next to the hero text. Each row filters the exam finder. */
   vendorPanel: {
-    title: 'Vouchers from seven vendors',
+    title: 'Popular vendors, and more on request',
     countLabel: (n: number) => `${n} ${n === 1 ? 'exam' : 'exams'}`,
     srPrefix: 'Show exams from',
+    /** Last pill: any certification vendor not in the list. */
+    other: { label: 'Other vendors', href: requestLink('certification', 'Voucher from another vendor') },
   },
 };
 
@@ -107,7 +109,7 @@ export const examFinder = {
   eyebrow: 'Exam finder',
   title: 'Find the exam. Request the voucher.',
   intro:
-    'Current exams from all seven vendors. Pick a vendor to narrow the list. Each row links to a pre-filled voucher request and, where one fits, to a lab environment to practise on.',
+    'Current exams from our most-requested vendors. Pick a vendor to narrow the list. Each row links to a pre-filled voucher request and, where one fits, to a lab environment to practise on. Need a different vendor or exam? Ask us: we supply vouchers for other certification programmes too.',
   /** Column headings (wide screens). Each row also carries screen-reader labels. */
   columns: {
     code: 'Exam code',
@@ -135,7 +137,7 @@ export const examFinder = {
   /** Count next to each vendor heading, e.g. "4 exams". */
   groupCount: (n: number) => `${n} ${n === 1 ? 'exam' : 'exams'}`,
   notListed: {
-    before: 'Exam not listed?',
+    before: 'Exam or vendor not listed?',
     link: 'Tell us the exam code',
     href: requestLink('certification'),
     after: 'and we will check voucher availability with the vendor.',
