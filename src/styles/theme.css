@@ -12,7 +12,10 @@
   --blue-600: #0a66c2; /* primary actions, links on light */
   --blue-400: #5aa6ff; /* highlights and links on dark */
   --orange-500: #f28c1e; /* accent — max 1–2 uses per screen */
-  --paper-50: #f7f8fa; /* light sections */
+  --paper-50: #f7f8fa; /* subtle fills inside white cards */
+  --canvas: #edf1f8; /* page canvas — pale blue-grey (tone "paper") */
+  --canvas-200: #dfe6f1; /* deeper canvas band, chips/rails on canvas */
+  --night-950: #040b17; /* deepest navy for dark feature sections & overlays */
   --white: #ffffff;
   --slate-600: #475569; /* body text on light */
   --slate-300: #cbd5e1; /* body text on dark */
@@ -38,11 +41,19 @@
   --control-radius: 10px; /* buttons, inputs */
   --card-radius: 16px;
   --frame-radius: 12px;
+  --panel-radius: 24px; /* inset hero panels and dark bands */
 
   /* ── Motion & special values ────────────────────────────────────────── */
   --hero-tilt: 2deg;
-  --lift: -3px;
+  --lift: -6px;
   --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1); /* long, soft settle — card hovers, carousels, nav morph */
+  --dur-hover: 450ms;
+  --dur-move: 650ms;
+
+  /* Accent-word gradients (headings). Light end stays >= 3:1 on canvas for large text. */
+  --accent-gradient-light: linear-gradient(95deg, #0a66c2 0%, #2a7fd8 55%, #0a66c2 110%);
+  --accent-gradient-dark: linear-gradient(95deg, #5aa6ff 0%, #a9d0ff 60%, #5aa6ff 115%);
   --grid-cell: 48px;
 }
 
@@ -53,6 +64,7 @@
 @layer components {
   .surface-dark {
     --surface-bg: var(--ink-950);
+    --surface-accent: var(--accent-gradient-dark);
     --surface-raised: var(--ink-900);
     --surface-heading: var(--white);
     --surface-body: var(--slate-300);
@@ -74,16 +86,17 @@
     --surface-line: var(--slate-200);
     --surface-line-strong: var(--slate-250);
     --surface-link: var(--blue-600);
+    --surface-accent: var(--accent-gradient-light);
     --focus: var(--blue-600);
     color: var(--surface-body);
   }
   .surface-paper {
-    --surface-bg: var(--paper-50);
+    --surface-bg: var(--canvas);
     background-color: var(--surface-bg);
   }
   .surface-white {
     --surface-bg: var(--white);
-    --surface-raised: var(--paper-50);
+    --surface-raised: var(--canvas);
     background-color: var(--surface-bg);
   }
 }
@@ -104,6 +117,10 @@
   --color-blue-400: var(--blue-400);
   --color-orange-500: var(--orange-500);
   --color-paper-50: var(--paper-50);
+  --color-canvas: var(--canvas);
+  --color-canvas-200: var(--canvas-200);
+  --color-night-950: var(--night-950);
+  --color-slate-250: var(--slate-250);
   --color-slate-600: var(--slate-600);
   --color-slate-500: var(--slate-500);
   --color-slate-400: var(--slate-400);
@@ -133,6 +150,10 @@
   --text-display: clamp(2.5rem, 1.55rem + 3.4vw, 4.25rem);
   --text-display--line-height: 1.02;
   --text-display--letter-spacing: -0.035em;
+  /* Very large light-weight hero headline (use with font-light) */
+  --text-mega: clamp(2.625rem, 1.2rem + 5.6vw, 5.5rem);
+  --text-mega--line-height: 1.02;
+  --text-mega--letter-spacing: -0.04em;
   --text-h1: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
   --text-h1--line-height: 1.05;
   --text-h1--letter-spacing: -0.03em;
@@ -156,13 +177,18 @@
   --radius-control: var(--control-radius);
   --radius-card: var(--card-radius);
   --radius-frame: var(--frame-radius);
+  --radius-panel: var(--panel-radius);
 
   /* Layout */
   --container-site: var(--container-max);
   --spacing-header: var(--header-h);
 
   --shadow-frame: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 30px 60px -20px rgb(0 0 0 / 0.55), 0 12px 24px -12px rgb(0 0 0 / 0.4);
-  --shadow-card: 0 1px 2px rgb(6 20 38 / 0.06), 0 8px 24px -12px rgb(6 20 38 / 0.12);
+  --shadow-card: 0 1px 2px rgb(6 20 38 / 0.04), 0 14px 34px -14px rgb(6 20 38 / 0.16);
+  --shadow-card-hover: 0 2px 4px rgb(6 20 38 / 0.05), 0 28px 56px -20px rgb(6 20 38 / 0.28);
+  --shadow-float: 0 1px 2px rgb(6 20 38 / 0.05), 0 18px 44px -16px rgb(6 20 38 / 0.22);
+  --shadow-btn: 0 10px 22px -10px rgb(6 20 38 / 0.55);
+  --shadow-btn-blue: 0 10px 22px -10px rgb(10 102 194 / 0.65);
 
   --ease-out: var(--ease-standard);
 }

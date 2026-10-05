@@ -1,34 +1,49 @@
-import { ArrowRight } from 'lucide-react';
-import { certHero, vendorCount, vendors } from '../../../content/certifications';
+import { ArrowUpRight, Ticket } from 'lucide-react';
+import { certHero, certifications, examFinder, vendorCount, vendors } from '../../../content/certifications';
 import { SmartLink } from '../../ui/SmartLink';
 
-/** Hero aside: the seven vendors, each linking to its exams in the finder. */
+/**
+ * White panel that overlaps the bottom of the hero: the seven vendors as pill
+ * links, each opening the exam finder filtered to that vendor.
+ */
 export function HeroVendors() {
   const { vendorPanel } = certHero;
   return (
-    <nav aria-labelledby="hero-vendors-title" className="rounded-card border border-ink-700 bg-ink-900 p-6">
-      <p id="hero-vendors-title" className="font-mono text-eyebrow text-muted uppercase">
-        {vendorPanel.title}
-      </p>
-      <ul className="mt-4 border-b border-ink-700">
+    <nav
+      aria-labelledby="hero-vendors-title"
+      className="card rise-in grid gap-5 p-5 sm:p-7 lg:grid-cols-[15rem_1fr] lg:items-center lg:gap-8"
+      style={{ ['--d' as string]: '150ms' }}
+    >
+      <div className="flex items-center gap-4">
+        <span className="icon-bubble h-11 w-11">
+          <Ticket className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+        </span>
+        <div>
+          <h2 id="hero-vendors-title" className="text-lg leading-snug font-medium tracking-tight">
+            {vendorPanel.title}
+          </h2>
+          <p className="mt-0.5 font-mono text-micro text-muted">{examFinder.groupCount(certifications.length)}</p>
+        </div>
+      </div>
+      <ul className="flex flex-wrap gap-2">
         {vendors.map((v) => (
-          <li key={v.id} className="border-t border-ink-700">
+          <li key={v.id}>
             <SmartLink
               href={`/certifications?vendor=${v.id}#exams`}
-              className="group flex items-center justify-between gap-4 py-2.5 text-sm text-white transition-colors hover:text-blue-400"
+              className="group inline-flex h-10 items-center gap-2 rounded-full bg-canvas pr-3 pl-4 text-sm text-heading transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:bg-ink-950 hover:text-white hover:shadow-btn"
             >
               <span>
                 <span className="sr-only">{vendorPanel.srPrefix} </span>
                 {v.label}
               </span>
-              <span className="flex flex-none items-center gap-2 font-mono text-micro text-muted">
-                {vendorPanel.countLabel(vendorCount(v.id))}
-                <ArrowRight
-                  className="h-3.5 w-3.5 text-blue-400 transition-transform group-hover:translate-x-0.5"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
+              <span className="font-mono text-micro text-muted transition-colors group-hover:text-slate-300">
+                {vendorCount(v.id)}
               </span>
+              <ArrowUpRight
+                className="h-3.5 w-3.5 flex-none transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                strokeWidth={2}
+                aria-hidden="true"
+              />
             </SmartLink>
           </li>
         ))}

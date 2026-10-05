@@ -1,42 +1,50 @@
-import { ArrowRight } from 'lucide-react';
+import { Check, Clock3, IndianRupee, Laptop, type LucideIcon } from 'lucide-react';
 import { problems } from '../../../content/training';
-import { Section, SectionHeader } from '../../ui/Section';
-import { Reveal } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { accentText } from './accentText';
 
+const icons: LucideIcon[] = [Clock3, Laptop, IndianRupee];
+
+/** Three problem → solution cards: "Today" on top, "With HexaLabs" in a tinted panel below. */
 export function ProblemSolution() {
   return (
-    <Section tone="white" labelledBy="problems-title">
-      <SectionHeader id="problems-title" eyebrow={problems.eyebrow} title={problems.title} />
+    <Section tone="paper" labelledBy="problems-title" className="pt-16! sm:pt-20! lg:pt-24!">
+      <SectionIntro id="problems-title" eyebrow={problems.eyebrow} title={accentText(problems.title, 'go wrong')} />
 
-      <div className="mt-14 hidden grid-cols-12 gap-x-6 pb-3 font-mono text-eyebrow text-muted uppercase lg:grid">
-        <span className="col-span-3">Where it hurts</span>
-        <span className="col-span-4">Today</span>
-        <span className="col-span-5 pl-10">With HexaLabs</span>
-      </div>
+      <RevealGroup as="ol" className="mt-12 grid gap-5 md:grid-cols-3 lg:mt-14 lg:gap-6">
+        {problems.rows.map((row, i) => {
+          const Icon = icons[i] ?? Clock3;
+          return (
+            <RevealItem as="li" key={row.label}>
+              <article className="card card-hover flex h-full flex-col p-6 sm:p-7">
+                <div className="flex items-center justify-between">
+                  <span className="icon-bubble">
+                    <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                  </span>
+                  <span aria-hidden="true" className="font-mono text-sm text-muted">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-xl leading-snug font-medium tracking-tight">{row.label}</h3>
 
-      <ol className="mt-10 border-b border-line lg:mt-0">
-        {problems.rows.map((row, i) => (
-          <Reveal as="li" key={row.label} delay={i * 0.06} className="grid grid-cols-12 gap-x-6 gap-y-4 border-t border-line py-8 lg:py-10">
-            <h3 className="col-span-12 flex items-baseline gap-3 text-h3 lg:col-span-3">
-              <span aria-hidden="true" className="font-mono text-micro text-muted">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              {row.label}
-            </h3>
-            <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-              <p className="font-mono text-micro text-muted uppercase lg:sr-only">Today</p>
-              <p className="mt-1 text-body lg:mt-0">{row.problem}</p>
-            </div>
-            <div className="col-span-12 flex gap-4 sm:col-span-6 lg:col-span-5">
-              <ArrowRight className="mt-1 hidden h-5 w-5 flex-none text-blue-600 lg:block" strokeWidth={1.5} aria-hidden="true" />
-              <div>
-                <p className="font-mono text-micro text-muted uppercase lg:sr-only">With HexaLabs</p>
-                <p className="mt-1 font-medium text-heading lg:mt-0">{row.solution}</p>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </ol>
+                <p className="mt-5 eyebrow">Today</p>
+                <p className="mt-2 flex-1 text-sm leading-6 text-body">{row.problem}</p>
+
+                <div className="mt-6 rounded-xl bg-raised p-5">
+                  <p className="eyebrow flex items-center gap-2 text-blue-600!">
+                    <span aria-hidden="true" className="grid h-4 w-4 place-items-center rounded-full bg-blue-600 text-white">
+                      <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                    </span>
+                    With HexaLabs
+                  </p>
+                  <p className="mt-2.5 text-[0.9375rem] leading-6 font-medium text-heading">{row.solution}</p>
+                </div>
+              </article>
+            </RevealItem>
+          );
+        })}
+      </RevealGroup>
     </Section>
   );
 }

@@ -1,38 +1,37 @@
 import { imageProcess } from '../../../content/labs';
 import { AccentHeadline } from '../../ui/Accent';
-import { Section, SectionHeader } from '../../ui/Section';
-import { Reveal } from '../../ui/Reveal';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
 
-/** Split: heading on the left, the four setup steps as a numbered list on the right. */
+/** Dark feature section: the four setup steps as numbered white cards that rise in one after another. */
 export function ImageProcess() {
+  const total = String(imageProcess.steps.length).padStart(2, '0');
   return (
-    <Section tone="white" labelledBy="image-process-title" className="border-t border-line">
-      <div className="grid grid-cols-12 gap-x-6 gap-y-12">
-        <div className="col-span-12 lg:col-span-5">
-          <div className="lg:sticky lg:top-24">
-            <SectionHeader
-              id="image-process-title"
-              eyebrow={imageProcess.eyebrow}
-              title={<AccentHeadline title={imageProcess.title} accentClass="text-blue-600" />}
-              intro={imageProcess.intro}
-            />
-          </div>
-        </div>
+    <Section tone="dark" glow labelledBy="image-process-title">
+      <SectionIntro
+        id="image-process-title"
+        eyebrow={imageProcess.eyebrow}
+        title={<AccentHeadline title={imageProcess.title} />}
+        intro={imageProcess.intro}
+      />
 
-        <ol className="col-span-12 lg:col-span-6 lg:col-start-7">
-          {imageProcess.steps.map((step, i) => (
-            <Reveal as="li" key={step.title} delay={i * 0.05} className="flex gap-6 border-t border-line py-8 last:border-b">
-              <span aria-hidden="true" className="w-8 shrink-0 pt-1 font-mono text-eyebrow text-muted">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div className="min-w-0">
-                <h3 className="text-h3">{step.title}</h3>
-                <p className="mt-2 text-body">{step.body}</p>
+      <RevealGroup as="ol" className="mt-12 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+        {imageProcess.steps.map((step, i) => (
+          <RevealItem as="li" key={step.title}>
+            <article className="card card-hover flex h-full flex-col p-6 sm:p-7">
+              {/* The <ol> already numbers the steps for screen readers. */}
+              <div aria-hidden="true" className="flex items-baseline justify-between">
+                <span className="text-accent text-[2.5rem] leading-none font-light tracking-[-0.04em]">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="font-mono text-micro text-muted">/ {total}</span>
               </div>
-            </Reveal>
-          ))}
-        </ol>
-      </div>
+              <h3 className="mt-10 text-xl leading-snug font-medium tracking-tight">{step.title}</h3>
+              <p className="mt-2.5 text-[0.9375rem] leading-6 text-body">{step.body}</p>
+            </article>
+          </RevealItem>
+        ))}
+      </RevealGroup>
     </Section>
   );
 }

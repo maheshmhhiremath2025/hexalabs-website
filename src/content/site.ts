@@ -45,14 +45,14 @@ export const site = {
   brand: {
     /**
      * Official HexaLabs logo: brain mark + wordmark + "Innovate. Create. Elevate.".
-     * public/brand/logo.{png,webp,avif} are 477×132 (3× the 44px header size).
+     * public/brand/logo.{png,webp,avif} are 405×112 (2× the 56px footer size).
      * Source: brand-source/hexalabs-logo-official.png.
      */
     logo: {
       src: '/brand/logo.png',
       ready: true,
-      width: 477,
-      height: 132,
+      width: 405,
+      height: 112,
       alt: 'HexaLabs — Innovate. Create. Elevate.',
     } satisfies ImageSlot,
     /** Hexa robot — the Ask Hexa assistant avatar. */

@@ -18,10 +18,10 @@ const events: Event[] = [
  */
 export function DayTimeline({ className = '' }: { className?: string }) {
   return (
-    <figure className={`rounded-card border border-slate-200 bg-white p-6 shadow-card sm:p-8 ${className}`}>
+    <figure className={`card p-6 sm:p-8 ${className}`}>
       <figcaption className="flex items-baseline justify-between gap-4">
-        <span className="font-mono text-eyebrow text-slate-500 uppercase">One lab day, as recorded</span>
-        <span className="font-mono text-micro text-slate-500">Sample data</span>
+        <span className="eyebrow">One lab day, as recorded</span>
+        <span className="chip chip-soft">Sample data</span>
       </figcaption>
       <ol className="relative mt-6">
         <span aria-hidden="true" className="absolute top-2 bottom-2 left-[5.25rem] w-px bg-slate-200 sm:left-[5.75rem]" />
@@ -31,7 +31,7 @@ export function DayTimeline({ className = '' }: { className?: string }) {
             <span
               aria-hidden="true"
               className={`relative z-10 grid h-6 w-6 flex-none place-items-center rounded-full ring-4 ring-white ${
-                e.accent ? 'bg-blue-600 text-white' : 'bg-paper-50 text-slate-600'
+                e.accent ? 'bg-blue-600 text-white' : 'bg-canvas text-blue-600'
               }`}
             >
               <e.icon className="h-3.5 w-3.5" strokeWidth={1.5} />

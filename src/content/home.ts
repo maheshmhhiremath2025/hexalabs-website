@@ -17,6 +17,34 @@ export const hero = {
     items: ['IT training companies', 'Corporate L&D teams', 'Individual learners'],
   },
 
+  /** The four cards that overlap the bottom edge of the hero — one per kind of lab. */
+  cards: [
+    {
+      id: 'official',
+      title: 'Official labs',
+      line: 'Microsoft Azure and AWS official course labs.',
+      href: '/official-labs',
+    },
+    {
+      id: 'sandboxes',
+      title: 'Cloud sandboxes',
+      line: 'Azure, AWS, GCP, OCI, Databricks and AI Foundry.',
+      href: '/sandboxes',
+    },
+    {
+      id: 'machines',
+      title: 'Lab machines',
+      line: 'Windows, Linux and Kubernetes in the browser.',
+      href: '/labs',
+    },
+    {
+      id: 'certifications',
+      title: 'Certification vouchers',
+      line: 'Official exam vouchers from seven vendors.',
+      href: '/certifications',
+    },
+  ] as const,
+
   /** Visible caption under the diagram. It is also the text summary of the (aria-hidden) diagram. */
   caption:
     'Each learner signs in over HTTPS and gets their own environment. The trainer runs the batch from the console. Hour caps, idle auto-stop and auto clean-up apply to every lab.',
@@ -65,6 +93,8 @@ export const proofStrip = [
 export const batchSteps = {
   eyebrow: 'How a batch runs',
   title: 'From course outline to a room full of running labs, in four steps.',
+  /** Words in `title` set in the accent gradient. */
+  accent: 'four steps',
   steps: [
     {
       title: 'Create cohort',
@@ -92,6 +122,51 @@ export const batchSteps = {
 export const catalogue = {
   eyebrow: 'Lab catalogue',
   title: 'Pick the stack your course teaches.',
+  accent: 'stack',
+  action: { label: 'See all lab machines', href: '/labs' },
+  /** The four art cards on the home page — one per kind of environment. */
+  cards: [
+    {
+      id: 'official',
+      art: 'official-labs',
+      chip: 'Azure · AWS',
+      title: 'Official course labs',
+      line: 'Official lab environments for Microsoft Azure and AWS classroom courses, from fundamentals to expert.',
+      tags: ['AZ-900', 'AZ-104', 'AI-200', 'AZ-305', 'AZ-400', 'AI-103', 'Architecting on AWS', 'Developing on AWS'],
+      offer: true,
+      href: '/official-labs',
+    },
+    {
+      id: 'sandboxes',
+      art: 'sandboxes',
+      chip: 'Six providers',
+      title: 'Cloud sandboxes',
+      line: 'Real cloud consoles for each learner, with limits on services, hours and spend.',
+      tags: ['Azure', 'AWS', 'Google Cloud', 'Oracle Cloud', 'Databricks', 'Azure AI Foundry'],
+      offer: false,
+      href: '/sandboxes',
+    },
+    {
+      id: 'machines',
+      art: 'lab-machines',
+      chip: 'In the browser',
+      title: 'Lab machines',
+      line: 'Windows Server and Linux desktops with admin rights, plus AKS and ARO clusters with a namespace and quota per learner.',
+      tags: ['Windows Server 2022', 'Ubuntu', 'Rocky', 'RHEL', 'Oracle Linux', 'AKS · ARO'],
+      offer: false,
+      href: '/labs',
+    },
+    {
+      id: 'certifications',
+      art: 'certifications',
+      chip: 'Seven vendors',
+      title: 'Certification vouchers',
+      line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day.',
+      tags: ['Microsoft', 'AWS', 'Google Cloud', 'Oracle', 'Red Hat', 'CNCF', 'Databricks'],
+      offer: false,
+      href: '/certifications',
+    },
+  ] as const,
   intro:
     'Each learner gets their own machine or sandbox, so one learner’s mistakes stay in their own lab.',
   certifications: {
@@ -147,6 +222,7 @@ export const catalogue = {
 export const trainers = {
   eyebrow: 'For trainers & admins',
   title: 'Run the whole batch from one console.',
+  accent: 'one console',
   body: 'The trainer sees every learner’s machine on one screen. Start the batch before class, give extra days to someone who fell behind, and let the platform stop machines nobody is using.',
   checklist: [
     { title: 'Bulk start and stop', body: 'Start or stop one machine or the whole batch in a single action.' },
@@ -161,6 +237,8 @@ export const trainers = {
 export const whiteLabel = {
   eyebrow: 'White-label',
   title: 'Your logo. Your colours. Your domain.',
+  accent: 'Your domain.',
+  action: { label: 'For training companies', href: '/for-training-companies' },
   body: 'Training companies run the portal under their own brand. Learners sign in on your domain, see your logo and get emails from your name.',
   points: ['Custom domain with SSL', 'Logo and colours on every screen', 'Branded learner emails'],
   caption: 'Two example brand kits. Each organisation gets its own — no code changes.',
@@ -187,6 +265,7 @@ export const whiteLabel = {
 export const askHexa = {
   eyebrow: 'Ask Hexa',
   title: 'A lab assistant that knows the learner’s machine.',
+  accent: 'knows',
   body: 'Ask Hexa sits inside the portal. It checks a learner’s VM status, lab expiry and hours left today, walks them through common fixes, and hands the issue to the platform team in one click — with the machine details already attached.',
   prompts: ['Start my lab', 'How many hours do I have left?', 'When does my lab expire?'],
   chat: {
@@ -201,6 +280,7 @@ export const askHexa = {
 export const security = {
   eyebrow: 'Security & reliability',
   title: 'Plain controls, applied to every lab.',
+  accent: 'every lab',
   intro: 'No badges we haven’t earned. Here is what the platform actually does.',
   items: [
     {
@@ -227,6 +307,81 @@ export const security = {
       term: 'Cost control',
       body: 'Spot-based infrastructure, idle auto-stop and daily caps keep lab costs down.',
     },
+  ],
+};
+
+/**
+ * "Use case" cards in the dark carousel. Generic setups built only from the
+ * offerings described on this site — no customers, numbers or results.
+ */
+export const useCases = {
+  eyebrow: 'Use cases',
+  title: 'Ways to run your next batch.',
+  accent: 'next batch',
+  intro: 'Typical setups, built from the labs, sandboxes and vouchers on this site.',
+  items: [
+    {
+      chip: 'Official labs',
+      title: 'Run an AZ-104 batch for 30 learners',
+      body: 'An official Azure lab environment for every learner, opened from any browser with nothing to install.',
+      href: '/official-labs#azure',
+      art: 'dark-silk',
+      focus: '64% 52%',
+    },
+    {
+      chip: 'Cloud sandbox',
+      title: 'Give each learner an OCI sandbox',
+      body: 'Their own compartment and console sign-in, with allowed services, shape limits and daily hour caps.',
+      href: '/sandboxes?provider=oci#providers',
+      art: 'training',
+      focus: '58% 50%',
+    },
+    {
+      chip: 'Lab machines',
+      title: 'Deploy 30 identical Windows Server machines',
+      body: 'We build one image with your software, then clone it so every learner gets the same machine.',
+      href: '/labs?type=windows',
+      art: 'honeycomb',
+      focus: '50% 48%',
+      flip: true,
+    },
+    {
+      chip: 'Kubernetes',
+      title: 'Teach Kubernetes with a namespace per learner',
+      body: 'A managed AKS cluster with a namespace and quota per learner, plus kubectl on their desktop.',
+      href: '/labs?type=kubernetes',
+      art: 'dark-spiral',
+      focus: '50% 48%',
+    },
+    {
+      chip: 'Certifications',
+      title: 'Pair a course with exam vouchers',
+      body: 'Order official vouchers for the whole batch or one learner, and add practice labs before exam day.',
+      href: '/certifications',
+      art: 'security',
+      focus: '50% 50%',
+      flip: true,
+    },
+    {
+      chip: 'White-label',
+      title: 'Run the labs under your own brand',
+      body: 'Learners sign in on your domain, see your logo and get emails from your name.',
+      href: '/for-training-companies',
+      art: 'hero',
+      focus: '74% 50%',
+    },
+  ],
+} as const;
+
+/** "How it works" band: text beside the flow panel (Learners → HexaLabs → isolated labs). */
+export const howItWorks = {
+  eyebrow: 'How it works',
+  title: 'One sign-in. An isolated lab for every learner.',
+  accent: 'isolated',
+  roles: [
+    { title: 'Learners', body: 'Sign in over HTTPS from any browser. No installs, no VPN.' },
+    { title: 'Trainer', body: 'Deploys 1 to 100+ labs, starts and stops the batch, downloads usage reports.' },
+    { title: 'Platform', body: 'Hour caps, idle auto-stop and auto clean-up on every lab.' },
   ],
 };
 

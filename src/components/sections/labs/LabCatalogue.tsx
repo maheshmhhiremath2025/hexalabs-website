@@ -1,34 +1,54 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { ArrowRight, Check } from 'lucide-react';
-import { customImageCard, labFilters, labs, otherLabPages, type LabCategory } from '../../../content/labs';
-import { SmartLink } from '../../ui/SmartLink';
+import { Check } from 'lucide-react';
+import { customImageCard, labFilters, labs, type LabCategory } from '../../../content/labs';
+import { Accent } from '../../ui/Accent';
+import { ButtonLink } from '../../ui/Button';
+import { Carousel } from '../../ui/Carousel';
+import { Chip } from '../../ui/Chip';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
+import { PillScroller, pillClass, pillRailClass } from '../sandboxes/pills';
 import { LabCard } from './LabCard';
 
 type FilterId = LabCategory | 'all';
+
+/** How many earlier visible cards share this card's category — picks a different crop of the same artwork. */
+const cropIndex = (list: typeof labs, i: number) => list.slice(0, i).filter((l) => l.categories[0] === list[i].categories[0]).length;
 const isFilter = (v: string | null): v is FilterId => !!v && labFilters.some((f) => f.id === v);
 
-const counts: Record<string, number> = Object.fromEntries(
+export const labCounts: Record<string, number> = Object.fromEntries(
   labFilters.map((f) => [f.id, f.id === 'all' ? labs.length : labs.filter((l) => l.categories.includes(f.id as LabCategory)).length]),
 );
 
-/** Points visitors who want official labs or sandboxes to the right page. */
-function OtherLabPages() {
-  const items = [otherLabPages.official, otherLabPages.sandboxes];
+/** Last tile: a dark card inviting a custom lab image. */
+function CustomImageCard() {
   return (
-    <aside aria-label="Other kinds of labs" className="mt-6">
-      <ul className="flex flex-col gap-x-8 gap-y-2 text-sm text-body sm:flex-row sm:flex-wrap">
-        {items.map((item) => (
-          <li key={item.href}>
-            {item.question}{' '}
-            <SmartLink href={item.href} className="link inline-flex items-center gap-1 font-medium">
-              {item.label}
-              <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
-            </SmartLink>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <article className="surface-dark card-hover relative flex h-full flex-col overflow-hidden rounded-card p-6 shadow-card sm:p-7">
+      <div aria-hidden="true" className="glow-dark pointer-events-none absolute inset-0" />
+      <div className="relative flex flex-1 flex-col">
+        <p>
+          <Chip tone="light">{customImageCard.platform}</Chip>
+        </p>
+        <h3 className="mt-7 text-2xl leading-tight font-light tracking-[-0.02em]">{customImageCard.title}</h3>
+        <p className="mt-3 text-[0.9375rem] leading-6 text-body">{customImageCard.body}</p>
+        <ul className="mt-6 flex-1 space-y-2.5">
+          {customImageCard.points.map((p) => (
+            <li key={p} className="flex items-center gap-2.5 text-sm text-white">
+              <span aria-hidden="true" className="grid h-5 w-5 flex-none place-items-center rounded-full bg-blue-400/15 text-blue-400">
+                <Check className="h-3 w-3" strokeWidth={2.5} />
+              </span>
+              {p}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-8">
+          <ButtonLink href={customImageCard.href} variant="light" size="sm" arrow="up-right">
+            {customImageCard.linkLabel}
+          </ButtonLink>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -44,84 +64,76 @@ export function LabCatalogue() {
 
   const choose = (id: FilterId) => {
     setFilter(id);
-    setParams(id === 'all' ? {} : { type: id }, { replace: true, preventScrollReset: true });
+    setParams(id === 'all' ? {} : { type: id }, {
+      replace: true,
+      preventScrollReset: true,
+    });
   };
 
-  const visible = useMemo(
-    () => (filter === 'all' ? labs : labs.filter((l) => l.categories.includes(filter))),
-    [filter],
-  );
+  const visible = useMemo(() => (filter === 'all' ? labs : labs.filter((l) => l.categories.includes(filter))), [filter]);
 
   return (
-    <section aria-labelledby="catalogue-heading" className="surface-paper py-14 lg:py-20">
-      <div className="container-site">
-        <h2 id="catalogue-heading" className="sr-only">
-          All lab machines
-        </h2>
+    <Section tone="paper" id="catalogue" labelledBy="catalogue-heading">
+      <SectionIntro
+        id="catalogue-heading"
+        eyebrow="Lab catalogue"
+        title={
+          <>
+            All <Accent>lab machines</Accent>
+          </>
+        }
+      />
 
-        <div className="flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-center md:justify-between">
-          <div role="group" aria-label="Filter lab machines by type" className="flex flex-wrap gap-2">
+      <div className="mt-10">
+        <PillScroller>
+          <div role="group" aria-label="Filter lab machines by type" className={pillRailClass}>
             {labFilters.map((f) => {
               const active = filter === f.id;
               return (
-                <button
-                  key={f.id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => choose(f.id)}
-                  className={`inline-flex h-9 items-center gap-2 rounded-full border px-3.5 text-sm transition-colors ${
-                    active
-                      ? 'border-ink-950 bg-ink-950 text-white'
-                      : 'border-line-strong bg-white text-heading hover:border-ink-950'
-                  }`}
-                >
+                <button key={f.id} type="button" aria-pressed={active} onClick={() => choose(f.id)} className={pillClass(active)}>
                   {f.label}
-                  <span className={`font-mono text-micro ${active ? 'text-slate-300' : 'text-muted'}`}>
+                  <span
+                    className={`grid h-5 min-w-5 place-items-center rounded-full px-1.5 font-mono text-micro ${
+                      active ? 'bg-white/15 text-white' : 'bg-canvas text-slate-600'
+                    }`}
+                  >
                     <span className="sr-only">, </span>
-                    {counts[f.id]}
+                    {labCounts[f.id]}
                     <span className="sr-only"> lab machines</span>
                   </span>
                 </button>
               );
             })}
           </div>
-          <p aria-live="polite" className="font-mono text-micro text-muted">
-            Showing {visible.length} of {labs.length} lab machines
-          </p>
-        </div>
-
-        <OtherLabPages />
-
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((lab) => (
-            <li key={lab.id}>
-              <LabCard lab={lab} />
-            </li>
-          ))}
-          <li>
-            <article className="card-lift group relative flex h-full flex-col rounded-card border border-dashed border-line-strong p-6">
-              <span className="font-mono text-micro text-muted uppercase">{customImageCard.platform}</span>
-              <h3 className="mt-4 text-h3">{customImageCard.title}</h3>
-              <p className="mt-3 text-sm text-body">{customImageCard.body}</p>
-              <ul className="mt-5 flex-1 space-y-2">
-                {customImageCard.points.map((p) => (
-                  <li key={p} className="flex items-center gap-2 text-sm text-heading">
-                    <Check className="h-4 w-4 flex-none text-blue-600" strokeWidth={1.5} aria-hidden="true" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-              <SmartLink
-                href={customImageCard.href}
-                className="mt-6 inline-flex items-center gap-1.5 border-t border-line pt-4 text-sm font-medium text-blue-600 after:absolute after:inset-0 after:rounded-card after:content-['']"
-              >
-                {customImageCard.linkLabel}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden="true" />
-              </SmartLink>
-            </article>
-          </li>
-        </ul>
+        </PillScroller>
       </div>
-    </section>
+      <p aria-live="polite" className="mt-1 text-center font-mono text-micro text-muted uppercase">
+        Showing {visible.length} of {labs.length} lab machines
+      </p>
+
+      {/*
+        Phones: a swipeable carousel running to the screen edges with a live "1 / N" pager, so the catalogue is one screen tall.
+        640px and up: the same track becomes a 2- / 3-column grid (pager hidden).
+        key: remount (scroll back to the start, re-run the staggered rise) when the filter changes.
+      */}
+      <RevealGroup key={filter} className="-mx-4 mt-10 sm:mx-0">
+        <Carousel
+          label="Lab machines"
+          bleed={false}
+          slideClassName="w-[86%] min-w-0 sm:w-auto"
+          trackClassName="scroll-px-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3"
+          controlsClassName="sm:hidden"
+        >
+          {visible.map((lab, i) => (
+            <RevealItem key={lab.id} className="h-full">
+              <LabCard lab={lab} crop={cropIndex(visible, i)} />
+            </RevealItem>
+          ))}
+          <RevealItem className="h-full">
+            <CustomImageCard />
+          </RevealItem>
+        </Carousel>
+      </RevealGroup>
+    </Section>
   );
 }

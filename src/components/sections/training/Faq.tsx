@@ -1,35 +1,45 @@
 import { Plus } from 'lucide-react';
 import { faq } from '../../../content/training';
-import { Section, SectionHeader } from '../../ui/Section';
+import { Section, SectionIntro } from '../../ui/Section';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { Accent } from '../../ui/Accent';
 
-/** Native <details> accordion: keyboard and screen-reader friendly without JS. */
+/**
+ * FAQ as white accordion cards on the canvas. Native <details>/<summary>, so it is
+ * keyboard and screen-reader friendly without JS; the answer rises in when opened.
+ */
 export function Faq() {
   return (
-    <Section tone="white" id="faq" labelledBy="faq-title">
-      <div className="grid grid-cols-12 gap-x-6 gap-y-10">
-        <div className="col-span-12 lg:col-span-4">
-          <SectionHeader id="faq-title" eyebrow="FAQ" title="Questions training companies ask us." />
-        </div>
-        <div className="col-span-12 lg:col-span-8">
-          <ul className="border-b border-line">
-            {faq.map((item) => (
-              <li key={item.q} className="border-t border-line">
-                <details className="group">
-                  <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-left text-lg font-medium text-heading [&::-webkit-details-marker]:hidden">
-                    {item.q}
-                    <Plus
-                      className="mt-1 h-5 w-5 flex-none text-muted transition-transform duration-200 group-open:rotate-45"
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                    />
-                  </summary>
-                  <p className="max-w-2xl pb-6 text-body">{item.a}</p>
-                </details>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <Section tone="paper" id="faq" labelledBy="faq-title">
+      <SectionIntro
+        id="faq-title"
+        eyebrow="FAQ"
+        title={
+          <>
+            Questions training companies <Accent>ask us</Accent>.
+          </>
+        }
+      />
+      <RevealGroup as="ul" stagger={0.06} className="mx-auto mt-12 max-w-3xl space-y-3 lg:mt-14">
+        {faq.map((item) => (
+          <RevealItem as="li" key={item.q}>
+            <details className="card group transition-shadow duration-(--dur-hover) ease-(--ease-smooth) open:shadow-card-hover">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-5 rounded-card px-5 py-5 text-left text-base leading-snug font-medium text-heading sm:px-7 sm:py-6 sm:text-lg [&::-webkit-details-marker]:hidden">
+                {item.q}
+                <span
+                  aria-hidden="true"
+                  className="grid h-9 w-9 flex-none place-items-center rounded-full bg-canvas text-ink-950 transition-[transform,background-color,color] duration-(--dur-hover) ease-(--ease-smooth) group-open:rotate-45 group-open:bg-blue-600 group-open:text-white group-hover:bg-canvas-200 group-open:group-hover:bg-blue-700"
+                >
+                  <Plus className="h-4 w-4" strokeWidth={1.75} />
+                </span>
+              </summary>
+              <div className="rise-in px-5 pb-6 sm:px-7 sm:pb-7">
+                <p className="max-w-2xl border-t border-line pt-5 leading-7 text-body">{item.a}</p>
+              </div>
+            </details>
+          </RevealItem>
+        ))}
+      </RevealGroup>
     </Section>
   );
 }

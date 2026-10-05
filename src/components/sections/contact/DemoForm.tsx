@@ -170,7 +170,7 @@ export function DemoForm() {
 
   if (status === 'emailed' && submitted) {
     return (
-      <div role="status" className="rounded-card border border-line bg-white p-8 shadow-card">
+      <div role="status" className="card p-8 sm:p-10">
         <CircleCheck className="h-8 w-8 text-success" strokeWidth={1.5} aria-hidden="true" />
         <h2 className="mt-4 text-h3">{formCopy.emailFallbackTitle}</h2>
         <p className="mt-2 text-body">{formCopy.emailFallbackBody(site.contact.email)}</p>
@@ -183,7 +183,7 @@ export function DemoForm() {
 
   if (status === 'success' && submitted) {
     return (
-      <div role="status" className="rounded-card border border-line bg-white p-8 shadow-card">
+      <div role="status" className="card p-8 sm:p-10">
         <CircleCheck className="h-8 w-8 text-success" strokeWidth={1.5} aria-hidden="true" />
         <h2 className="mt-4 text-h3">{formCopy.successTitle}</h2>
         <p className="mt-2 text-body">{formCopy.successBody(submitted.name, submitted.email)}</p>
@@ -205,10 +205,10 @@ export function DemoForm() {
       noValidate
       onSubmit={onSubmit}
       aria-label="Book a demo"
-      className="relative rounded-card border border-line bg-white p-6 shadow-card sm:p-8"
+      className="card p-6 sm:p-10"
     >
       {!endpoint && import.meta.env.DEV ? (
-        <div role="note" className="mb-6 rounded-control border border-dashed border-line-strong p-4 text-sm text-body">
+        <div role="note" className="mb-6 rounded-xl border border-dashed border-line-strong p-4 text-sm text-body">
           <span className="mr-2 rounded bg-paper-50 px-1.5 py-0.5 font-mono text-micro text-ink-950">DEV</span>
           Dev only: <code className="font-mono">VITE_DEMO_ENDPOINT</code> is not set, so submitting opens an email to {site.contact.email}.
         </div>
@@ -304,7 +304,7 @@ export function DemoForm() {
         <div className="mt-3 space-y-4">
           {requestTypeGroups.map((group) => (
             <div key={group.label} role="group" aria-label={group.label}>
-              <p aria-hidden="true" className="font-mono text-micro text-muted uppercase">
+              <p aria-hidden="true" className="font-mono text-micro text-slate-500 uppercase">
                 {group.label}
               </p>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
@@ -313,8 +313,8 @@ export function DemoForm() {
                   return (
                     <label
                       key={opt.id}
-                      className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-control border px-3.5 py-2.5 text-sm transition-colors ${
-                        checked ? 'border-blue-600 bg-blue-600/5 text-heading' : 'border-line-strong text-body hover:border-slate-500'
+                      className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2.5 text-sm transition-colors duration-300 ${
+                        checked ? 'border-blue-600 bg-blue-600/6 text-heading shadow-[0_0_0_1px_var(--blue-600)]' : 'border-line-strong bg-white text-body hover:border-slate-500'
                       }`}
                     >
                       <input
@@ -388,7 +388,7 @@ export function DemoForm() {
       </div>
 
       {status === 'error' ? (
-        <p role="alert" className="mt-6 flex gap-2 rounded-control bg-paper-50 p-3 text-sm text-error">
+        <p role="alert" className="mt-6 flex gap-2 rounded-xl bg-canvas p-3 text-sm text-error">
           <TriangleAlert className="h-4 w-4 flex-none" strokeWidth={1.5} aria-hidden="true" />
           <span>
             {formCopy.genericError} Email:{' '}

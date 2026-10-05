@@ -1,69 +1,155 @@
+import { Briefcase, Building2, GraduationCap, type LucideIcon } from 'lucide-react';
 import { aboutHero, audiences, principles, whatWeDo } from '../content/about';
-import { site } from '../content/site';
+import { labsMenu, site } from '../content/site';
 import { PageHero } from '../components/sections/PageHero';
 import { CtaBand } from '../components/sections/CtaBand';
-import { Section, SectionHeader, Eyebrow } from '../components/ui/Section';
-import { Reveal } from '../components/ui/Reveal';
+import { Section, SectionIntro } from '../components/ui/Section';
+import { Accent } from '../components/ui/Accent';
+import { Art, type ArtName } from '../components/ui/Art';
+import { ArtCard, IconCard } from '../components/ui/Cards';
+import { ButtonLink } from '../components/ui/Button';
+import { Carousel } from '../components/ui/Carousel';
+import { Chip } from '../components/ui/Chip';
+import { Reveal, RevealGroup, RevealItem } from '../components/ui/Reveal';
+import { accentText } from '../components/sections/training/accentText';
+
+/** What HexaLabs runs — the four kinds of lab plus the training-company program. */
+const offerings: { chip: string; title: string; body: string; href: string; art: ArtName }[] = [
+  ...labsMenu.items.map((item, i) => ({
+    chip: ['Course labs', 'Sandboxes', 'Browser labs', 'Vouchers'][i] ?? 'Labs',
+    title: item.label,
+    body: `${item.description ?? ''}.`,
+    href: item.href,
+    art: (['official-labs', 'sandboxes', 'lab-machines', 'certifications'] as const)[i] ?? 'official-labs',
+  })),
+  {
+    chip: 'For trainers',
+    title: 'For training companies',
+    body: 'Lab Console, reports, white-label and the partner program.',
+    href: '/for-training-companies',
+    art: 'white-label',
+  },
+];
+
+const audienceLook: { icon: LucideIcon; href: string }[] = [
+  { icon: Building2, href: '/for-training-companies' },
+  { icon: Briefcase, href: '/labs' },
+  { icon: GraduationCap, href: '/sandboxes' },
+];
 
 export default function About() {
   return (
     <>
-      <PageHero eyebrow={aboutHero.eyebrow} title={aboutHero.title} body={aboutHero.body} />
+      <PageHero
+        eyebrow={aboutHero.eyebrow}
+        title={aboutHero.title}
+        body={aboutHero.body}
+        art="hero"
+        actions={
+          <>
+            <ButtonLink href="/contact" size="lg" arrow="up-right" className="w-full sm:w-auto">
+              Book a demo
+            </ButtonLink>
+            <ButtonLink href="/labs" variant="ghost" size="lg" className="w-full sm:w-auto">
+              See lab catalogue
+            </ButtonLink>
+          </>
+        }
+      />
 
-      <Section tone="white" labelledBy="what-title">
-        <div className="grid grid-cols-12 gap-x-6 gap-y-8">
-          <div className="col-span-12 lg:col-span-5">
-            <Eyebrow>{whatWeDo.eyebrow}</Eyebrow>
-            <h2 id="what-title" className="mt-5 text-h2">
-              {whatWeDo.title}
-            </h2>
-          </div>
-          <div className="col-span-12 space-y-5 text-lead text-body lg:col-span-6 lg:col-start-7">
-            {whatWeDo.paragraphs.map((p) => (
-              <p key={p}>{p}</p>
+      {/* What we do — editorial split: statement and text left, framed artwork right */}
+      <Section tone="paper" labelledBy="what-title">
+        <div className="grid grid-cols-12 items-center gap-x-6 gap-y-12">
+          <div className="col-span-12 lg:col-span-6">
+            <SectionIntro id="what-title" eyebrow={whatWeDo.eyebrow} title={accentText(whatWeDo.title, 'every lab')} align="left" />
+            <p className="mt-8 text-xl leading-8 font-light tracking-tight text-heading sm:text-2xl sm:leading-9">{whatWeDo.paragraphs[0]}</p>
+            {whatWeDo.paragraphs.slice(1).map((p) => (
+              <p key={p} className="mt-6 text-lead text-body">
+                {p}
+              </p>
             ))}
           </div>
+          <Reveal className="col-span-12 lg:col-span-5 lg:col-start-8">
+            <figure aria-hidden="true" className="group relative">
+              <div className="art-zoom overflow-hidden rounded-[20px] shadow-card">
+                <Art name="training" sizes="(min-width: 1024px) 480px, 100vw" className="aspect-[4/3] lg:aspect-[4/5]" />
+              </div>
+              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+                <Chip className="font-mono">{site.portalLabel}</Chip>
+              </div>
+            </figure>
+          </Reveal>
         </div>
       </Section>
 
-      <Section tone="paper" labelledBy="principles-title">
-        <SectionHeader id="principles-title" eyebrow={principles.eyebrow} title={principles.title} />
-        <ol className="mt-14 border-b border-line">
-          {principles.items.map((item, i) => (
-            <Reveal as="li" key={item.title} className="grid grid-cols-12 gap-x-6 gap-y-3 border-t border-line py-8 lg:py-10">
-              <span aria-hidden="true" className="col-span-12 font-mono text-micro text-muted lg:col-span-1">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="col-span-12 text-h3 lg:col-span-5">{item.title}</h3>
-              <p className="col-span-12 text-body lg:col-span-5 lg:col-start-8">{item.body}</p>
-            </Reveal>
+      {/* What we run — dark feature section with a card carousel */}
+      <Section tone="dark" labelledBy="run-title" glow>
+        <SectionIntro
+          id="run-title"
+          eyebrow="What we run"
+          title={
+            <>
+              Labs for every <Accent>course</Accent> you teach.
+            </>
+          }
+          intro="Official course labs, cloud sandboxes, browser lab machines and exam vouchers — all in one portal."
+        />
+        <Carousel label="What we run" className="mt-12 lg:mt-14">
+          {offerings.map((o) => (
+            <ArtCard
+              key={o.title}
+              art={o.art}
+              chip={o.chip}
+              title={o.title}
+              body={o.body}
+              action={
+                <ButtonLink href={o.href} variant="dark" size="sm" arrow="up-right">
+                  Know more<span className="sr-only"> about {o.title}</span>
+                </ButtonLink>
+              }
+            />
           ))}
-        </ol>
+        </Carousel>
       </Section>
 
-      <Section tone="white" labelledBy="audiences-title">
-        <SectionHeader id="audiences-title" eyebrow={audiences.eyebrow} title={audiences.title} />
-        <ol className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-3">
-          {audiences.items.map((item, i) => (
-            <li key={item.title} className="border-t border-line pt-6">
-              <span aria-hidden="true" className="font-mono text-micro text-muted">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-3 text-h3">{item.title}</h3>
-              <p className="mt-2 text-body">{item.body}</p>
-            </li>
+      {/* How we work — three numbered principles */}
+      <Section tone="white" labelledBy="principles-title">
+        <SectionIntro id="principles-title" eyebrow={principles.eyebrow} title={accentText(principles.title, 'Three rules')} />
+        <RevealGroup as="ol" className="mt-12 grid gap-5 md:grid-cols-3 lg:mt-14 lg:gap-6">
+          {principles.items.map((item, i) => (
+            <RevealItem as="li" key={item.title} className="h-full">
+              <div className="flex h-full flex-col rounded-card bg-raised p-6 sm:p-8">
+                <span aria-hidden="true" className="display text-accent text-5xl leading-none">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mt-8 text-xl leading-snug font-medium tracking-tight">{item.title}</h3>
+                <p className="mt-3 text-[0.9375rem] leading-7 text-body">{item.body}</p>
+              </div>
+            </RevealItem>
           ))}
-        </ol>
-        <p className="mt-12 text-body">
+        </RevealGroup>
+      </Section>
+
+      {/* Who we work with */}
+      <Section tone="paper" labelledBy="audiences-title">
+        <SectionIntro id="audiences-title" eyebrow={audiences.eyebrow} title={accentText(audiences.title, 'run training')} />
+        <RevealGroup as="ul" className="mt-12 grid gap-5 md:grid-cols-3 lg:mt-14 lg:gap-6">
+          {audiences.items.map((item, i) => (
+            <RevealItem as="li" key={item.title} className="h-full">
+              <IconCard icon={audienceLook[i]?.icon ?? Building2} title={item.title} body={item.body} href={audienceLook[i]?.href} />
+            </RevealItem>
+          ))}
+        </RevealGroup>
+        <p className="mt-12 text-center text-body">
           {audiences.contact.text}{' '}
-          <a href={`mailto:${site.contact.email}`} className="link font-medium">
+          <a href={`mailto:${site.contact.email}`} className="link-underline font-medium">
             {site.contact.email}
           </a>
           .
         </p>
       </Section>
 
-      <CtaBand />
+      <CtaBand art="honeycomb" chip="About HexaLabs" />
     </>
   );
 }

@@ -7,12 +7,14 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scroll-padding-top: calc(var(--header-h) + 16px);
+    scroll-padding-top: calc(var(--header-h) + 24px);
   }
 
   body {
     @apply font-sans text-base;
-    background-color: var(--ink-950);
+    /* Light canvas everywhere; dark feature sections set their own background. */
+    background-color: var(--canvas);
+    color: var(--slate-600);
     overflow-x: hidden;
   }
 
@@ -20,9 +22,17 @@
   h2,
   h3,
   h4 {
-    color: var(--surface-heading);
-    font-weight: 600;
+    color: var(--surface-heading, var(--ink-950));
     text-wrap: balance;
+  }
+  /* Big headings are set light, like the reference; card titles stay medium. */
+  h1,
+  h2 {
+    font-weight: 400;
+  }
+  h3,
+  h4 {
+    font-weight: 500;
   }
 
   p {
@@ -35,7 +45,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--focus, var(--blue-400));
+    outline: 2px solid var(--focus, var(--blue-600));
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -51,11 +61,33 @@
     @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8;
   }
 
+  /* ── Type helpers ─────────────────────────────────────────────────── */
   .serif-accent {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.01em;
+  }
+
+  /* One accent word per heading: brand-blue gradient text (surface-aware). */
+  .text-accent {
+    background-image: var(--surface-accent, var(--accent-gradient-light));
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    /* keeps descenders inside the clipped background */
+    padding-bottom: 0.06em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Big light-weight display headline (hero h1s). */
+  .display {
+    font-weight: 300;
+    letter-spacing: -0.04em;
   }
 
   .eyebrow {
@@ -70,26 +102,144 @@
     text-decoration: underline;
   }
 
-  /* Buttons — solid primary, outlined secondary, 10px radius, no glow */
-  .btn {
-    @apply inline-flex h-11 items-center justify-center gap-2 rounded-control px-4.5 text-button font-medium whitespace-nowrap select-none;
+  /* "Know more ↗" — underlined text link with a small arrow. */
+  .link-arrow {
+    @apply inline-flex items-center gap-1.5 text-sm font-medium;
+    color: var(--surface-heading);
+    padding-bottom: 3px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
     transition:
-      background-color 150ms var(--ease-standard),
-      border-color 150ms var(--ease-standard),
-      color 150ms var(--ease-standard);
+      color var(--dur-hover) var(--ease-smooth),
+      background-size var(--dur-hover) var(--ease-smooth);
+  }
+  .link-arrow svg {
+    transition: transform var(--dur-hover) var(--ease-smooth);
+  }
+  .link-arrow:hover,
+  .group:hover .link-arrow {
+    color: var(--surface-link);
+  }
+  .link-arrow:hover svg,
+  .group:hover .link-arrow svg {
+    transform: translate(2px, -2px);
+  }
+  /* Stretch a card's link over the whole card (card needs `relative`). */
+  .link-stretched::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  /* Plain underlined link list (footer columns, index lists). */
+  .link-underline {
+    color: var(--surface-heading);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    transition:
+      color 300ms var(--ease-smooth),
+      text-decoration-color 300ms var(--ease-smooth);
+  }
+  .link-underline:hover {
+    color: var(--surface-link);
+    text-decoration-color: currentColor;
+  }
+
+  /* ── Chips ────────────────────────────────────────────────────────── */
+  /* Small dark label ("Use case", "Azure", "New"). */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-[6px] px-2 py-[3px] text-xs leading-4 font-medium whitespace-nowrap;
+    background: var(--ink-950);
+    color: var(--white);
+  }
+  .chip-light {
+    background: color-mix(in srgb, var(--white) 12%, transparent);
+    color: var(--white);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--white) 18%, transparent);
+  }
+  .chip-soft {
+    background: var(--canvas-200);
+    color: var(--ink-950);
+  }
+  .chip-accent {
+    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    color: #9a4d00; /* 5.6:1 on white — orange-500 itself is too light for small text */
+  }
+  .surface-dark .chip-accent {
+    color: var(--orange-500);
+  }
+
+  /* Icon in a soft circle */
+  .icon-bubble {
+    @apply grid h-10 w-10 flex-none place-items-center rounded-full;
+    background: color-mix(in srgb, var(--blue-600) 9%, var(--white));
+    color: var(--blue-600);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--blue-600) 14%, transparent);
+  }
+  .surface-dark .icon-bubble:not(.card *) {
+    background: color-mix(in srgb, var(--blue-400) 14%, transparent);
+    color: var(--blue-400);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--blue-400) 25%, transparent);
+  }
+
+  /* ── Buttons — pills with a soft shadow ───────────────────────────── */
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-button font-medium whitespace-nowrap select-none;
+    transition:
+      background-color 300ms var(--ease-smooth),
+      border-color 300ms var(--ease-smooth),
+      color 300ms var(--ease-smooth),
+      box-shadow 300ms var(--ease-smooth),
+      transform 300ms var(--ease-smooth);
+  }
+  .btn svg {
+    transition: transform 300ms var(--ease-smooth);
+  }
+  .btn:hover svg.arrow-up-right {
+    transform: translate(2px, -2px);
+  }
+  .btn:hover svg.arrow-right {
+    transform: translateX(3px);
+  }
+  .btn:active {
+    transform: translateY(1px);
   }
   .btn-lg {
-    @apply h-12 px-5 text-base;
+    @apply h-12 px-6 text-base;
   }
   .btn-sm {
-    @apply h-9 px-3.5 text-sm;
+    @apply h-9 px-4 text-sm;
   }
   .btn-primary {
     background-color: var(--blue-600);
     color: var(--white);
+    box-shadow: var(--shadow-btn-blue);
   }
   .btn-primary:hover {
     background-color: var(--blue-700);
+  }
+  .btn-dark {
+    background-color: var(--ink-950);
+    color: var(--white);
+    box-shadow: var(--shadow-btn);
+  }
+  .btn-dark:hover {
+    background-color: var(--ink-900);
+  }
+  /* White pill — for dark sections and over imagery */
+  .btn-light {
+    background-color: var(--white);
+    color: var(--ink-950);
+    box-shadow: 0 10px 26px -12px rgb(90 166 255 / 0.55);
+  }
+  .btn-light:hover {
+    background-color: var(--canvas);
   }
   .btn-secondary {
     border: 1px solid var(--surface-line-strong);
@@ -99,20 +249,328 @@
   .btn-secondary:hover {
     border-color: var(--surface-heading);
   }
+  /* Outline pill over dark imagery */
+  .btn-ghost {
+    border: 1px solid color-mix(in srgb, var(--white) 35%, transparent);
+    color: var(--white);
+    background: color-mix(in srgb, var(--white) 6%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .btn-ghost:hover {
+    border-color: var(--white);
+    background: color-mix(in srgb, var(--white) 12%, transparent);
+  }
   .btn[disabled] {
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  /* Hover lift for interactive cards */
+  /* ── Cards ────────────────────────────────────────────────────────── */
+  /* White card. Always light inside, even on dark sections. */
+  .card {
+    --surface-heading: var(--ink-950);
+    --surface-body: var(--slate-600);
+    --surface-muted: var(--slate-500);
+    --surface-line: var(--slate-200);
+    --surface-line-strong: var(--slate-250);
+    --surface-link: var(--blue-600);
+    --surface-raised: var(--canvas);
+    --surface-accent: var(--accent-gradient-light);
+    --focus: var(--blue-600);
+    position: relative;
+    background: var(--white);
+    color: var(--slate-600);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-card);
+  }
+  .surface-dark .card {
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.2),
+      0 24px 48px -24px rgb(90 166 255 / 0.35);
+  }
+  /* Hover lift — smooth and slow, shadow deepens */
+  .card-hover {
+    transition:
+      transform var(--dur-hover) var(--ease-smooth),
+      box-shadow var(--dur-hover) var(--ease-smooth);
+  }
+  .card-hover:hover,
+  .card-hover:focus-within {
+    transform: translateY(var(--lift));
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Card on dark sections when you need a dark card, not a white one */
+  .card-night {
+    position: relative;
+    border-radius: var(--card-radius);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ink-900) 92%, transparent), var(--ink-950));
+    box-shadow: inset 0 0 0 1px var(--ink-700);
+  }
+
+  /* Legacy: hover lift used by older cards */
   .card-lift {
     transition:
-      transform 200ms var(--ease-standard),
-      border-color 200ms var(--ease-standard);
+      transform var(--dur-hover) var(--ease-smooth),
+      border-color var(--dur-hover) var(--ease-smooth),
+      box-shadow var(--dur-hover) var(--ease-smooth);
   }
   .card-lift:hover {
     transform: translateY(var(--lift));
     border-color: var(--surface-line-strong);
+  }
+
+  /* Art card: artwork on top, white panel overlapping its lower part. */
+  .art-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .art-card-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    aspect-ratio: 3 / 2;
+    background: var(--canvas-200);
+    isolation: isolate;
+  }
+  .art-card-panel {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    margin: -4.5rem 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  @media (width >= 40rem) {
+    .art-card-panel {
+      padding: 1.5rem 1.5rem 1.75rem;
+    }
+  }
+  .art-card .art-card-panel {
+    transition:
+      transform var(--dur-hover) var(--ease-smooth),
+      box-shadow var(--dur-hover) var(--ease-smooth);
+  }
+  .art-card:hover .art-card-panel,
+  .art-card:focus-within .art-card-panel {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Image zoom on hover: wrap the image in .art-zoom inside a .group */
+  .art-zoom {
+    overflow: hidden;
+  }
+  .art-zoom img {
+    transition: transform 900ms var(--ease-smooth);
+    will-change: transform;
+  }
+  .group:hover .art-zoom img,
+  .group:focus-within .art-zoom img {
+    transform: scale(1.06);
+  }
+
+  /* ── Hero art ─────────────────────────────────────────────────────── */
+  /* Slow drift/zoom on hero backgrounds (disabled for reduced motion). */
+  .art-drift img {
+    animation: art-drift 26s var(--ease-standard) infinite alternate;
+    transform-origin: 70% 50%;
+  }
+  /* Readability overlay for text over dark art */
+  .hero-scrim {
+    background:
+      linear-gradient(90deg, rgb(4 11 23 / 0.92) 0%, rgb(4 11 23 / 0.78) 38%, rgb(4 11 23 / 0.25) 72%, rgb(4 11 23 / 0.15) 100%),
+      linear-gradient(0deg, rgb(4 11 23 / 0.7) 0%, transparent 45%);
+  }
+  @media (width < 64rem) {
+    .hero-scrim {
+      background:
+        linear-gradient(180deg, rgb(4 11 23 / 0.5) 0%, rgb(4 11 23 / 0.78) 40%, rgb(4 11 23 / 0.92) 100%);
+    }
+  }
+
+  /* Rising-in on first paint (hero cards). Uses --d for stagger. */
+  .rise-in {
+    animation: rise-in 800ms var(--ease-smooth) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* Subtle blue glow decoration for dark sections (place in an absolute layer) */
+  .glow-dark {
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgb(90 166 255 / 0.16), transparent 70%),
+      radial-gradient(40% 40% at 90% 100%, rgb(10 102 194 / 0.18), transparent 70%);
+  }
+
+  /* ── Carousel ─────────────────────────────────────────────────────── */
+  .carousel-track {
+    display: flex;
+    gap: var(--carousel-gap, 1.25rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding-block: 0.5rem 2.5rem; /* room for card shadows / hover lift */
+    margin-block: -0.5rem -2.5rem;
+  }
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-track > * {
+    scroll-snap-align: start;
+    flex: none;
+  }
+  /* Bleed to the viewport edge while keeping the first card on the container line */
+  .carousel-bleed {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+  .carousel-bleed .carousel-track {
+    --bleed: max(1rem, calc((100vw - var(--container-max)) / 2 + 2rem));
+    padding-inline: var(--bleed);
+    scroll-padding-inline: var(--bleed);
+  }
+  @media (width < 40rem) {
+    .carousel-bleed .carousel-track {
+      --bleed: 1rem;
+    }
+  }
+  @media (width >= 40rem) and (width < 64rem) {
+    .carousel-bleed .carousel-track {
+      --bleed: 1.5rem;
+    }
+  }
+
+  /* Small square arrow button */
+  .carousel-btn {
+    @apply grid h-8 w-8 place-items-center rounded-[8px];
+    color: var(--surface-heading);
+    box-shadow: inset 0 0 0 1px var(--surface-line-strong);
+    background: transparent;
+    transition:
+      background-color 300ms var(--ease-smooth),
+      color 300ms var(--ease-smooth),
+      box-shadow 300ms var(--ease-smooth),
+      opacity 300ms var(--ease-smooth);
+  }
+  .carousel-btn:not([disabled]):hover {
+    background: var(--blue-600);
+    color: var(--white);
+    box-shadow: var(--shadow-btn-blue);
+  }
+  .carousel-btn[data-primary="true"]:not([disabled]) {
+    background: var(--blue-600);
+    color: var(--white);
+    box-shadow: var(--shadow-btn-blue);
+  }
+  .carousel-btn[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: transparent;
+  }
+  .site-header[data-open="true"] {
+    background: var(--white);
+  }
+  .site-header-inner {
+    position: relative;
+    margin-inline: auto;
+    max-width: calc(var(--container-max) + 1rem);
+    height: 100%;
+    padding-inline: 0.5rem;
+    transition: transform var(--dur-move) var(--ease-smooth);
+  }
+  .site-header-pill {
+    position: absolute;
+    inset: 6px 0.5rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.86);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow:
+      0 0 0 1px rgb(6 20 38 / 0.06),
+      var(--shadow-float);
+    opacity: 0;
+    transform: scale(0.97);
+    transition:
+      opacity var(--dur-move) var(--ease-smooth),
+      transform var(--dur-move) var(--ease-smooth);
+    pointer-events: none;
+  }
+  .site-header[data-scrolled="true"]:not([data-open="true"]) .site-header-inner {
+    transform: translateY(8px);
+  }
+  .site-header[data-scrolled="true"] .site-header-pill,
+  .site-header[data-open="true"] .site-header-pill {
+    opacity: 1;
+    transform: none;
+  }
+  .site-header[data-open="true"] .site-header-pill {
+    background: var(--white);
+  }
+  .nav-rail {
+    @apply flex items-center gap-0.5 rounded-full p-1;
+    background: color-mix(in srgb, var(--canvas-200) 70%, transparent);
+  }
+  .nav-item {
+    @apply inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm;
+    color: var(--slate-600);
+    transition:
+      color 300ms var(--ease-smooth),
+      background-color 300ms var(--ease-smooth),
+      box-shadow 300ms var(--ease-smooth);
+  }
+  .nav-item:hover {
+    color: var(--ink-950);
+    background: rgb(255 255 255 / 0.7);
+  }
+  .nav-item[aria-current="page"],
+  .nav-item[data-active="true"] {
+    color: var(--ink-950);
+    background: var(--white);
+    box-shadow: 0 1px 2px rgb(6 20 38 / 0.08);
+  }
+
+  /* Form controls (light surfaces) */
+  .field {
+    @apply block w-full rounded-xl border border-line-strong bg-white px-4 text-base text-ink-950 placeholder:text-slate-500;
+    min-height: 48px;
+    transition:
+      border-color 300ms var(--ease-smooth),
+      box-shadow 300ms var(--ease-smooth);
+  }
+  textarea.field {
+    @apply py-3;
+  }
+  .field:hover {
+    border-color: var(--slate-500);
+  }
+  .field:focus-visible {
+    border-color: var(--blue-600);
+    outline: none;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue-600) 18%, transparent);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--status-error);
+  }
+  .field-label {
+    @apply block text-sm font-medium text-heading;
+  }
+  .field-error {
+    @apply mt-1.5 text-sm;
+    color: var(--status-error);
   }
 
   /* Live status dot */
@@ -134,7 +592,7 @@
     animation: status-ping 2.4s var(--ease-standard) infinite;
   }
 
-  /* Fine technical grid used behind dark heroes */
+  /* Fine technical grid used behind dark sections */
   .bg-grid {
     background-image:
       linear-gradient(to right, color-mix(in srgb, var(--blue-400) 7%, transparent) 1px, transparent 1px),
@@ -142,12 +600,11 @@
     background-size: var(--grid-cell) var(--grid-cell);
     mask-image: radial-gradient(ellipse 70% 65% at 72% 35%, #000 25%, transparent 75%);
   }
-  /* Home hero: keep the grid in the top-left corner so it never runs through the diagram's lines. */
   .bg-grid-hero {
     mask-image: radial-gradient(ellipse 55% 75% at 0% 0%, #000 0%, transparent 70%);
   }
 
-  /* Home hero headline: two lines at desktop and on phones; three in the narrow lg column. */
+  /* Legacy home headline size (kept for backward compatibility) */
   .hero-title {
     font-size: clamp(2.25rem, 0.75rem + 7.5vw, 2.5rem);
     line-height: 1.02;
@@ -163,35 +620,8 @@
     }
   }
 
-  /* Form controls (light surfaces) */
-  .field {
-    @apply block w-full rounded-control border border-line-strong bg-white px-3.5 text-base text-ink-950 placeholder:text-slate-500;
-    min-height: 44px;
-    transition: border-color 150ms var(--ease-standard);
-  }
-  textarea.field {
-    @apply py-3;
-  }
-  .field:hover {
-    border-color: var(--slate-500);
-  }
-  .field:focus-visible {
-    border-color: var(--blue-600);
-    outline-offset: 0;
-  }
-  .field[aria-invalid="true"] {
-    border-color: var(--status-error);
-  }
-  .field-label {
-    @apply block text-sm font-medium text-heading;
-  }
-  .field-error {
-    @apply mt-1.5 text-sm;
-    color: var(--status-error);
-  }
-
   .skip-link {
-    @apply fixed top-3 left-3 z-100 -translate-y-24 rounded-control bg-white px-4 py-2 text-sm font-medium text-ink-950;
+    @apply fixed top-3 left-3 z-100 -translate-y-24 rounded-full bg-ink-950 px-4 py-2 text-sm font-medium text-white;
     transition: transform 150ms var(--ease-standard);
   }
   .skip-link:focus {
@@ -211,6 +641,26 @@
   }
 }
 
+@keyframes art-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -220,7 +670,23 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .card-lift:hover {
+  .art-drift img {
+    animation: none !important;
     transform: none;
+  }
+  .rise-in {
+    animation: none !important;
+  }
+  .card-lift:hover,
+  .card-hover:hover,
+  .card-hover:focus-within,
+  .art-card:hover .art-card-panel,
+  .art-card:focus-within .art-card-panel,
+  .group:hover .art-zoom img,
+  .group:focus-within .art-zoom img {
+    transform: none;
+  }
+  .carousel-track {
+    scroll-behavior: auto;
   }
 }

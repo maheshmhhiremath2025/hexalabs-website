@@ -1,7 +1,14 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
-import { ChevronDown } from 'lucide-react';
+import { Award, ChevronDown, Cloud, Layers, MonitorSmartphone, type LucideIcon } from 'lucide-react';
 import { labsMenu } from '../../content/site';
+
+const icons: Record<string, LucideIcon> = {
+  '/official-labs': Layers,
+  '/sandboxes': Cloud,
+  '/labs': MonitorSmartphone,
+  '/certifications': Award,
+};
 
 /**
  * Desktop "Labs" disclosure menu. A button toggles a panel of links
@@ -51,13 +58,12 @@ export function LabsMenu() {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm transition-colors ${
-          open || sectionActive ? 'text-white' : 'text-slate-300 hover:text-white'
-        }`}
+        className="nav-item"
+        data-active={open || sectionActive}
       >
         {labsMenu.label}
         <ChevronDown
-          className={`h-4 w-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
           strokeWidth={1.5}
           aria-hidden="true"
         />
@@ -66,28 +72,36 @@ export function LabsMenu() {
       <div
         id={panelId}
         hidden={!open}
-        className="absolute top-full left-0 mt-2 w-[22rem] rounded-card border border-ink-700 bg-ink-900 p-2 shadow-frame"
+        className="card absolute top-full left-0 mt-3 w-[24rem] p-2 shadow-[var(--shadow-card-hover)]"
       >
         <ul>
-          {labsMenu.items.map((item) => (
-            <li key={item.href}>
-              <NavLink
-                to={item.href}
-                className={({ isActive }) =>
-                  `block rounded-lg px-3 py-2.5 transition-colors hover:bg-ink-950 ${isActive ? 'bg-ink-950' : ''}`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    <span className={`flex items-center gap-2 text-sm font-medium ${isActive ? 'text-blue-400' : 'text-white'}`}>
-                      {item.label}
-                    </span>
-                    {item.description ? <span className="mt-0.5 block text-xs text-slate-400">{item.description}</span> : null}
-                  </>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {labsMenu.items.map((item) => {
+            const Icon = icons[item.href] ?? Layers;
+            return (
+              <li key={item.href}>
+                <NavLink
+                  to={item.href}
+                  className={({ isActive }) =>
+                    `flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-canvas ${isActive ? 'bg-canvas' : ''}`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className="icon-bubble h-9 w-9">
+                        <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                      </span>
+                      <span>
+                        <span className={`block text-sm font-medium ${isActive ? 'text-blue-600' : 'text-ink-950'}`}>
+                          {item.label}
+                        </span>
+                        {item.description ? <span className="mt-0.5 block text-xs text-slate-600">{item.description}</span> : null}
+                      </span>
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

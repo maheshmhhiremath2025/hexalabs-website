@@ -1,26 +1,20 @@
 import { hero } from '../../../content/home';
 import { ButtonLink } from '../../ui/Button';
 import { Accent } from '../../ui/Accent';
-import { Reveal } from '../../ui/Reveal';
-import { OfferPill, ProofStrip } from './HeroParts';
-import { ArchDiagram } from './hero/ArchDiagram';
+import { Art } from '../../ui/Art';
+import { HeroCards, OfferPill, ProofStrip } from './HeroParts';
 
-/**
- * Hairline "Built for" row under the CTAs: the three audiences, in priority order.
- * One row where all three fit (sm, xl); a clean stack where a row would wrap 2 + 1 (phones, lg).
- */
+/** "Built for" — the three audiences, as a quiet line under the CTAs. */
 function Audience() {
   return (
-    <div className="mt-10 flex max-w-xl flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-baseline sm:gap-5 lg:flex-col lg:gap-3 xl:flex-row xl:gap-5">
-      <p id="hero-audience" className="flex-none font-mono text-eyebrow text-muted uppercase">
+    <div className="mt-10 flex max-w-xl flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-5">
+      <p id="hero-audience" className="flex-none font-mono text-eyebrow text-slate-400 uppercase">
         {hero.audience.label}
       </p>
-      <ul aria-labelledby="hero-audience" className="flex flex-col gap-x-4 gap-y-2 sm:flex-row sm:flex-wrap lg:flex-col xl:flex-row text-[0.8125rem] leading-5 text-body">
+      <ul aria-labelledby="hero-audience" className="flex flex-col gap-1.5 text-sm text-slate-300 sm:flex-row sm:flex-wrap sm:gap-x-4">
         {hero.audience.items.map((item, i) => (
-          <li key={item} className="flex items-baseline gap-2 whitespace-nowrap">
-            <span aria-hidden="true" className="font-mono text-micro text-muted">
-              {String(i + 1).padStart(2, '0')}
-            </span>
+          <li key={item} className="flex items-baseline gap-4 whitespace-nowrap">
+            {i > 0 ? <span aria-hidden="true" className="hidden h-1 w-1 translate-y-[-3px] rounded-full bg-slate-400 sm:block" /> : null}
             {item}
           </li>
         ))}
@@ -30,43 +24,41 @@ function Audience() {
 }
 
 /**
- * Home hero. Copy on the left; on the right a line diagram of how a batch runs:
- * learners → one HTTPS entry point → an isolated environment per learner, with
- * the trainer's console on the side and the official course labs underneath.
+ * Home hero: an inset rounded panel with the dark brand artwork drifting slowly
+ * behind a big light-weight headline, then four white cards overlapping its bottom edge.
+ * The h1 is never animated (it is the LCP element).
  */
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="surface-dark relative overflow-hidden">
-      <div aria-hidden="true" className="bg-grid bg-grid-hero pointer-events-none absolute inset-0" />
+    <section aria-labelledby="hero-title" className="relative px-2 sm:px-3">
+      <div className="surface-dark relative overflow-hidden rounded-[20px] sm:rounded-panel">
+        <div aria-hidden="true" className="art-drift absolute inset-0">
+          <Art name="hero" priority sizes="100vw" className="h-full w-full" imgClassName="h-full w-full object-cover object-[70%_50%]" />
+        </div>
+        <div aria-hidden="true" className="hero-scrim absolute inset-0" />
 
-      <div className="container-site relative grid grid-cols-12 items-start gap-x-6 gap-y-14 pt-10 pb-16 sm:pt-14 lg:pt-16 lg:pb-20 xl:pt-[4.5rem]">
-        <div className="col-span-12 lg:col-span-5 xl:col-span-6">
+        <div className="container-site relative pt-12 pb-36 sm:pt-20 sm:pb-40 lg:pt-24 lg:pb-52">
           <OfferPill />
-          {/* No fade on the h1: it is the LCP element and must paint immediately. */}
-          <h1 id="hero-title" className="hero-title mt-7 text-heading">
+          <h1 id="hero-title" className="display mt-8 max-w-[13ch] text-mega text-white">
             {hero.headline.before}
-            <Accent className="text-blue-400">{hero.headline.accent}</Accent>
+            <Accent>{hero.headline.accent}</Accent>
             {hero.headline.after}
           </h1>
-          <p className="mt-6 max-w-xl text-lead text-body">{hero.subcopy}</p>
+          <p className="mt-7 max-w-xl text-lead text-slate-300">{hero.subcopy}</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href={hero.primaryCta.href} size="lg" className="w-full sm:w-auto">
+            <ButtonLink href={hero.primaryCta.href} size="lg" arrow="up-right" className="w-full sm:w-auto">
               {hero.primaryCta.label}
             </ButtonLink>
-            <ButtonLink href={hero.secondaryCta.href} variant="secondary" size="lg" className="w-full sm:w-auto">
+            <ButtonLink href={hero.secondaryCta.href} variant="ghost" size="lg" className="w-full sm:w-auto">
               {hero.secondaryCta.label}
             </ButtonLink>
           </div>
           <Audience />
         </div>
+      </div>
 
-        <Reveal className="col-span-12 lg:col-span-7 xl:col-span-6" delay={0.1}>
-          <figure className="mx-auto max-w-[720px] lg:mx-0 lg:max-w-none">
-            <ArchDiagram variant="wide" className="hidden sm:block" />
-            <ArchDiagram variant="narrow" className="mx-auto max-w-[400px] sm:hidden" />
-            <figcaption className="mt-6 max-w-[34rem] font-mono text-[0.8125rem] leading-5 text-body">{hero.caption}</figcaption>
-          </figure>
-        </Reveal>
+      <div className="container-site relative z-10 -mt-24 sm:-mt-28 lg:-mt-36">
+        <HeroCards />
       </div>
 
       <ProofStrip />

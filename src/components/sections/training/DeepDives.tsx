@@ -1,55 +1,69 @@
 import { Check } from 'lucide-react';
 import { deepDives } from '../../../content/training';
-import { Eyebrow } from '../../ui/Section';
+import { Art, type ArtName } from '../../ui/Art';
+import { Chip } from '../../ui/Chip';
 import { Reveal } from '../../ui/Reveal';
-import { FleetGraphic } from '../../graphics/FleetGraphic';
-import { ReportGraphic } from '../../graphics/ReportGraphic';
-import { AskHexaFlow } from '../../graphics/AskHexaFlow';
+import { accentText } from './accentText';
 
-function Visual({ screen }: { screen: (typeof deepDives)[number]['screen'] }) {
-  switch (screen) {
-    case 'bulkDeploy':
-      return <FleetGraphic tone="light" />;
-    case 'usageReport':
-      return (
-        <div className="overflow-hidden rounded-frame border border-line shadow-card">
-          <ReportGraphic />
-        </div>
-      );
-    case 'askHexa':
-      return <AskHexaFlow className="mx-auto max-w-lg" />;
-  }
-}
+/** Artwork and the accent phrase for each deep dive. */
+const look: Record<(typeof deepDives)[number]['id'], { art: ArtName; accent: string }> = {
+  console: { art: 'honeycomb', accent: 'whole batch' },
+  reports: { art: 'certifications', accent: 'did the work' },
+  support: { art: 'ask-hexa', accent: 'support queue' },
+};
 
-/** Feature deep-dives, alternating text and visual sides. */
+/** Feature deep-dives on white: text and a framed artwork, alternating sides. */
 export function DeepDives() {
   return (
-    <section aria-label="Features" className="surface-paper">
-      {deepDives.map((d, i) => {
-        const flip = i % 2 === 1;
-        return (
-          <div key={d.id} id={d.id} className={`py-20 lg:py-28 ${i > 0 ? 'border-t border-line' : ''}`}>
-            <div className="container-site grid grid-cols-12 items-center gap-x-6 gap-y-12">
+    <section aria-label="Features" className="surface-white py-20 sm:py-24 lg:py-28">
+      <div className="container-site space-y-20 sm:space-y-24 lg:space-y-32">
+        {deepDives.map((d, i) => {
+          const flip = i % 2 === 1;
+          const { art, accent } = look[d.id];
+          return (
+            <article
+              key={d.id}
+              id={d.id}
+              aria-labelledby={`${d.id}-title`}
+              className="grid scroll-mt-28 grid-cols-12 items-center gap-x-6 gap-y-10"
+            >
               <div className={`col-span-12 lg:col-span-5 ${flip ? 'lg:order-2 lg:col-start-8' : ''}`}>
-                <Eyebrow index={String(i + 1).padStart(2, '0')}>{d.eyebrow}</Eyebrow>
-                <h2 className="mt-5 text-h2">{d.title}</h2>
+                <p className="eyebrow flex items-center gap-2">
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                  {d.eyebrow}
+                </p>
+                <h2 id={`${d.id}-title`} className="mt-4 text-h2">
+                  {accentText(d.title, accent)}
+                </h2>
                 <p className="mt-5 text-lead text-body">{d.body}</p>
-                <ul className="mt-8 space-y-3">
+                <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                   {d.points.map((p) => (
-                    <li key={p} className="flex gap-3 text-heading">
-                      <Check className="mt-1 h-4 w-4 flex-none text-blue-600" strokeWidth={1.5} aria-hidden="true" />
+                    <li key={p} className="flex gap-3 text-[0.9375rem] leading-6 text-heading">
+                      <span aria-hidden="true" className="mt-0.5 grid h-5 w-5 flex-none place-items-center rounded-full bg-canvas text-blue-600">
+                        <Check className="h-3 w-3" strokeWidth={2.5} />
+                      </span>
                       {p}
                     </li>
                   ))}
                 </ul>
               </div>
-              <Reveal className={`col-span-12 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1 lg:pr-6' : 'lg:pl-6'}`}>
-                <Visual screen={d.screen} />
+
+              <Reveal className={`col-span-12 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1 lg:pr-4' : 'lg:pl-4'}`}>
+                <figure aria-hidden="true" className="group relative">
+                  <div className="art-zoom overflow-hidden rounded-[20px] shadow-card">
+                    <Art name={art} sizes="(min-width: 1024px) 640px, 100vw" className="aspect-[3/2]" />
+                  </div>
+                  <div className={`absolute bottom-4 sm:bottom-6 ${flip ? 'right-4 sm:right-6' : 'left-4 sm:left-6'}`}>
+                    <Chip className="font-mono">
+                      {String(i + 1).padStart(2, '0')} · {d.eyebrow}
+                    </Chip>
+                  </div>
+                </figure>
               </Reveal>
-            </div>
-          </div>
-        );
-      })}
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }

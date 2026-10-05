@@ -1,42 +1,38 @@
 import { officialSteps } from '../../../content/officialLabs';
-import { Section, SectionHeader } from '../../ui/Section';
-import { Reveal } from '../../ui/Reveal';
+import type { ArtName } from '../../ui/Art';
+import { ArtCard } from '../../ui/Cards';
+import { Carousel } from '../../ui/Carousel';
+import { Section, SectionIntro } from '../../ui/Section';
+import { accentWord } from './accentWord';
 
-/** Split layout: header on the left, a vertical numbered timeline on the right. */
+/** Artwork for each step card, in step order (each light artwork once per page). */
+const stepArt: ArtName[] = ['honeycomb', 'lab-machines', 'white-label', 'security'];
+
+/** "Step 01" label used on step cards. */
+export const stepLabel = (i: number) => `Step ${String(i + 1).padStart(2, '0')}`;
+
+/** Dark feature section: the four steps of a batch as an art-card carousel. */
 export function OfficialSteps() {
-  const last = officialSteps.steps.length - 1;
   return (
-    <Section tone="white" labelledBy="official-steps-title">
-      <div className="grid grid-cols-12 gap-x-6 gap-y-12">
-        <SectionHeader
-          id="official-steps-title"
-          eyebrow={officialSteps.eyebrow}
-          title={officialSteps.title}
-          intro={officialSteps.intro}
-          className="col-span-12 lg:col-span-5"
-        />
-
-        <ol className="col-span-12 border-l border-line lg:col-span-6 lg:col-start-7">
-          {officialSteps.steps.map((step, i) => (
-            <Reveal as="li" key={step.title} delay={i * 0.08} className="relative pb-10 pl-8 last:pb-0 sm:pl-10">
-              <span
-                aria-hidden="true"
-                className={`absolute top-1 -left-1.5 h-3 w-3 rounded-full border ${
-                  i === last ? 'border-blue-600 bg-blue-600' : 'border-line-strong bg-surface'
-                }`}
-              />
-              <p aria-hidden="true" className="font-mono text-micro text-muted">
-                Step {String(i + 1).padStart(2, '0')}
-              </p>
-              <h3 className="mt-2 text-h3">
-                <span className="sr-only">Step {i + 1}: </span>
-                {step.title}
-              </h3>
-              <p className="mt-2 max-w-md text-body">{step.body}</p>
-            </Reveal>
-          ))}
-        </ol>
-      </div>
+    <Section tone="dark" glow id="how-it-works" labelledBy="official-steps-title">
+      <SectionIntro
+        id="official-steps-title"
+        eyebrow={officialSteps.eyebrow}
+        title={accentWord(officialSteps.title, 'batch')}
+        intro={officialSteps.intro}
+      />
+      <Carousel label="How a batch runs" className="mt-14">
+        {officialSteps.steps.map((step, i) => (
+          <ArtCard
+            key={step.title}
+            art={stepArt[i % stepArt.length]}
+            chip={stepLabel(i)}
+            title={step.title}
+            body={step.body}
+            sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 86vw"
+          />
+        ))}
+      </Carousel>
     </Section>
   );
 }

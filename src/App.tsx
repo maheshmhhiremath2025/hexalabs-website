@@ -20,6 +20,8 @@ const Pricing = loadable(() => import('./pages/Pricing'));
 const About = loadable(() => import('./pages/About'));
 const Contact = loadable(() => import('./pages/Contact'));
 const Legal = loadable(() => import('./pages/Legal'));
+/** Dev-only design-system reference at /_styleguide (dead-code-eliminated from production builds). */
+const StyleGuide = import.meta.env.DEV ? loadable(() => import('./pages/StyleGuide')) : null;
 
 const pages: Record<string, { preload: () => Promise<void> }> = {
   '/': Home,
@@ -60,6 +62,7 @@ export function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="privacy" element={<Legal kind="privacy" />} />
             <Route path="terms" element={<Legal kind="terms" />} />
+            {StyleGuide ? <Route path="_styleguide" element={<StyleGuide />} /> : null}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

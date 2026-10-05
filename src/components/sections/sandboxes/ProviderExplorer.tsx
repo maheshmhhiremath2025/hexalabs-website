@@ -1,23 +1,36 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ArrowRight, Check, ShieldCheck } from 'lucide-react';
-import {
-  providers,
-  providersSection,
-  sandboxRequestLink,
-  type SandboxProvider,
-  type SandboxProviderId,
-} from '../../../content/sandboxes';
-import { Section, SectionHeader } from '../../ui/Section';
-import { SmartLink } from '../../ui/SmartLink';
+import { Check, ShieldCheck } from 'lucide-react';
+import { providers, providersSection, sandboxRequestLink, type SandboxProvider, type SandboxProviderId } from '../../../content/sandboxes';
+import { Section, SectionIntro } from '../../ui/Section';
+import { ButtonLink } from '../../ui/Button';
+import { Chip } from '../../ui/Chip';
 import { Reveal } from '../../ui/Reveal';
-import { SandboxMock } from './SandboxMock';
+import { PillScroller, pillClass, pillRailClass, withAccent } from './pills';
 
 const DEFAULT_PROVIDER: SandboxProviderId = 'azure';
 const isProvider = (v: string | null): v is SandboxProviderId => !!v && providers.some((p) => p.id === v);
 
 const tabId = (id: SandboxProviderId) => `sandbox-tab-${id}`;
 const panelId = (id: SandboxProviderId) => `sandbox-panel-${id}`;
+
+function List({ title, items, icon: Icon }: { title: string; items: string[]; icon: typeof Check }) {
+  return (
+    <div>
+      <h4 className="text-base font-medium text-heading">{title}</h4>
+      <ul className="mt-5 space-y-3.5">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3 text-[0.9375rem] leading-6 text-body">
+            <span aria-hidden="true" className="mt-0.5 grid h-5 w-5 flex-none place-items-center rounded-full bg-blue-600/10 text-blue-600">
+              <Icon className="h-3 w-3" strokeWidth={2.25} />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function ProviderPanel({ provider, active }: { provider: SandboxProvider; active: boolean }) {
   const { labels } = providersSection;
@@ -28,71 +41,55 @@ function ProviderPanel({ provider, active }: { provider: SandboxProvider; active
       aria-labelledby={tabId(provider.id)}
       hidden={!active}
       tabIndex={0}
-      className="rounded-card border border-line bg-white p-6 shadow-card sm:p-8"
+      className="card p-6 sm:p-10"
+      // Soft fade-up whenever a panel is shown (CSS keyframe; off under reduced motion).
+      style={{ animation: 'rise-in 560ms var(--ease-smooth) both' }}
     >
-      <div className="grid grid-cols-12 gap-x-6 gap-y-6">
-        <div className="col-span-12 md:col-span-7">
-          <p className="font-mono text-micro text-muted uppercase">{provider.unit}</p>
-          <h3 className="mt-3 text-h3 sm:text-2xl">{provider.name}</h3>
-          <p className="mt-2 text-body">{provider.summary}</p>
+      <div className="flex flex-col gap-6 border-b border-line pb-8 md:flex-row md:items-end md:justify-between md:gap-10">
+        <div className="max-w-2xl">
+          <p>
+            <Chip tone="soft" className="font-mono uppercase">
+              {provider.unit}
+            </Chip>
+          </p>
+          <h3 className="mt-4 text-[1.75rem] leading-tight font-light tracking-[-0.03em] sm:text-[2.125rem]">{provider.name}</h3>
+          <p className="mt-3 text-body sm:text-lg sm:leading-7">{provider.summary}</p>
         </div>
-        <SandboxMock
-          title={provider.mock.title}
-          rows={provider.mock.rows}
-          className="col-span-12 self-start md:col-span-5"
-        />
+        <ButtonLink href={sandboxRequestLink(provider)} variant="dark" arrow="up-right" className="flex-none self-start md:self-auto">
+          {labels.request}
+          <span className="sr-only">: {provider.name}</span>
+        </ButtonLink>
       </div>
 
-      <div className="mt-8 grid gap-x-10 gap-y-8 border-t border-line pt-8 md:grid-cols-2">
-        <div>
-          <h4 className="font-medium text-heading">{labels.learnerGets}</h4>
-          <ul className="mt-4 space-y-3">
-            {provider.learnerGets.map((item) => (
-              <li key={item} className="flex gap-3 text-sm text-body">
-                <Check className="mt-0.5 h-4 w-4 flex-none text-blue-600" strokeWidth={1.5} aria-hidden="true" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-medium text-heading">{labels.guardrails}</h4>
-          <ul className="mt-4 space-y-3">
-            {provider.guardrails.map((item) => (
-              <li key={item} className="flex gap-3 text-sm text-body">
-                <ShieldCheck className="mt-0.5 h-4 w-4 flex-none text-blue-600" strokeWidth={1.5} aria-hidden="true" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <div className="grid gap-x-10 gap-y-10 pt-8 md:grid-cols-2 lg:grid-cols-3">
+        <List title={labels.learnerGets} items={provider.learnerGets} icon={Check} />
+        <List title={labels.guardrails} items={provider.guardrails} icon={ShieldCheck} />
 
-      <div className="mt-8 flex flex-col gap-6 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h4 className="font-mono text-micro text-muted uppercase">{labels.typicalUse}</h4>
+        <aside aria-label={provider.mock.title} className="rounded-[14px] bg-raised p-6 md:col-span-2 lg:col-span-1">
+          <p className="eyebrow">{provider.mock.title}</p>
+          <dl className="mt-4">
+            {provider.mock.rows.map((r) => (
+              <div key={r.label} className="flex items-baseline justify-between gap-4 border-t border-slate-250/70 py-3 text-sm">
+                <dt className="text-body">{r.label}</dt>
+                <dd className="text-right font-medium text-heading">{r.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <h4 className="eyebrow mt-6">{labels.typicalUse}</h4>
           <ul className="mt-3 flex flex-wrap gap-1.5">
             {provider.typicalUse.map((use) => (
-              <li key={use} className="rounded-md border border-line px-2 py-1 text-xs text-heading">
+              <li key={use} className="rounded-full bg-white px-3 py-1.5 text-xs text-heading shadow-[0_1px_2px_rgb(6_20_38/0.08)]">
                 {use}
               </li>
             ))}
           </ul>
-        </div>
-        <SmartLink
-          href={sandboxRequestLink(provider)}
-          className="group inline-flex flex-none items-center gap-1.5 text-sm font-medium text-blue-600"
-        >
-          {labels.request}
-          <span className="sr-only">: {provider.name}</span>
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden="true" />
-        </SmartLink>
+        </aside>
       </div>
     </div>
   );
 }
 
-/** Provider tabs: a grid of tabs on phones, a vertical list beside the panel on desktop. */
+/** Provider tabs as a white pill rail; the selected provider shows in a large white card below. */
 export function ProviderExplorer() {
   const [params] = useSearchParams();
   const location = useLocation();
@@ -129,54 +126,42 @@ export function ProviderExplorer() {
 
   return (
     <Section tone="paper" id="providers" labelledBy="providers-title">
-      <SectionHeader
+      <SectionIntro
         id="providers-title"
         eyebrow={providersSection.eyebrow}
-        title={providersSection.title}
+        title={withAccent(providersSection.title, 'cloud')}
         intro={providersSection.intro}
       />
 
-      <Reveal className="mt-12 grid grid-cols-12 gap-x-6 gap-y-6 lg:mt-16">
-        <div
-          role="tablist"
-          aria-label={providersSection.tabsLabel}
-          onKeyDown={onKeyDown}
-          className="col-span-12 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:col-span-3 lg:grid-cols-1 lg:content-start"
-        >
-          {providers.map((p) => {
-            const active = p.id === selected;
-            return (
-              <button
-                key={p.id}
-                ref={(el) => {
-                  tabRefs.current[p.id] = el;
-                }}
-                type="button"
-                role="tab"
-                id={tabId(p.id)}
-                aria-selected={active}
-                aria-controls={panelId(p.id)}
-                tabIndex={active ? 0 : -1}
-                onClick={() => choose(p.id)}
-                className={`flex min-w-0 flex-col items-start rounded-control border px-4 py-3 text-left transition-colors ${
-                  active
-                    ? 'border-ink-950 bg-ink-950 text-white'
-                    : 'border-line-strong bg-white text-heading hover:border-ink-950'
-                }`}
-              >
-                <span className="text-sm font-medium">
+      <Reveal className="mt-10 sm:mt-12">
+        <PillScroller>
+          <div role="tablist" aria-label={providersSection.tabsLabel} onKeyDown={onKeyDown} className={pillRailClass}>
+            {providers.map((p) => {
+              const active = p.id === selected;
+              return (
+                <button
+                  key={p.id}
+                  ref={(el) => {
+                    tabRefs.current[p.id] = el;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={tabId(p.id)}
+                  aria-selected={active}
+                  aria-controls={panelId(p.id)}
+                  tabIndex={active ? 0 : -1}
+                  onClick={() => choose(p.id)}
+                  className={pillClass(active)}
+                >
                   <span className="lg:hidden">{p.shortName}</span>
                   <span className="hidden lg:inline">{p.name}</span>
-                </span>
-                <span className={`mt-1 max-w-full truncate font-mono text-micro ${active ? 'text-slate-300' : 'text-muted'}`}>
-                  {p.unit}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        </PillScroller>
 
-        <div className="col-span-12 lg:col-span-9">
+        <div className="mt-6 sm:mt-8">
           {providers.map((p) => (
             <ProviderPanel key={p.id} provider={p} active={p.id === selected} />
           ))}

@@ -7,11 +7,11 @@ import { Logo } from '../ui/Logo';
 import { SmartLink } from '../ui/SmartLink';
 import { buttonClass } from '../ui/Button';
 
-const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-md px-3 py-2 text-sm transition-colors ${
-    isActive ? 'text-white' : 'text-slate-300 hover:text-white'
-  }`;
-
+/**
+ * Light header that sits on the canvas at the top of the page and morphs into a
+ * floating white pill once the page scrolls (pill fades/scales in, bar drops 8px —
+ * transform + opacity only).
+ */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -19,9 +19,8 @@ export function Header() {
   const menuRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
 
-  // Solid background once the page scrolls
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -47,7 +46,9 @@ export function Header() {
         return;
       }
       if (e.key !== 'Tab' || !menu) return;
-      const focusables = Array.from(menu.querySelectorAll<HTMLElement>('a, button'));
+      const focusables = [toggleRef.current, ...Array.from(menu.querySelectorAll<HTMLElement>('a, button'))].filter(
+        (el): el is HTMLElement => !!el,
+      );
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
       if (e.shiftKey && document.activeElement === first) {
@@ -65,54 +66,53 @@ export function Header() {
     };
   }, [open]);
 
-  // The blur is the site's one frosted element. It is dropped while the menu is
-  // open because backdrop-filter would make the fixed menu position relative to the header.
-  const headerTone = open
-    ? 'border-ink-700 bg-ink-950'
-    : scrolled
-      ? 'border-ink-700 bg-ink-950/90 backdrop-blur-md'
-      : 'border-transparent bg-ink-950';
-
   return (
-    <header className={`surface-dark sticky top-0 z-50 border-b transition-colors duration-200 ${headerTone}`}>
-      <div className="container-site flex h-header items-center justify-between gap-6">
-        <SmartLink href="/" className="flex-none rounded-md" aria-label={`${site.name} home`}>
-          <Logo />
-        </SmartLink>
-
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            <li>
-              <LabsMenu />
-            </li>
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <NavLink to={item.href} className={navLinkClass}>
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <a href={site.loginUrl} className="hidden rounded-md px-3 py-2 text-sm text-slate-300 hover:text-white sm:inline-flex">
-            Log in
-          </a>
-          <SmartLink href={headerCta.href} className={buttonClass('primary', 'sm', 'hidden sm:inline-flex')}>
-            {headerCta.label}
+    <header className="site-header surface-white" data-scrolled={scrolled} data-open={open}>
+      <div className="site-header-inner">
+        <div aria-hidden="true" className="site-header-pill" />
+        <div className="relative flex h-full items-center justify-between gap-4 pr-2.5 pl-4 sm:pl-5 lg:pr-3">
+          <SmartLink href="/" className="flex-none rounded-md" aria-label={`${site.name} home`}>
+            <Logo />
           </SmartLink>
-          <button
-            ref={toggleRef}
-            type="button"
-            className="-mr-2 grid h-11 w-11 place-items-center rounded-md text-white lg:hidden"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /> : <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />}
-          </button>
+
+          <nav aria-label="Main" className="hidden lg:block">
+            <ul className="nav-rail">
+              <li>
+                <LabsMenu />
+              </li>
+              {mainNav.map((item) => (
+                <li key={item.href}>
+                  <NavLink to={item.href} className="nav-item">
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-1.5">
+            <a
+              href={site.loginUrl}
+              className="hidden rounded-full px-3.5 py-2 text-sm text-slate-600 transition-colors hover:text-ink-950 sm:inline-flex"
+            >
+              Log in
+            </a>
+            <SmartLink href={headerCta.href} className={buttonClass('dark', 'sm', 'hidden h-10 sm:inline-flex')}>
+              {headerCta.label}
+              <ArrowUpRight className="arrow-up-right h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+            </SmartLink>
+            <button
+              ref={toggleRef}
+              type="button"
+              className="grid h-11 w-11 place-items-center rounded-full bg-white text-ink-950 shadow-[0_0_0_1px_rgb(6_20_38/0.08),0_6px_16px_-8px_rgb(6_20_38/0.35)] lg:hidden"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <X className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /> : <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -120,20 +120,20 @@ export function Header() {
         <div
           id="mobile-menu"
           ref={menuRef}
-          className="fixed inset-x-0 top-header bottom-0 z-40 flex flex-col overflow-y-auto bg-ink-950 lg:hidden"
+          className="surface-white fixed inset-x-0 top-header bottom-0 z-40 flex flex-col overflow-y-auto border-t border-line lg:hidden"
         >
           <nav aria-label="Mobile" className="container-site flex-1 py-6">
-            <p className="font-mono text-eyebrow text-slate-400 uppercase" id="mobile-labs-heading">
+            <p className="eyebrow" id="mobile-labs-heading">
               {labsMenu.label}
             </p>
-            <ul aria-labelledby="mobile-labs-heading" className="mt-2 grid grid-cols-2 gap-2">
+            <ul aria-labelledby="mobile-labs-heading" className="mt-3 grid grid-cols-2 gap-2">
               {labsMenu.items.map((item) => (
                 <li key={item.href}>
                   <NavLink
                     to={item.href}
                     className={({ isActive }) =>
-                      `flex min-h-14 items-center rounded-lg border px-3 py-2 text-base font-medium ${
-                        isActive ? 'border-blue-400 text-white' : 'border-ink-700 text-slate-300'
+                      `flex min-h-14 items-center rounded-xl px-3.5 py-2 text-base font-medium transition-colors ${
+                        isActive ? 'bg-ink-950 text-white' : 'bg-canvas text-ink-950'
                       }`
                     }
                   >
@@ -142,15 +142,15 @@ export function Header() {
                 </li>
               ))}
             </ul>
-            <ul className="mt-6 divide-y divide-ink-700 border-y border-ink-700">
+            <ul className="mt-6 divide-y divide-line border-y border-line">
               {[{ label: 'Home', href: '/' }, ...mainNav].map((item) => (
                 <li key={item.href}>
                   <NavLink
                     to={item.href}
                     end={item.href === '/'}
                     className={({ isActive }) =>
-                      `flex items-center justify-between py-4 text-2xl font-medium tracking-tight ${
-                        isActive ? 'text-white' : 'text-slate-300'
+                      `flex items-center justify-between py-4 text-2xl font-light tracking-tight ${
+                        isActive ? 'text-blue-600' : 'text-ink-950'
                       }`
                     }
                   >

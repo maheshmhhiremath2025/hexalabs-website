@@ -8,10 +8,10 @@ const sections = ['Learners and machines', 'Hours used per learner', 'Sessions a
  */
 export function ReportGraphic({ className = '' }: { className?: string }) {
   return (
-    <div aria-hidden="true" className={`relative bg-paper-50 p-6 sm:p-10 ${className}`}>
+    <div aria-hidden="true" className={`relative bg-canvas p-6 sm:p-10 ${className}`}>
       <div className="relative mx-auto max-w-sm">
         {/* back sheet: certificate */}
-        <div className="absolute -top-4 -right-4 hidden h-full w-full rotate-(--hero-tilt) rounded-md bg-white shadow-card ring-1 ring-slate-200 sm:block">
+        <div className="absolute -top-4 -right-4 hidden h-full w-full rotate-(--hero-tilt) rounded-xl bg-white shadow-card sm:block">
           <div className="flex items-center gap-2 p-4 font-mono text-micro text-slate-500">
             <FileText className="h-3.5 w-3.5" strokeWidth={1.5} />
             completion-certificate.pdf
@@ -19,7 +19,7 @@ export function ReportGraphic({ className = '' }: { className?: string }) {
         </div>
 
         {/* front sheet: usage report */}
-        <div className="relative rounded-md bg-white p-6 shadow-card ring-1 ring-slate-200">
+        <div className="relative rounded-xl bg-white p-6 shadow-card-hover">
           <div className="flex items-center gap-2 font-mono text-micro text-slate-500">
             <FileText className="h-3.5 w-3.5" strokeWidth={1.5} />
             usage-report.pdf

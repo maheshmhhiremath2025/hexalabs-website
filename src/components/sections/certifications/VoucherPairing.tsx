@@ -1,91 +1,104 @@
-import { ArrowDown, ArrowRight, CalendarCheck, FlaskConical, Plus, Ticket } from 'lucide-react';
+import { ArrowRight, CalendarCheck, FlaskConical, Plus, Ticket } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { pairing, practiceExamples } from '../../../content/certifications';
+import { pairing, practiceExamples, type PracticeKind } from '../../../content/certifications';
 import { AccentHeadline } from '../../ui/Accent';
-import { Section, SectionHeader } from '../../ui/Section';
-import { SmartLink } from '../../ui/SmartLink';
-import { Reveal } from '../../ui/Reveal';
+import type { ArtName } from '../../ui/Art';
+import { ArtCard } from '../../ui/Cards';
+import { Chip } from '../../ui/Chip';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
 
 const partIcons: LucideIcon[] = [Ticket, FlaskConical, CalendarCheck];
-const connectors: LucideIcon[] = [Plus, ArrowDown];
+const connectors: LucideIcon[] = [Plus, ArrowRight];
+const destinationArt: Record<PracticeKind, ArtName> = {
+  official: 'official-labs',
+  sandbox: 'sandboxes',
+  machine: 'lab-machines',
+};
 
-/** Voucher + practice environment → exam day, then the three HexaLabs environments. */
+/** Voucher + practice environment → exam day, then the three HexaLabs environments as art cards. */
 export function VoucherPairing() {
   const { diagram, destinations } = pairing;
+  const last = diagram.parts.length - 1;
   return (
-    <Section tone="paper" labelledBy="pairing-title">
-      <div className="grid grid-cols-12 gap-x-6 gap-y-12">
-        <SectionHeader
-          id="pairing-title"
-          eyebrow={pairing.eyebrow}
-          title={<AccentHeadline title={pairing.title} accentClass="text-blue-600" />}
-          intro={pairing.intro}
-          className="col-span-12 lg:col-span-5"
-        />
+    <Section tone="white" id="practice" labelledBy="pairing-title">
+      <SectionIntro
+        id="pairing-title"
+        eyebrow={pairing.eyebrow}
+        title={<AccentHeadline title={pairing.title} />}
+        intro={pairing.intro}
+      />
 
-        <Reveal className="col-span-12 lg:col-span-6 lg:col-start-7">
-          <figure>
-            <figcaption className="font-mono text-eyebrow text-muted uppercase">{diagram.caption}</figcaption>
-            <ol className="mt-4">
-              {diagram.parts.map((part, i) => {
-                const Icon = partIcons[i];
-                const Connector = connectors[i];
-                return (
-                  <li key={part.label}>
-                    <div className="flex items-center gap-4 rounded-card border border-line bg-white p-4 sm:p-5">
-                      <span
-                        aria-hidden="true"
-                        className={`grid h-10 w-10 flex-none place-items-center rounded-control ${
-                          i === diagram.parts.length - 1 ? 'bg-blue-600 text-white' : 'bg-paper-50 text-slate-600'
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" strokeWidth={1.5} />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="font-medium text-heading">{part.label}</p>
-                        <p className="mt-0.5 text-sm text-body">{part.detail}</p>
-                      </div>
-                    </div>
-                    {Connector ? (
-                      <div aria-hidden="true" className="flex justify-center py-2 text-muted">
-                        <Connector className="h-4 w-4" strokeWidth={1.5} />
-                      </div>
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ol>
-          </figure>
-        </Reveal>
-      </div>
+      <figure className="mx-auto mt-14 max-w-5xl">
+        <figcaption className="eyebrow text-center">{diagram.caption}</figcaption>
+        <RevealGroup as="ol" className="mt-5 flex flex-col items-stretch md:flex-row md:items-center">
+          {diagram.parts.map((part, i) => {
+            const Icon = partIcons[i];
+            const Connector = connectors[i];
+            return (
+              <RevealItem as="li" key={part.label} className="flex flex-col items-center md:flex-1 md:flex-row">
+                <div className="flex w-full flex-1 items-center gap-4 rounded-card bg-canvas p-4 sm:p-5">
+                  <span
+                    aria-hidden="true"
+                    className={
+                      i === last
+                        ? 'grid h-10 w-10 flex-none place-items-center rounded-full bg-blue-600 text-white shadow-btn-blue'
+                        : 'icon-bubble'
+                    }
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={1.5} />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-medium text-heading">{part.label}</p>
+                    <p className="mt-0.5 text-sm text-body">{part.detail}</p>
+                  </div>
+                </div>
+                {Connector ? (
+                  <span
+                    aria-hidden="true"
+                    className="my-2 grid h-8 w-8 flex-none rotate-90 place-items-center rounded-full bg-white text-heading shadow-card md:mx-[-0.5rem] md:my-0 md:rotate-0 relative z-10"
+                  >
+                    <Connector className="h-4 w-4" strokeWidth={1.75} />
+                  </span>
+                ) : null}
+              </RevealItem>
+            );
+          })}
+        </RevealGroup>
+      </figure>
 
-      <ul className="mt-16 border-b border-line lg:mt-20">
+      <RevealGroup as="ul" className="mt-16 grid gap-y-10 gap-x-5 md:grid-cols-3 lg:mt-20">
         {destinations.map((d) => {
           const examples = practiceExamples(d.kind);
           return (
-            <li key={d.kind} className="grid grid-cols-12 gap-x-6 gap-y-3 border-t border-line py-6 lg:items-baseline">
-              <div className="col-span-12 lg:col-span-5">
-                <h3 className="text-h3">{d.name}</h3>
-                <p className="mt-1 text-body">{d.body}</p>
-              </div>
-              <div className="col-span-12 sm:col-span-8 lg:col-span-4">
-                <p className="font-mono text-micro text-muted uppercase">{pairing.examplesLabel}</p>
-                <p className="mt-1 font-mono text-sm text-heading">{examples.join(' · ')}</p>
-              </div>
-              <p className="col-span-12 sm:col-span-4 sm:text-right lg:col-span-3">
-                <SmartLink href={d.href} className="link group inline-flex items-center gap-1.5 text-sm font-medium">
-                  {d.linkLabel}
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                    strokeWidth={1.5}
-                    aria-hidden="true"
-                  />
-                </SmartLink>
-              </p>
-            </li>
+            <RevealItem as="li" key={d.kind}>
+              <ArtCard
+                art={destinationArt[d.kind]}
+                title={d.name}
+                body={d.body}
+                href={d.href}
+                linkLabel={d.linkLabel}
+                sizes="(min-width: 768px) 380px, 100vw"
+              >
+                {examples.length ? (
+                  <div className="mt-5">
+                    <p className="font-mono text-micro text-muted uppercase">{pairing.examplesLabel}</p>
+                    <ul className="mt-2 flex flex-wrap gap-1.5">
+                      {examples.map((code) => (
+                        <li key={code}>
+                          <Chip tone="soft" className="font-mono">
+                            {code}
+                          </Chip>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </ArtCard>
+            </RevealItem>
           );
         })}
-      </ul>
+      </RevealGroup>
     </Section>
   );
 }

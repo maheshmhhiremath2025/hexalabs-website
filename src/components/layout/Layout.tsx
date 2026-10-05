@@ -15,8 +15,8 @@ export function Layout() {
       <ScrollManager />
       <Header />
       <main id="main" tabIndex={-1} className="outline-none">
-        {/* A page chunk that is not loaded yet shows an empty dark area for a moment. */}
-        <Suspense fallback={<div className="min-h-screen bg-ink-950" />}>
+        {/* A page chunk that is not loaded yet shows an empty canvas area for a moment. */}
+        <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
           <Outlet />
         </Suspense>
       </main>

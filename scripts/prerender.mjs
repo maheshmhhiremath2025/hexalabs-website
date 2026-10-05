@@ -66,9 +66,20 @@ function head(meta, { noindex = false } = {}) {
   ].join('\n    ');
 }
 
+/**
+ * Preload the page's hero artwork (the <picture> whose <img> has fetchpriority="high"),
+ * so the browser starts downloading it before the CSS — it is usually the LCP element.
+ */
+function heroPreload(html) {
+  const m = html.match(/<picture[^>]*><source type="image\/avif" srcSet="([^"]+)" sizes="([^"]+)"\/>(?:(?!<\/picture>)[\s\S])*?fetchpriority="high"/);
+  return m ? `<link rel="preload" as="image" type="image/avif" imagesrcset="${m[1]}" imagesizes="${m[2]}" fetchpriority="high" />` : '';
+}
+
 function page(meta, routePath, opts) {
   const html = render(routePath);
   return template
+    .replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />
+    ${heroPreload(html)}`)
     .replace('<!--app-head-->', head(meta, opts))
     .replace('<div id="root"><!--app-html--></div>', `<div id="root" data-prerendered="${esc(routePath)}">${html}</div>`);
 }

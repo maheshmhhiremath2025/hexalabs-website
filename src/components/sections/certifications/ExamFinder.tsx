@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { ArrowRight } from 'lucide-react';
 import {
   certifications,
   certLabel,
@@ -12,8 +11,12 @@ import {
   type Certification,
   type VendorId,
 } from '../../../content/certifications';
-import { Section, SectionHeader } from '../../ui/Section';
+import { Chip } from '../../ui/Chip';
+import { LinkArrow } from '../../ui/LinkArrow';
+import { Reveal } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
 import { SmartLink } from '../../ui/SmartLink';
+import { accentWord } from '../official/accentWord';
 
 type FilterId = VendorId | 'all';
 const isFilter = (v: string | null): v is FilterId => v === 'all' || vendors.some((x) => x.id === v);
@@ -22,27 +25,32 @@ const filters: { id: FilterId; label: string }[] = [{ id: 'all', label: examFind
 const countFor = (id: FilterId) => (id === 'all' ? certifications.length : vendorCount(id));
 
 const cols = examFinder.columns;
-const chip = 'inline-block rounded-full border px-2.5 py-0.5 font-mono text-micro whitespace-nowrap';
 
 function StatusChip({ cert }: { cert: Certification }) {
   if (cert.status === 'beta') {
-    return <span className={`${chip} border-line-strong text-heading`}>{examFinder.betaLabel}</span>;
+    return <Chip>{examFinder.betaLabel}</Chip>;
   }
   if (cert.status === 'retiring') {
     return (
-      <span className={`${chip} border-line-strong text-heading`}>
+      <Chip>
         {examFinder.retiringLabel}
         {cert.lastDate ? ` · ${cert.lastDate}` : ''}
-      </span>
+      </Chip>
     );
   }
   return null;
 }
 
-function ExamRow({ cert }: { cert: Certification }) {
+/** Shared column template so the header row and every exam row line up. */
+const rowGrid = 'grid grid-cols-12 gap-x-6 gap-y-2 lg:items-start';
+
+function ExamRow({ cert, className = '', delay }: { cert: Certification; className?: string; delay?: number }) {
   const practice = cert.practice ? practiceOptions[cert.practice] : null;
   return (
-    <li className="grid grid-cols-12 gap-x-6 gap-y-2 border-t border-line py-5 lg:items-start lg:py-4">
+    <li
+      className={`${rowGrid} px-5 py-5 transition-colors duration-300 hover:bg-canvas/60 sm:px-7 lg:py-4 ${className}`}
+      style={delay === undefined ? undefined : { ['--d' as string]: `${delay}ms` }}
+    >
       <p className="order-1 col-span-6 font-mono text-sm text-heading lg:col-span-2 lg:pt-0.5">
         <span className="sr-only">{cols.code}: </span>
         {/* Vendors without exam codes leave the cell empty; screen readers hear "None". */}
@@ -65,7 +73,7 @@ function ExamRow({ cert }: { cert: Certification }) {
 
       <p className="order-2 col-span-6 justify-self-end lg:order-3 lg:col-span-2 lg:justify-self-start">
         <span className="sr-only">{cols.level}: </span>
-        <span className={`${chip} border-line-strong bg-white text-heading`}>{cert.level}</span>
+        <Chip tone="soft">{cert.level}</Chip>
       </p>
 
       <p className="order-4 col-span-12 text-sm sm:col-span-7 lg:col-span-2 lg:pt-0.5">
@@ -79,19 +87,30 @@ function ExamRow({ cert }: { cert: Certification }) {
         )}
       </p>
 
-      <p className="order-5 col-span-12 text-sm sm:col-span-5 sm:text-right lg:col-span-2 lg:pt-0.5">
-        <SmartLink href={certRequestHref(cert)} className="link group inline-flex items-center gap-1.5 font-medium">
+      <p className="order-5 col-span-12 sm:col-span-5 sm:text-right lg:col-span-2 lg:pt-0.5">
+        <LinkArrow href={certRequestHref(cert)}>
           {cert.free && cert.practice ? examFinder.freeRequestLabel : examFinder.requestLabel}
           <span className="sr-only">
             {' '}
             {examFinder.requestSrPrefix} {certLabel(cert)}
           </span>
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden="true" />
-        </SmartLink>
+        </LinkArrow>
       </p>
     </li>
   );
 }
+
+const pillClass = (active: boolean) =>
+  `inline-flex h-10 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-sm whitespace-nowrap transition-[background-color,color,box-shadow] duration-300 ease-[var(--ease-smooth)] ${
+    active ? 'bg-ink-950 text-white shadow-btn' : 'text-slate-600 hover:bg-canvas hover:text-ink-950'
+  }`;
+
+/** Rows shown per vendor while the filter is "All" (one fewer on phones, see PREVIEW_PHONE). */
+const PREVIEW = 4;
+const PREVIEW_PHONE = 3;
+/** Soft fade at both ends of the phone-width filter rail, so it reads as scrollable. */
+const railMask =
+  'max-lg:[mask-image:linear-gradient(to_right,transparent,#000_0.75rem,#000_calc(100%-2.5rem),transparent)]';
 
 export function ExamFinder() {
   const [params] = useSearchParams();
@@ -99,11 +118,44 @@ export function ExamFinder() {
   const navigate = useNavigate();
   // Start at "all" so the prerendered HTML matches; sync from ?vendor= after mount.
   const [filter, setFilter] = useState<FilterId>('all');
+  // Vendor groups the visitor expanded while viewing "All".
+  const [expanded, setExpanded] = useState<ReadonlySet<VendorId>>(() => new Set());
+  const railRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const v = params.get('vendor');
     setFilter(isFilter(v) ? v : 'all');
   }, [params]);
+
+  // Phone widths: keep the active pill visible inside the scrolling rail (never scrolls the page).
+  useEffect(() => {
+    const rail = railRef.current;
+    const pill = rail?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!rail || !pill || rail.scrollWidth <= rail.clientWidth) return;
+    const left = pill.offsetLeft - (rail.clientWidth - pill.offsetWidth) / 2;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    rail.scrollTo({ left: Math.max(0, left), behavior: reduce ? 'auto' : 'smooth' });
+  }, [filter]);
+
+  // Only fold a group when it hides at least two exams; folding one row away is not worth a click.
+  const isCollapsible = (n: number) => filter === 'all' && n > PREVIEW + 1;
+
+  const toggleGroup = (id: VendorId, button: HTMLElement) => {
+    // Collapsing a long list: bring the group's heading back into view instead of leaving the reader far below it.
+    if (expanded.has(id)) {
+      const card = button.closest<HTMLElement>('[data-exam-group]');
+      if (card && card.getBoundingClientRect().top < 0) {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        card.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const choose = (id: FilterId) => {
     setFilter(id);
@@ -124,63 +176,97 @@ export function ExamFinder() {
 
   return (
     <Section tone="paper" id="exams" labelledBy="exams-title">
-      <SectionHeader id="exams-title" eyebrow={examFinder.eyebrow} title={examFinder.title} intro={examFinder.intro} />
+      <SectionIntro
+        id="exams-title"
+        eyebrow={examFinder.eyebrow}
+        title={accentWord(examFinder.title, 'exam')}
+        intro={examFinder.intro}
+      />
 
-      <div className="mt-12 flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-center md:justify-between">
-        <div role="group" aria-label={examFinder.filterLabel} className="flex flex-wrap gap-2">
-          {filters.map((f) => {
-            const active = filter === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                aria-pressed={active}
-                onClick={() => choose(f.id)}
-                className={`inline-flex h-9 items-center gap-2 rounded-full border px-3.5 text-sm transition-colors ${
-                  active
-                    ? 'border-ink-950 bg-ink-950 text-white'
-                    : 'border-line-strong bg-white text-heading hover:border-ink-950'
-                }`}
-              >
-                {f.label}
-                <span className={`font-mono text-micro ${active ? 'text-slate-300' : 'text-muted'}`}>{countFor(f.id)}</span>
-              </button>
-            );
-          })}
+      {/* Vendor filter: a white pill rail. Below lg it stays one row and scrolls inside itself. */}
+      <div className="mx-auto mt-10 max-w-full overflow-hidden rounded-full bg-white shadow-card lg:w-max">
+        <div
+          ref={railRef}
+          role="group"
+          aria-label={examFinder.filterLabel}
+          className={`flex snap-x snap-mandatory scroll-px-1.5 gap-1 overflow-x-auto overscroll-x-contain p-1.5 [scrollbar-width:none] max-lg:pr-10 max-lg:pl-3 lg:overflow-visible [&::-webkit-scrollbar]:hidden ${railMask}`}
+        >
+        {filters.map((f) => {
+          const active = filter === f.id;
+          return (
+            <button key={f.id} type="button" aria-pressed={active} onClick={() => choose(f.id)} className={pillClass(active)}>
+              {f.label}
+              <span className={`font-mono text-micro ${active ? 'text-slate-300' : 'text-slate-500'}`}>{countFor(f.id)}</span>
+            </button>
+          );
+        })}
         </div>
-        <p aria-live="polite" className="flex-none font-mono text-micro text-muted">
-          {examFinder.showing(shown, certifications.length)}
-        </p>
       </div>
+      <p aria-live="polite" className="mt-4 text-center font-mono text-micro text-muted">
+        {examFinder.showing(shown, certifications.length)}
+      </p>
 
-      {/* Column labels for wide screens. Each row also carries its own screen-reader labels. */}
-      <div aria-hidden="true" className="mt-8 hidden grid-cols-12 gap-x-6 pb-3 font-mono text-micro text-muted uppercase lg:grid">
-        <span className="col-span-2">{cols.code}</span>
-        <span className="col-span-4">{cols.name}</span>
-        <span className="col-span-2">{cols.level}</span>
-        <span className="col-span-2">{cols.practiceOn}</span>
-        <span className="col-span-2 text-right">{cols.request}</span>
-      </div>
-
-      <div className="space-y-12 lg:space-y-10">
-        {groups.map((g, i) => (
-          <div key={g.id} className={i === 0 ? 'mt-8 lg:mt-0' : ''}>
-            <h3 className="flex items-baseline gap-3 pb-3 text-h3">
-              {g.label}
-              <span className="font-mono text-micro font-normal text-muted">{examFinder.groupCount(g.exams.length)}</span>
-            </h3>
-            <ul>
-              {g.exams.map((c) => (
-                <ExamRow key={`${c.vendor}-${c.code || c.name}`} cert={c} />
-              ))}
-            </ul>
-          </div>
+      <div className="mt-10 space-y-6">
+        {groups.map((g) => (
+          <Reveal key={g.id}>
+            {/* content-visibility lets the browser skip laying out vendor groups until they are near the screen. */}
+            <div data-exam-group className="card scroll-mt-28 overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+              <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-5 sm:px-7">
+                <h3 className="text-xl leading-snug font-medium tracking-tight">{g.label}</h3>
+                <Chip tone="soft">{examFinder.groupCount(g.exams.length)}</Chip>
+              </div>
+              {/* Column labels for wide screens. Each row also carries its own screen-reader labels. */}
+              <div
+                aria-hidden="true"
+                className={`${rowGrid} hidden bg-paper-50 px-7 py-3 font-mono text-micro text-muted uppercase lg:grid`}
+              >
+                <span className="col-span-2">{cols.code}</span>
+                <span className="col-span-4">{cols.name}</span>
+                <span className="col-span-2">{cols.level}</span>
+                <span className="col-span-2">{cols.practiceOn}</span>
+                <span className="col-span-2 text-right">{cols.request}</span>
+              </div>
+              <ul id={`exams-${g.id}`} className="divide-y divide-line">
+                {g.exams.map((c, i) => {
+                  const collapsible = isCollapsible(g.exams.length);
+                  const open = !collapsible || expanded.has(g.id);
+                  if (!open && i >= PREVIEW) return null;
+                  // Collapsed on phones: hide one more row. Rows past the preview rise in when expanded.
+                  const reveal = collapsible && open && i >= PREVIEW;
+                  const cls = !open && i === PREVIEW_PHONE ? 'max-sm:hidden' : reveal ? 'rise-in' : '';
+                  const delay = reveal ? Math.min(i - PREVIEW, 8) * 45 : undefined;
+                  return <ExamRow key={`${c.vendor}-${c.code || c.name}`} cert={c} className={cls} delay={delay} />;
+                })}
+              </ul>
+              {isCollapsible(g.exams.length) ? (
+                <div className="border-t border-line bg-paper-50 px-5 py-4 text-center sm:px-7">
+                  <button
+                    type="button"
+                    aria-expanded={expanded.has(g.id)}
+                    aria-controls={`exams-${g.id}`}
+                    onClick={(e) => toggleGroup(g.id, e.currentTarget)}
+                    className="inline-flex h-10 items-center gap-2 rounded-full border border-line bg-white px-5 text-sm font-medium text-heading shadow-card transition-[transform,box-shadow] duration-300 ease-[var(--ease-smooth)] hover:-translate-y-0.5"
+                  >
+                    {expanded.has(g.id) ? 'Show fewer' : `Show all ${g.exams.length} exams`}
+                    <span className="sr-only"> from {g.label}</span>
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 16 16"
+                      className={`size-3.5 transition-transform duration-500 ease-[var(--ease-smooth)] ${expanded.has(g.id) ? 'rotate-180' : ''}`}
+                    >
+                      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          </Reveal>
         ))}
       </div>
 
-      <p className="mt-12 border-t border-line pt-6 text-sm text-body">
+      <p className="mt-10 text-center text-sm text-body">
         {examFinder.notListed.before}{' '}
-        <SmartLink href={examFinder.notListed.href} className="link font-medium">
+        <SmartLink href={examFinder.notListed.href} className="link-underline font-medium">
           {examFinder.notListed.link}
         </SmartLink>{' '}
         {examFinder.notListed.after}

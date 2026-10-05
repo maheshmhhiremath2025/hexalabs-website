@@ -1,42 +1,43 @@
+import { ArrowRight } from 'lucide-react';
 import { batchSteps } from '../../../content/home';
-import { Section, SectionHeader } from '../../ui/Section';
-import { Reveal } from '../../ui/Reveal';
+import { Section, SectionIntro } from '../../ui/Section';
+import { RevealGroup, RevealItem } from '../../ui/Reveal';
+import { accentTitle } from './accentTitle';
 
+/** Four numbered white cards; on desktop a small arrow bubble links each card to the next. */
 export function BatchTimeline() {
   const last = batchSteps.steps.length - 1;
   return (
-    <Section tone="white" labelledBy="batch-title">
-      <SectionHeader id="batch-title" eyebrow={batchSteps.eyebrow} title={batchSteps.title} />
+    <Section tone="paper" labelledBy="batch-title">
+      <SectionIntro id="batch-title" eyebrow={batchSteps.eyebrow} title={accentTitle(batchSteps.title, batchSteps.accent)} />
 
-      <ol className="relative mt-14 grid gap-10 lg:mt-20 lg:grid-cols-4 lg:gap-8">
-        {/* Connecting line: vertical on phones, horizontal on desktop */}
-        <span
-          aria-hidden="true"
-          className="absolute top-2 bottom-2 left-4 w-px bg-line lg:top-4 lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto"
-        />
+      <RevealGroup as="ol" className="mt-14 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
         {batchSteps.steps.map((step, i) => (
-          <Reveal as="li" key={step.title} delay={i * 0.08} className="relative pl-14 lg:pl-0">
-            <span
-              aria-hidden="true"
-              className={`absolute top-0 left-0 grid h-8 w-8 place-items-center rounded-full border font-mono text-micro lg:relative ${
-                i === last
-                  ? 'border-blue-600 bg-blue-600 text-white'
-                  : 'border-line-strong bg-surface text-heading'
-              }`}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <h3 className="text-h3 lg:mt-7">
-              <span className="sr-only">Step {i + 1}: </span>
-              {step.title}
-            </h3>
-            <p className="mt-2.5 max-w-xs text-body">{step.body}</p>
-            <p className="mt-5 inline-flex rounded-md border border-line bg-raised px-2.5 py-1 font-mono text-micro text-heading">
-              {step.detail}
-            </p>
-          </Reveal>
+          <RevealItem as="li" key={step.title} className="relative">
+            <article className="card card-hover flex h-full flex-col p-6 sm:p-7">
+              <p aria-hidden="true" className="display text-[3.25rem] leading-none text-accent tabular-nums">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h3 className="mt-6 text-xl leading-snug font-medium tracking-tight">
+                <span className="sr-only">Step {i + 1}: </span>
+                {step.title}
+              </h3>
+              <p className="mt-2.5 text-sm leading-6 text-body">{step.body}</p>
+              <p className="mt-auto pt-6">
+                <span className="chip chip-soft font-mono">{step.detail}</span>
+              </p>
+            </article>
+            {i < last ? (
+              <span
+                aria-hidden="true"
+                className="absolute top-1/2 -right-[1.375rem] z-10 hidden h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-white text-blue-600 shadow-card lg:grid"
+              >
+                <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
+              </span>
+            ) : null}
+          </RevealItem>
         ))}
-      </ol>
+      </RevealGroup>
     </Section>
   );
 }
