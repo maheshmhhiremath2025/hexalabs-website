@@ -1,12 +1,8 @@
 import { hero } from '../../../content/home';
 import { ButtonLink } from '../../ui/Button';
 import { Accent } from '../../ui/Accent';
-import { LogoCluster } from '../../ui/LogoCluster';
-import type { ProductId } from '../../../content/products';
+import { Art } from '../../ui/Art';
 import { HeroCards, OfferPill, ProofStrip } from './HeroParts';
-
-/** Official logos of the platforms HexaLabs runs, shown right of the headline on wide screens. */
-const heroLogos: ProductId[] = ['azure', 'aws', 'gcp', 'oci', 'windows-server', 'ubuntu', 'rhel', 'kubernetes', 'databricks'];
 
 /** "Built for" — the three audiences, as a quiet line under the CTAs. */
 function Audience() {
@@ -28,18 +24,20 @@ function Audience() {
 }
 
 /**
- * Home hero: an inset rounded panel on a plain dark gradient with a big light-weight
- * headline (official platform logos on the right on wide screens), then four white
- * cards overlapping its bottom edge.
+ * Home hero: an inset rounded panel with the dark brand artwork drifting slowly
+ * behind a big light-weight headline, then four white cards overlapping its bottom edge.
  * The h1 is never animated (it is the LCP element).
  */
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="relative px-2 sm:px-3">
       <div className="surface-dark relative overflow-hidden rounded-[20px] sm:rounded-panel">
-        <div aria-hidden="true" className="hero-gradient absolute inset-0" />
+        <div aria-hidden="true" className="art-drift absolute inset-0">
+          <Art name="hero" priority sizes="100vw" className="h-full w-full" imgClassName="h-full w-full object-cover object-[70%_50%]" />
+        </div>
+        <div aria-hidden="true" className="hero-scrim absolute inset-0" />
 
-        <div className="container-site relative grid items-center gap-x-12 pt-12 pb-36 sm:pt-20 sm:pb-40 lg:pt-24 lg:pb-52 xl:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="container-site relative pt-12 pb-36 sm:pt-20 sm:pb-40 lg:pt-24 lg:pb-52">
           <div>
           <OfferPill />
           <h1 id="hero-title" className="display mt-8 max-w-[13ch] text-mega text-white">
@@ -58,7 +56,6 @@ export function Hero() {
           </div>
           <Audience />
           </div>
-          <LogoCluster ids={heroLogos} label="Platforms we run labs on" className="hidden xl:flex" />
         </div>
       </div>
 
