@@ -60,6 +60,8 @@ export const artNames = [
   'il-uc-kubernetes',
   'il-uc-vouchers',
   'il-uc-whitelabel',
+  // White-label section illustration (shown whole, 3:2)
+  'il-whitelabel',
   // Per-product artwork (unused on product cards — see LogoTile).
   'p-azure',
   'p-aws',

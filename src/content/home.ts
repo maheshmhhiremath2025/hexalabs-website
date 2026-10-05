@@ -242,25 +242,9 @@ export const whiteLabel = {
   action: { label: 'For training companies', href: '/for-training-companies' },
   body: 'Training companies run the portal under their own brand. Learners sign in on your domain, see your logo and get emails from your name.',
   points: ['Custom domain with SSL', 'Logo and colours on every screen', 'Branded learner emails'],
-  caption: 'Two example brand kits. Each organisation gets its own — no code changes.',
-  themes: [
-    {
-      name: 'Acme Training',
-      initials: 'AT',
-      domain: 'labs.acmetraining.example',
-      color: '#0E7C66',
-      colorFg: '#FFFFFF',
-      tint: '#E7F4F1',
-    },
-    {
-      name: 'Northwind Academy',
-      initials: 'NA',
-      domain: 'learn.northwind.example',
-      color: '#B4232A',
-      colorFg: '#FFFFFF',
-      tint: '#FBECEC',
-    },
-  ],
+  /** Text alternative for the white-label illustration (it carries meaning). */
+  imageAlt:
+    'Example of a white-label lab portal: your logo on the learner dashboard, your own domain with SSL, your colours on every screen and branded learner emails.',
 };
 
 export const askHexa = {

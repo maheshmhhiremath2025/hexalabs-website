@@ -2,9 +2,8 @@ import { Check } from 'lucide-react';
 import { whiteLabel } from '../../../content/home';
 import { Section, SectionIntro } from '../../ui/Section';
 import { ButtonLink } from '../../ui/Button';
-import { BrandKit } from '../../graphics/BrandKit';
-import { RevealGroup, RevealItem } from '../../ui/Reveal';
-import { PhotoStage } from '../../ui/PhotoStage';
+import { Art } from '../../ui/Art';
+import { Reveal } from '../../ui/Reveal';
 import { accentTitle } from './accentTitle';
 
 export function WhiteLabel() {
@@ -36,19 +35,20 @@ export function WhiteLabel() {
           </div>
         </div>
 
-        {/* The two example brand kits over a photo of a brand team at work */}
-        <div className="col-span-12 lg:order-1 lg:col-span-7">
-          <PhotoStage image="ph-wl-studio" focus="50% 30%">
-            <RevealGroup className="grid gap-4 sm:grid-cols-2 sm:pb-4 lg:gap-5">
-              {whiteLabel.themes.map((theme, i) => (
-                <RevealItem key={theme.name} className={i === 1 ? 'sm:mt-10' : ''}>
-                  <BrandKit theme={theme} />
-                </RevealItem>
-              ))}
-            </RevealGroup>
-          </PhotoStage>
-          <p className="mt-6 text-sm text-muted sm:mx-6">{whiteLabel.caption}</p>
-        </div>
+        {/* The white-label illustration, shown whole (3:2, no crop) */}
+        <Reveal className="col-span-12 lg:order-1 lg:col-span-7">
+          <figure className="group overflow-hidden rounded-[20px] shadow-card sm:rounded-panel">
+            <div className="art-zoom">
+              <Art
+                name="il-whitelabel"
+                alt={whiteLabel.imageAlt}
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className="block"
+                imgClassName="block h-auto w-full"
+              />
+            </div>
+          </figure>
+        </Reveal>
       </div>
     </Section>
   );
