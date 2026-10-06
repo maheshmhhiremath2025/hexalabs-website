@@ -58,6 +58,14 @@ export const pages: PageMeta[] = [
     priority: 0.8,
   },
   {
+    path: '/lms',
+    title: 'Learning platform (LMS) | HexaLabs',
+    description:
+      'White-label LMS with AI course builder, live sessions, hands-on cloud labs inside courses, auto-graded coding tests, secure exams and QR-verified certificates. From ₹1,999 per organisation a month.',
+    sitemap: true,
+    priority: 0.9,
+  },
+  {
     path: '/for-training-companies',
     title: 'For training companies | HexaLabs',
     description:

@@ -66,6 +66,8 @@ export const artNames = [
   'il-cta-batch',
   // Pricing hero illustration (shown whole, 3:2)
   'il-pricing-hero',
+  // LMS page hero illustration (shown whole, 3:2)
+  'il-lms-hero',
   // Security controls (square tiles cut from one 3×2 artwork, 2× upscaled)
   'il-sec-roles',
   'il-sec-isolation',

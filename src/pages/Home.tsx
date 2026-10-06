@@ -1,6 +1,7 @@
 import { Hero } from '../components/sections/home/Hero';
 import { Catalogue } from '../components/sections/home/Catalogue';
 import { UseCases } from '../components/sections/home/UseCases';
+import { LmsBand } from '../components/sections/home/LmsBand';
 import { HowItWorks } from '../components/sections/home/HowItWorks';
 import { BatchTimeline } from '../components/sections/home/BatchTimeline';
 import { TrainersSplit } from '../components/sections/home/TrainersSplit';
@@ -11,7 +12,7 @@ import { CtaBand } from '../components/sections/CtaBand';
 
 /**
  * Section rhythm: hero (canvas) → catalogue art cards (paper) → use cases carousel (short dark band)
- * → how it works (white) → batch steps (paper) → trainers (white) → white-label (paper) → Ask Hexa (white)
+ * → LMS (paper) → how it works (white) → batch steps (paper) → trainers (white) → white-label (paper) → Ask Hexa (white)
  * → security (paper) → CTA band (dark, text + illustration).
  */
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <Hero />
       <Catalogue />
       <UseCases />
+      <LmsBand />
       <HowItWorks />
       <BatchTimeline />
       <TrainersSplit />

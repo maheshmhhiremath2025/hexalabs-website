@@ -15,6 +15,7 @@ const OfficialLabs = loadable(() => import('./pages/OfficialLabs'));
 const Sandboxes = loadable(() => import('./pages/Sandboxes'));
 const Labs = loadable(() => import('./pages/Labs'));
 const Certifications = loadable(() => import('./pages/Certifications'));
+const Lms = loadable(() => import('./pages/Lms'));
 const TrainingCompanies = loadable(() => import('./pages/TrainingCompanies'));
 const Pricing = loadable(() => import('./pages/Pricing'));
 const About = loadable(() => import('./pages/About'));
@@ -29,6 +30,7 @@ const pages: Record<string, { preload: () => Promise<void> }> = {
   '/sandboxes': Sandboxes,
   '/labs': Labs,
   '/certifications': Certifications,
+  '/lms': Lms,
   '/for-training-companies': TrainingCompanies,
   '/pricing': Pricing,
   '/about': About,
@@ -56,6 +58,7 @@ export function App() {
             <Route path="sandboxes" element={<Sandboxes />} />
             <Route path="labs" element={<Labs />} />
             <Route path="certifications" element={<Certifications />} />
+            <Route path="lms" element={<Lms />} />
             <Route path="for-training-companies" element={<TrainingCompanies />} />
             <Route path="pricing" element={<Pricing />} />
             <Route path="about" element={<About />} />

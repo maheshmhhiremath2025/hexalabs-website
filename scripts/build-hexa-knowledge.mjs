@@ -11,7 +11,7 @@
 import fs from 'node:fs/promises';
 import { build } from 'esbuild';
 
-const MODULES = ['site', 'home', 'officialLabs', 'sandboxes', 'labs', 'certifications', 'pricing', 'training', 'about', 'contact'];
+const MODULES = ['site', 'home', 'officialLabs', 'sandboxes', 'labs', 'certifications', 'lms', 'pricing', 'training', 'about', 'contact'];
 
 const entry = MODULES.map((m) => `export * as ${m} from './src/content/${m}.ts';`).join('\n');
 const out = await build({

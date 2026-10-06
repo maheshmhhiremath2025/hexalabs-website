@@ -81,6 +81,7 @@ export const labsMenu: NavGroup = {
 };
 
 export const mainNav: NavItem[] = [
+  { label: 'LMS', href: '/lms' },
   { label: 'For training companies', href: '/for-training-companies' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
@@ -105,6 +106,7 @@ export const footer = {
     {
       title: 'Product',
       links: [
+        { label: 'HexaLabs LMS', href: '/lms' },
         { label: 'Lab Console', href: '/for-training-companies#console' },
         { label: 'Reports & certificates', href: '/for-training-companies#reports' },
         { label: 'Ask Hexa assistant', href: '/#ask-hexa' },
@@ -124,6 +126,7 @@ export const footer = {
       title: 'Support',
       links: [
         { label: 'Log in to the portal', href: 'https://labsoncloud.online/login' },
+        { label: 'Sign in to the LMS', href: 'https://learn.hexalabs.online' },
         { label: 'Contact us', href: '/contact' },
         { label: 'FAQ', href: '/for-training-companies#faq' },
       ],

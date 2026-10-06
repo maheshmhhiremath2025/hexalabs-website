@@ -17,6 +17,7 @@ export type RequestTypeId =
   | 'vm-linux'
   | 'vm-kubernetes'
   | 'certification'
+  | 'lms'
   | 'unsure';
 
 export type RequestTypeGroup = { label: string; options: { id: RequestTypeId; label: string }[] };
@@ -52,6 +53,7 @@ export const requestTypeGroups: RequestTypeGroup[] = [
     label: 'Other',
     options: [
       { id: 'certification', label: 'Certification vouchers' },
+      { id: 'lms', label: 'HexaLabs LMS (learning platform)' },
       { id: 'unsure', label: 'Not sure yet' },
     ],
   },
