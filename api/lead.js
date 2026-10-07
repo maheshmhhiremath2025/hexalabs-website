@@ -1,5 +1,5 @@
 /**
- * POST /api/lead — a visitor's details from the Hexa chat or the Book-a-demo form,
+ * POST /api/lead: a visitor's details from the Hexa chat or the Book-a-demo form,
  * emailed to the HexaLabs sales inbox (and nowhere else).
  *
  * Body: { source: 'hexa-chat' | 'demo-form', name, email, company, phone?, interest?,
@@ -12,9 +12,12 @@
  *     sends as support@hexalabs.online so leads land in the inbox (see _lib/graph-mail.js).
  *   GMAIL_USER, GMAIL_APP_PASSWORD: a Gmail account with an app password (fallback;
  *     Outlook tends to put this mail in Junk).
+ *   MAILER_INBOUND_SECRET (+ optional MAILER_INBOUND_URL): after the lead email is sent,
+ *     the lead is also forwarded to HexaLabs Mailer (see _lib/mailer.js). Skipped when unset.
  */
 import nodemailer from 'nodemailer';
 import { graphMailReady, sendGraphMail } from './_lib/graph-mail.js';
+import { forwardToMailer } from './_lib/mailer.js';
 import { EMAIL_RE, clientIp, escapeHtml, line, originAllowed, rateLimited, readJson, send, text } from './_lib/http.js';
 
 /** Every lead goes to this one address only. */
@@ -125,23 +128,57 @@ export default async function handler(req, res) {
   try {
     if (useGraph) {
       await sendGraphMail({ to: { address: LEAD_TO }, replyTo: { name: lead.name, address: lead.email }, subject, html });
-      return send(res, 200, { ok: true });
+    } else {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
+      });
+      await transporter.sendMail({
+        from: { name: 'HexaLabs website', address: process.env.GMAIL_USER },
+        to: LEAD_TO,
+        replyTo: { name: lead.name, address: lead.email },
+        subject,
+        text: plain,
+        html,
+      });
     }
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
-    });
-    await transporter.sendMail({
-      from: { name: 'HexaLabs website', address: process.env.GMAIL_USER },
-      to: LEAD_TO,
-      replyTo: { name: lead.name, address: lead.email },
-      subject,
-      text: plain,
-      html,
-    });
-    return send(res, 200, { ok: true });
   } catch (err) {
     console.error('[lead] send failed', err?.code || err?.message || err);
     return send(res, 502, { error: 'Could not send' });
   }
+  // The lead is safe in the inbox now. Also hand it to the mailer (at most 3 s, never fails the visitor).
+  await forwardToMailer(mailerEnquiry(lead, transcript)).catch(() => {});
+  return send(res, 200, { ok: true });
+}
+
+/**
+ * The lead as HexaLabs Mailer expects it. The site already emailed the sales inbox, so the
+ * mailer does not alert again. A chat transcript is never forwarded, only a short summary of
+ * what the visitor wrote.
+ */
+export function mailerEnquiry(lead, transcript = []) {
+  const said = transcript
+    .filter((m) => m.role === 'user')
+    .map((m) => line(m.content, 200))
+    .filter(Boolean)
+    .slice(-3)
+    .join(' | ');
+  const message = lead.message || (said ? `From the chat: ${said}` : '');
+  return {
+    source: lead.source === 'hexa-chat' ? 'website-chat' : 'website-demo',
+    name: lead.name,
+    email: lead.email,
+    company: lead.company,
+    phone: lead.phone,
+    interest: lead.interest,
+    message: message.slice(0, 600),
+    details: Object.fromEntries(
+      [
+        ['batch_size', lead.batchSize],
+        ['preferred_date', lead.preferredDate],
+        ['page', lead.page],
+      ].filter(([, v]) => v),
+    ),
+    already_notified: true,
+  };
 }
