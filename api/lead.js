@@ -7,10 +7,14 @@
  *         transcript?: [{ role, content }], page?, website? (honeypot) }
  * Reply: { ok: true } or { error }
  *
- * Env: GMAIL_USER, GMAIL_APP_PASSWORD (a Gmail account with 2-step verification
- * and an app password).
+ * Env (first one set is used):
+ *   MS_TENANT_ID, MS_CLIENT_ID, MS_CLIENT_SECRET, MAIL_SENDER: Microsoft 365 via Graph,
+ *     sends as support@hexalabs.online so leads land in the inbox (see _lib/graph-mail.js).
+ *   GMAIL_USER, GMAIL_APP_PASSWORD: a Gmail account with an app password (fallback;
+ *     Outlook tends to put this mail in Junk).
  */
 import nodemailer from 'nodemailer';
+import { graphMailReady, sendGraphMail } from './_lib/graph-mail.js';
 import { EMAIL_RE, clientIp, escapeHtml, line, originAllowed, rateLimited, readJson, send, text } from './_lib/http.js';
 
 /** Every lead goes to this one address only. */
@@ -62,8 +66,9 @@ export default async function handler(req, res) {
     return send(res, 429, { error: 'Too many requests. Please email support@hexalabs.online.' });
   }
 
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    console.error('[lead] GMAIL_USER / GMAIL_APP_PASSWORD not set');
+  const useGraph = graphMailReady();
+  if (!useGraph && (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD)) {
+    console.error('[lead] no mail settings: set MS_* + MAIL_SENDER, or GMAIL_USER / GMAIL_APP_PASSWORD');
     return send(res, 503, { error: 'Not configured' });
   }
 
@@ -116,7 +121,12 @@ export default async function handler(req, res) {
     ...(transcript.length ? ['', "Chat transcript (sent by the visitor's browser, not verified):", ...transcript.map((m) => `${m.role === 'user' ? 'Visitor' : 'Hexa (unverified)'}: ${m.content}`)] : []),
   ].join('\n');
 
+  const subject = `New lead: ${lead.name} | ${lead.company}${lead.batchSize ? ` (${lead.batchSize})` : ''}`;
   try {
+    if (useGraph) {
+      await sendGraphMail({ to: { address: LEAD_TO }, replyTo: { name: lead.name, address: lead.email }, subject, html });
+      return send(res, 200, { ok: true });
+    }
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
@@ -125,7 +135,7 @@ export default async function handler(req, res) {
       from: { name: 'HexaLabs website', address: process.env.GMAIL_USER },
       to: LEAD_TO,
       replyTo: { name: lead.name, address: lead.email },
-      subject: `New lead: ${lead.name} — ${lead.company}${lead.batchSize ? ` (${lead.batchSize})` : ''}`,
+      subject,
       text: plain,
       html,
     });
