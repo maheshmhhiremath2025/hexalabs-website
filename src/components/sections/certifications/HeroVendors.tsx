@@ -1,4 +1,4 @@
-import { ArrowUpRight, Plus, Ticket } from 'lucide-react';
+import { ArrowUpRight, Ticket } from 'lucide-react';
 import { certHero, certifications, examFinder, vendorCount, vendors } from '../../../content/certifications';
 import { SmartLink } from '../../ui/SmartLink';
 import { VendorLogo } from './VendorLogo';
@@ -6,7 +6,7 @@ import { VendorLogo } from './VendorLogo';
 /**
  * White panel that overlaps the bottom of the hero: the most-requested vendors as
  * pill links (each opens the exam finder filtered to that vendor), then an
- * "Other vendors" pill for any certification not listed.
+ * pill to the full voucher catalogue (all vendors) in the HexaLabs Store.
  */
 export function HeroVendors() {
   const { vendorPanel } = certHero;
@@ -52,8 +52,8 @@ export function HeroVendors() {
             href={vendorPanel.other.href}
             className="group inline-flex h-10 items-center gap-1.5 rounded-full border border-dashed border-line-strong px-3.5 text-sm text-heading transition-[background-color,color,border-color] duration-300 ease-[var(--ease-smooth)] hover:border-ink-950 hover:bg-ink-950 hover:text-white"
           >
-            <Plus className="h-3.5 w-3.5 flex-none" strokeWidth={2} aria-hidden="true" />
             {vendorPanel.other.label}
+            <ArrowUpRight className="h-3.5 w-3.5 flex-none" strokeWidth={2} aria-hidden="true" />
           </SmartLink>
         </li>
       </ul>

@@ -87,6 +87,12 @@ export function Header() {
                   </NavLink>
                 </li>
               ))}
+              <li>
+                <a href={site.storeUrl} className="nav-item">
+                  {site.storeLabel}
+                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
+                </a>
+              </li>
             </ul>
           </nav>
 
@@ -158,6 +164,12 @@ export function Header() {
                   </NavLink>
                 </li>
               ))}
+              <li>
+                <a href={site.storeUrl} className="flex items-center justify-between py-4 text-2xl font-light tracking-tight text-ink-950">
+                  {site.storeLabel}
+                  <ArrowUpRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                </a>
+              </li>
             </ul>
           </nav>
           <div className="container-site grid gap-3 pb-8">

@@ -26,8 +26,8 @@ export default function Certifications() {
             <ButtonLink href={certHero.primaryCta.href} size="lg" arrow="up-right">
               {certHero.primaryCta.label}
             </ButtonLink>
-            <ButtonLink href={certHero.secondaryCta.href} variant="ghost" size="lg">
-              {certHero.secondaryCta.label}
+            <ButtonLink href={certHero.storeCta.href} variant="ghost" size="lg" arrow="up-right">
+              {certHero.storeCta.label}
             </ButtonLink>
           </>
         }

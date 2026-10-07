@@ -13,7 +13,7 @@ export const hexa = {
   teaserDelayMs: 9000,
   welcome:
     'Hi, I’m Hexa, the HexaLabs assistant. Ask me about official Azure and AWS labs, cloud sandboxes, lab machines, exam vouchers or HexaLabs LMS, our learning platform. When you’re ready, I can set up a demo for your batch.',
-  starters: ['Book a demo', 'Tell me about HexaLabs LMS', 'Which cloud sandboxes do you offer?', 'Do you sell exam vouchers?', 'How does pricing work?'],
+  starters: ['Book a demo', 'Tell me about HexaLabs LMS', 'Which cloud sandboxes do you offer?', 'Do you sell exam vouchers?', 'Where can I see prices?'],
   /** Quick replies that open the details form instead of asking the AI. */
   formTriggers: ['book a demo', 'book an lms demo', 'lms demo', 'talk to sales', 'get a quote', 'request a quote', 'contact the team', 'contact sales', 'share my details'],
   formIntro: 'Share a few details and the team will reply within one working day.',

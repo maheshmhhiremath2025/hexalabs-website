@@ -162,7 +162,7 @@ export const catalogue = {
       illustration: 'certifications',
       chip: 'All major vendors',
       title: 'Certification vouchers',
-      line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day.',
+      line: 'Official exam vouchers for a whole batch or a single learner, with practice labs before exam day. See every exam and price in the HexaLabs Store.',
       tags: ['Microsoft', 'AWS', 'Google Cloud', 'Oracle', 'Red Hat', 'CNCF', 'Databricks', 'and more'],
       offer: false,
       href: '/certifications',

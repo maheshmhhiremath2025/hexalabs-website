@@ -93,13 +93,15 @@ export const certHero = {
   body: 'Vouchers for official exams from Microsoft, AWS, Google Cloud, Oracle, Red Hat, CNCF / Linux Foundation, Databricks and other certification vendors. Order them through HexaLabs for a whole batch or a single learner, and add hands-on practice labs before exam day.',
   primaryCta: { label: 'Request vouchers', href: requestLink('certification') },
   secondaryCta: { label: 'Find your exam', href: '#exams' },
+  /** The full voucher catalogue (all vendors and exams) lives in the HexaLabs Store. */
+  storeCta: { label: 'Browse 860+ exams in the Store', href: 'https://store.hexalabs.online/vouchers' },
   /** Vendor list next to the hero text. Each row filters the exam finder. */
   vendorPanel: {
     title: 'Popular vendors, and more on request',
     countLabel: (n: number) => `${n} ${n === 1 ? 'exam' : 'exams'}`,
     srPrefix: 'Show exams from',
     /** Last pill: any certification vendor not in the list. */
-    other: { label: 'Other vendors', href: requestLink('certification', 'Voucher from another vendor') },
+    other: { label: 'All 24 vendors in the Store', href: 'https://store.hexalabs.online/vouchers' },
   },
 };
 
@@ -141,6 +143,7 @@ export const examFinder = {
     link: 'Tell us the exam code',
     href: requestLink('certification'),
     after: 'and we will check voucher availability with the vendor.',
+    store: { before: 'Or see every exam, vendor and price in the', link: 'HexaLabs Store', href: 'https://store.hexalabs.online/vouchers' },
   },
 };
 

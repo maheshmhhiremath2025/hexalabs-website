@@ -19,6 +19,9 @@ export const site = {
   /** Public URL of this marketing site (set VITE_SITE_URL at build time). */
   url: (import.meta.env.VITE_SITE_URL || 'https://hexalabs.online').replace(/\/$/, ''),
   portalUrl: 'https://labsoncloud.online',
+  /** HexaLabs Store: prices and online orders for vouchers, labs, sandboxes, workspaces and servers. */
+  storeUrl: 'https://store.hexalabs.online',
+  storeLabel: 'Store',
   portalLabel: 'labsoncloud.online',
   loginUrl: 'https://labsoncloud.online/login',
   tagline: 'Cloud labs your learners can open in a browser tab.',
@@ -101,6 +104,7 @@ export const footer = {
         { label: 'Cloud sandboxes', href: '/sandboxes' },
         { label: 'Lab machines', href: '/labs' },
         { label: 'Certifications', href: '/certifications' },
+        { label: 'HexaLabs Store', href: 'https://store.hexalabs.online' },
       ],
     },
     {
@@ -127,6 +131,7 @@ export const footer = {
       links: [
         { label: 'Log in to the portal', href: 'https://labsoncloud.online/login' },
         { label: 'Sign in to the LMS', href: 'https://learn.hexalabs.online' },
+        { label: 'Buy in the Store', href: 'https://store.hexalabs.online' },
         { label: 'Contact us', href: '/contact' },
         { label: 'FAQ', href: '/for-training-companies#faq' },
       ],

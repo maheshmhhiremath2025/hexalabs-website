@@ -18,7 +18,7 @@ const emptyLead: Lead = { name: '', email: '', company: '', phone: '', interest:
 
 /** Site pages Hexa may link to (anything else is left as plain text). */
 const PAGE_LINK = /(^|[\s(])(\/(?:official-labs|sandboxes|labs|certifications|pricing|for-training-companies|contact|about|privacy|terms)(?:[#?][\w=&%.-]*)?)(?=$|[\s).,;:!?])/g;
-const TOKEN = /(\bhttps?:\/\/[^\s)]+|\blabsoncloud\.online\b|[\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
+const TOKEN = /(\bhttps?:\/\/[^\s),]+[^\s),.]|\b(?:store\.|learn\.)?(?:hexalabs|labsoncloud)\.online\b|[\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
 
 /** Plain-text reply → paragraphs and "- " bullets, with site paths, URLs and emails linked. */
 function RichText({ text }: { text: string }) {
@@ -49,9 +49,9 @@ function RichText({ text }: { text: string }) {
           </a>
         );
       }
-      if (part === 'labsoncloud.online') {
+      if (/^(?:store\.|learn\.)?(?:hexalabs|labsoncloud)\.online$/.test(part)) {
         return (
-          <a key={`${key}-${i}`} href="https://labsoncloud.online" target="_blank" rel="noopener noreferrer" className="hexa-link">
+          <a key={`${key}-${i}`} href={`https://${part}`} target="_blank" rel="noopener noreferrer" className="hexa-link">
             {part}
           </a>
         );

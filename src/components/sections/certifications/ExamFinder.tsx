@@ -284,7 +284,11 @@ export function ExamFinder() {
         <SmartLink href={examFinder.notListed.href} className="link-underline font-medium">
           {examFinder.notListed.link}
         </SmartLink>{' '}
-        {examFinder.notListed.after}
+        {examFinder.notListed.after} {examFinder.notListed.store.before}{' '}
+        <a href={examFinder.notListed.store.href} className="link-underline font-medium">
+          {examFinder.notListed.store.link}
+        </a>
+        .
       </p>
     </Section>
   );
